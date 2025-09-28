@@ -147,5 +147,6 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
 void BulkinDevice::createGraphicsPipeline() {
   graphicsPipeline.create(device, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
+  graphicsPipeline.createVertexBuffer(device, physicalDevice, graphicsQueue);
   graphicsPipeline.createCommandBuffers(device);
 }

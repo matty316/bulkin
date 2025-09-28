@@ -116,6 +116,16 @@ bool BulkinSwapchain::isAdequate() {
   return !formats.empty() && !presentModes.empty();
 }
 
-void BulkinSwapchain::nextImage() {
+void BulkinSwapchain::recreate(vk::Device& device, vk::SurfaceKHR& surface, GLFWwindow* window, QueueFamilyIndices indices) {
+  int width = 0, height = 0;
+  glfwGetFramebufferSize(window, &width, &height);
+  while (width == 0 || height == 0) {
+    glfwGetFramebufferSize(window, &width, &height);
+    glfwWaitEvents();
+  }
   
+  device.waitIdle();
+  cleanup(device);
+  createSwapchain(device, surface, window, indices);
+  createImageViews(device);
 }

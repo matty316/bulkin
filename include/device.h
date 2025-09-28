@@ -23,8 +23,8 @@ public:
   void createSwapchain(GLFWwindow* window);
   void createGraphicsPipeline();
   void cleanup(vk::Instance& instance);
+  QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice& device);
 private:
   bool isDeviceSuitable(vk::PhysicalDevice& physicalDevice);
-  QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice& device);
   bool checkDeviceExtensionSupport(vk::PhysicalDevice& physicalDevice);
 };

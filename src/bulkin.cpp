@@ -10,8 +10,14 @@ void Bulkin::run() {
 void Bulkin::initWindow() {
   glfwInit();
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
   window = glfwCreateWindow(WIDTH, HEIGHT, "bulkin", nullptr, nullptr);
+  glfwSetWindowUserPointer(window, this);
+  glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+}
+
+void Bulkin::framebufferResizeCallback(GLFWwindow *window, int width, int height) {
+  auto app = reinterpret_cast<Bulkin*>(glfwGetWindowUserPointer(window));
+  app->framebufferResized = true;
 }
 
 void Bulkin::initVulkan() {
@@ -35,13 +41,25 @@ void Bulkin::mainLoop() {
 
 void Bulkin::drawFrame() {
   if(device.device.waitForFences(1, &drawFences[currentFrame], vk::True, UINT64_MAX) != vk::Result::eSuccess)
-  throw std::runtime_error("failed to wait for fence");
-  if(device.device.resetFences(1, &drawFences[currentFrame]) != vk::Result::eSuccess)
-    throw std::runtime_error("failed to reset fence");
+    throw std::runtime_error("failed to wait for fence");
+  
+  
   
   uint32_t imageIndex;
-  if(device.device.acquireNextImageKHR(device.swapchain.swapchain, UINT64_MAX, presentCompleteSemaphores[currentFrame], nullptr, &imageIndex) != vk::Result::eSuccess)
+  auto result = device.device.acquireNextImageKHR(device.swapchain.swapchain,
+                                                  UINT64_MAX,
+                                                  presentCompleteSemaphores[currentFrame],
+                                                  nullptr,
+                                                  &imageIndex);
+  
+  if (result == vk::Result::eErrorOutOfDateKHR) {
+    device.swapchain.recreate(device.device, device.surface, window, device.findQueueFamilies(device.physicalDevice));
+  } else if (result != vk::Result::eSuccess && result != vk::Result::eSuboptimalKHR) {
     throw std::runtime_error("failed to acquire next image");
+  }
+  
+  if(device.device.resetFences(1, &drawFences[currentFrame]) != vk::Result::eSuccess)
+    throw std::runtime_error("failed to reset fence");
   
   device.graphicsPipeline.commandBuffers[currentFrame].reset();
   device.graphicsPipeline.recordCommandBuffer(device.graphicsPipeline.commandBuffers[currentFrame], imageIndex, device.swapchain);
@@ -74,8 +92,14 @@ void Bulkin::drawFrame() {
   presentInfo.pSwapchains = swapChains;
   presentInfo.pImageIndices = &imageIndex;
   
-  if(device.presentQueue.presentKHR(presentInfo) != vk::Result::eSuccess)
+  result = device.presentQueue.presentKHR(presentInfo);
+  
+  if (result == vk::Result::eErrorOutOfDateKHR || result == vk::Result::eSuboptimalKHR || framebufferResized) {
+    framebufferResized = false;
+    device.swapchain.recreate(device.device, device.surface, window, device.findQueueFamilies(device.physicalDevice));
+  } else if (result != vk::Result::eSuccess) {
     throw std::runtime_error("failed to present graphics queue");
+  }
   
   currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
 }

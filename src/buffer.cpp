@@ -1,0 +1,107 @@
+#include "buffer.h"
+#include "vertex.h"
+
+uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, vk::PhysicalDevice device) {
+  vk::PhysicalDeviceMemoryProperties memProperties = device.getMemoryProperties();
+  
+  for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+      if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+          return i;
+      }
+  }
+
+  throw std::runtime_error("failed to find suitable memory type!");
+}
+
+void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size, vk::CommandPool& commandPool, vk::Device& device, vk::Queue& queue) {
+  vk::CommandBufferAllocateInfo allocInfo{};
+  allocInfo.level = vk::CommandBufferLevel::ePrimary;
+  allocInfo.commandPool = commandPool;
+  allocInfo.commandBufferCount = 1;
+  
+  vk::CommandBuffer commandBuffer = std::move(device.allocateCommandBuffers(allocInfo).front());
+  
+  vk::CommandBufferBeginInfo beginInfo{};
+  beginInfo.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
+  commandBuffer.begin(beginInfo);
+  
+  vk::BufferCopy copyRegion{};
+  copyRegion.srcOffset = 0;
+  copyRegion.dstOffset = 0;
+  copyRegion.size = size;
+  commandBuffer.copyBuffer(srcBuffer, dstBuffer, 1, &copyRegion);
+  
+  commandBuffer.end();
+  
+  vk::SubmitInfo submitInfo{};
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers = &commandBuffer;
+  
+  queue.submit(1, &submitInfo, nullptr);
+  queue.waitIdle();
+  
+  device.freeCommandBuffers(commandPool, 1, &commandBuffer);
+}
+
+void BulkinBuffer::createBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, size_t size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory) {
+  vk::BufferCreateInfo bufferInfo{};
+  bufferInfo.size = size;
+  bufferInfo.usage = usage;
+  bufferInfo.sharingMode = vk::SharingMode::eExclusive;
+  
+  buffer = device.createBuffer(bufferInfo);
+  
+  vk::MemoryRequirements memRequirments = device.getBufferMemoryRequirements(buffer);
+  
+  vk::MemoryAllocateInfo allocInfo{};
+  allocInfo.allocationSize = memRequirments.size;
+  allocInfo.memoryTypeIndex = findMemoryType(memRequirments.memoryTypeBits,
+                                             properties,
+                                             physicalDevice);
+  
+  bufferMemory = device.allocateMemory(allocInfo);
+  device.bindBufferMemory(buffer, bufferMemory, 0);
+}
+
+void BulkinBuffer::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
+  vk::Buffer stagingBuffer;
+  vk::DeviceMemory stagingBufferMemory;
+  vk::DeviceSize size = sizeof(vertices[0]) * vertices.size();
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  
+  void* newData = device.mapMemory(stagingBufferMemory, 0, size);
+  memcpy(newData, vertices.data(), size);
+  device.unmapMemory(stagingBufferMemory);
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
+  
+  copyBuffer(stagingBuffer, vertexBuffer, size, commandPool, device, graphicsQueue);
+  device.destroy(stagingBuffer);
+  device.free(stagingBufferMemory);
+}
+
+void BulkinBuffer::createIndexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
+  vk::Buffer stagingBuffer;
+  vk::DeviceMemory stagingBufferMemory;
+  vk::DeviceSize size = sizeof(indices[0]) * indices.size();
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  
+  void* newData = device.mapMemory(stagingBufferMemory, 0, size);
+  memcpy(newData, indices.data(), size);
+  device.unmapMemory(stagingBufferMemory);
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
+  
+  copyBuffer(stagingBuffer, indexBuffer, size, commandPool, device, graphicsQueue);
+  device.destroy(stagingBuffer);
+  device.free(stagingBufferMemory);
+}
+
+void BulkinBuffer::cleanup(vk::Device& device) {
+  device.destroy(vertexBuffer);
+  device.free(vertexBufferMemory);
+  device.destroy(indexBuffer);
+  device.free(indexBufferMemory);
+}

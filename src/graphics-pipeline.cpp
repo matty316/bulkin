@@ -1,28 +1,61 @@
 #include "graphics-pipeline.h"
 #include "constants.h"
+#include "vertex.h"
 
 #include <fstream>
 
 void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFormat) {
-  auto slangShaderCode = readFile("shaders/slang.spv");
-  
-  auto slangModule = createShaderModule(slangShaderCode, device);
-  
-  vk::PipelineShaderStageCreateInfo vertShaderStageInfo{};
-  vertShaderStageInfo.stage = vk::ShaderStageFlagBits::eVertex;
-  vertShaderStageInfo.module = slangModule;
-  vertShaderStageInfo.pName = "vertMain";
-  
   vk::PipelineShaderStageCreateInfo fragShaderStageInfo{};
-  fragShaderStageInfo.stage = vk::ShaderStageFlagBits::eFragment;
-  fragShaderStageInfo.module = slangModule;
-  fragShaderStageInfo.pName = "fragMain";
+  vk::PipelineShaderStageCreateInfo vertShaderStageInfo{};
+  
+  std::vector<vk::ShaderModule> modules;
+  
+  if (slang) {
+    auto slangShaderCode = readFile("shaders/slang.spv");
+
+    auto slangModule = createShaderModule(slangShaderCode, device);
+    modules.push_back(slangModule);
+    
+    vertShaderStageInfo.stage = vk::ShaderStageFlagBits::eVertex;
+    vertShaderStageInfo.module = slangModule;
+    vertShaderStageInfo.pName = "vertMain";
+    
+    
+    fragShaderStageInfo.stage = vk::ShaderStageFlagBits::eFragment;
+    fragShaderStageInfo.module = slangModule;
+    fragShaderStageInfo.pName = "fragMain";
+  } else {
+    auto vertShaderCode = readFile("shaders/vert.spv");
+    auto fragShaderCode = readFile("shaders/frag.spv");
+    
+    auto vertModule = createShaderModule(vertShaderCode, device);
+    auto fragModule = createShaderModule(fragShaderCode, device);
+    
+    modules.push_back(vertModule);
+    modules.push_back(fragModule);
+    
+    vertShaderStageInfo.stage = vk::ShaderStageFlagBits::eVertex;
+    vertShaderStageInfo.module = vertModule;
+    vertShaderStageInfo.pName = "main";
+    
+    fragShaderStageInfo.stage = vk::ShaderStageFlagBits::eFragment;
+    fragShaderStageInfo.module = fragModule;
+    fragShaderStageInfo.pName = "main";
+  }
   
   vk::PipelineShaderStageCreateInfo shaderStages[] = {vertShaderStageInfo, fragShaderStageInfo};
   
   vk::PipelineVertexInputStateCreateInfo vertexInputInfo{};
   vertexInputInfo.vertexBindingDescriptionCount = 0;
   vertexInputInfo.vertexAttributeDescriptionCount = 0;
+  
+  auto bindingDesc = Vertex::bindingDesc();
+  auto attrDesc = Vertex::attrDesc();
+  
+  vertexInputInfo.vertexBindingDescriptionCount = 1;
+  vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attrDesc.size());
+  vertexInputInfo.pVertexBindingDescriptions = &bindingDesc;
+  vertexInputInfo.pVertexAttributeDescriptions = attrDesc.data();
   
   vk::PipelineInputAssemblyStateCreateInfo inputAssembly{};
   inputAssembly.topology = vk::PrimitiveTopology::eTriangleList;
@@ -97,7 +130,8 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
     
   pipeline = graphicsPipeline;
   
-  device.destroy(slangModule);
+  for (auto shaderModule : modules)
+    device.destroy(shaderModule);
 }
 
 std::vector<char> BulkinGraphicsPipeline::readFile(const std::string &filename) {
@@ -124,6 +158,7 @@ vk::ShaderModule BulkinGraphicsPipeline::createShaderModule(const std::vector<ch
 }
 
 void BulkinGraphicsPipeline::cleanup(vk::Device &device) {
+  buffers.cleanup(device);
   device.destroy(commandPool);
   device.destroy(pipelineLayout);
   device.destroy(pipeline);
@@ -182,7 +217,12 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   commandBuffer.setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(swapchain.extent.width), static_cast<float>(swapchain.extent.height), 0.0f, 1.0f));
   commandBuffer.setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), swapchain.extent));
   
-  commandBuffer.draw(3, 1, 0, 0);
+  vk::Buffer vertexBuffers[] = {buffers.vertexBuffer};
+  vk::DeviceSize offsets[] = {0};
+  commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
+  commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint16);
+  
+  commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
   
   commandBuffer.endRendering();
   
@@ -230,4 +270,9 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   dependencyInfo.pImageMemoryBarriers = &barrier;
   
   commandBuffer.pipelineBarrier2(dependencyInfo);
+}
+
+void BulkinGraphicsPipeline::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue) {
+  buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
+  buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
 }

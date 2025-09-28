@@ -6,6 +6,7 @@ file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/Users/matty/projects/bulkin/
 set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/GLFW/glfw3.h"
   "/Users/matty/projects/bulkin/include/GLFW/glfw3native.h"
+  "/Users/matty/projects/bulkin/include/buffer.h"
   "/Users/matty/projects/bulkin/include/bulkin.h"
   "/Users/matty/projects/bulkin/include/constants.h"
   "/Users/matty/projects/bulkin/include/device.h"
@@ -34,6 +35,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/stb_image.h"
   "/Users/matty/projects/bulkin/include/swapchain.h"
   "/Users/matty/projects/bulkin/include/tiny_obj_loader.h"
+  "/Users/matty/projects/bulkin/include/vertex.h"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -52,6 +54,7 @@ endif()
 # MY_SOURCES at CMakeLists.txt:7 (file)
 file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/Users/matty/projects/bulkin/src/*.cpp")
 set(OLD_GLOB
+  "/Users/matty/projects/bulkin/src/buffer.cpp"
   "/Users/matty/projects/bulkin/src/bulkin.cpp"
   "/Users/matty/projects/bulkin/src/device.cpp"
   "/Users/matty/projects/bulkin/src/graphics-pipeline.cpp"

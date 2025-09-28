@@ -13,7 +13,6 @@ public:
   vk::Extent2D extent;
   vk::Format imageFormat;
 
-  void nextImage();
   void querySwapchainSupport(vk::PhysicalDevice& physicalDevice, vk::SurfaceKHR& surface);
   void chooseSwapSurfaceFormat();
   void chooseSwapPresentMode();
@@ -21,6 +20,7 @@ public:
   void createSwapchain(vk::Device& device, vk::SurfaceKHR& surface, GLFWwindow *window, QueueFamilyIndices indices);
   void createImageViews(vk::Device& device);
   bool isAdequate();
+  void recreate(vk::Device& device, vk::SurfaceKHR& surface, GLFWwindow* window, QueueFamilyIndices indices);
   void cleanup(vk::Device& device);
 private:
   vk::SurfaceFormatKHR format;

@@ -20,6 +20,8 @@ private:
   std::vector<vk::Semaphore> renderFinishedSemaphores;
   std::vector<vk::Fence> drawFences;
   uint32_t currentFrame = 0;
+  static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+  bool framebufferResized = false;
   
   void initWindow();
   void initVulkan();
