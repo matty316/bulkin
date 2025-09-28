@@ -1,0 +1,6 @@
+build
+thirdParty/libglfw3.a
+.DS_Store
+.cache/clangd/index
+build-xcode/VulkanTutorial.xcodeproj/project.xcworkspace/xcuserdata/*
+build-xcode/VulkanTutorial.xcodeproj/xcuserdata/*
