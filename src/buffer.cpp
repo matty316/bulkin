@@ -73,12 +73,12 @@ void BulkinBuffer::createBuffer(vk::Device& device, vk::PhysicalDevice& physical
 void BulkinBuffer::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
   vk::Buffer stagingBuffer;
   vk::DeviceMemory stagingBufferMemory;
-  vk::DeviceSize size = sizeof(vertices[0]) * vertices.size();
+  vk::DeviceSize size = sizeof(quadVertices[0]) * quadVertices.size();
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
   
   void* newData = device.mapMemory(stagingBufferMemory, 0, size);
-  memcpy(newData, vertices.data(), size);
+  memcpy(newData, quadVertices.data(), size);
   device.unmapMemory(stagingBufferMemory);
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
@@ -91,12 +91,12 @@ void BulkinBuffer::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& ph
 void BulkinBuffer::createIndexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
   vk::Buffer stagingBuffer;
   vk::DeviceMemory stagingBufferMemory;
-  vk::DeviceSize size = sizeof(indices[0]) * indices.size();
+  vk::DeviceSize size = sizeof(quadIndices[0]) * quadIndices.size();
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
   
   void* newData = device.mapMemory(stagingBufferMemory, 0, size);
-  memcpy(newData, indices.data(), size);
+  memcpy(newData, quadIndices.data(), size);
   device.unmapMemory(stagingBufferMemory);
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);

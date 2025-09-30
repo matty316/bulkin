@@ -227,7 +227,7 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   
   commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
   
-  commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+  commandBuffer.drawIndexed(static_cast<uint32_t>(quadIndices.size()), 1, 0, 0, 0);
   
   commandBuffer.endRendering();
   

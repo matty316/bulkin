@@ -40,13 +40,13 @@ struct Vertex {
   }
 };
 
-const std::vector<Vertex> vertices = {
-    {{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-    {{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-    {{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-    {{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+const std::vector<Vertex> quadVertices = {
+    {{-0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}},
+    {{0.5f, 0.0f}, {0.0f, 1.0f, 0.0f}},
+    {{0.5f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+    {{-0.5f, 1.0f}, {1.0f, 1.0f, 1.0f}}
 };
 
-const std::vector<uint16_t> indices = {
+const std::vector<uint16_t> quadIndices = {
     0, 1, 2, 2, 3, 0
 };

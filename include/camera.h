@@ -30,7 +30,7 @@ private:
   float acceleration = 150.0f;
   float damping = 0.2f;
   float maxSpeed = 5.0f;
-  float fastCoef = 10.0f;
+  float fastCoef = 2.0f;
   float yaw = -90.0f;
   float pitch = 0.0f;
   glm::vec2 mousePosition = glm::vec2(0.0f);
