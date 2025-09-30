@@ -26,7 +26,7 @@ public:
   } movement;
   
 private:
-  float mouseSpeed = 10.0f;
+  float mouseSpeed = 50.0f;
   float acceleration = 150.0f;
   float damping = 0.2f;
   float maxSpeed = 5.0f;
