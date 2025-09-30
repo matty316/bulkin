@@ -13,11 +13,48 @@ void Bulkin::initWindow() {
   window = glfwCreateWindow(WIDTH, HEIGHT, "bulkin", nullptr, nullptr);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+  glfwSetCursorPosCallback(window, mouse_callback);
+  glfwSetKeyCallback(window, key_callback);
+  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Bulkin::framebufferResizeCallback(GLFWwindow *window, int width, int height) {
   auto app = reinterpret_cast<Bulkin*>(glfwGetWindowUserPointer(window));
   app->framebufferResized = true;
+}
+
+void Bulkin::mouse_callback(GLFWwindow *window, double x, double y) {
+  auto app = reinterpret_cast<Bulkin*>(glfwGetWindowUserPointer(window));
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  float xpos = static_cast<float>(x / width);
+  float ypos = static_cast<float>(y / height);
+  
+  if (app->firstMouse) {
+    app->lastX = xpos;
+    app->lastY = ypos;
+    app->firstMouse = false;
+  }
+  
+  float xoffset = xpos - app->lastX;
+  float yoffset = app->lastY - ypos;
+  
+  app->lastX = xpos;
+  app->lastY = ypos;
+  
+  app->mouseState.pos.x = xoffset;
+  app->mouseState.pos.y = yoffset;
+}
+
+void Bulkin::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+  auto app = reinterpret_cast<Bulkin*>(glfwGetWindowUserPointer(window));
+  const bool press = action != GLFW_RELEASE;
+  if (key == GLFW_KEY_ESCAPE) glfwSetWindowShouldClose(window, GLFW_TRUE);
+  if (key == GLFW_KEY_W) app->camera.movement.forward = press;
+  if (key == GLFW_KEY_S) app->camera.movement.backward = press;
+  if (key == GLFW_KEY_A) app->camera.movement.left = press;
+  if (key == GLFW_KEY_D) app->camera.movement.right = press;
+  if (mods & GLFW_MOD_SHIFT) app->camera.movement.fast = press;
 }
 
 void Bulkin::initVulkan() {
@@ -43,8 +80,6 @@ void Bulkin::drawFrame() {
   if(device.device.waitForFences(1, &drawFences[currentFrame], vk::True, UINT64_MAX) != vk::Result::eSuccess)
     throw std::runtime_error("failed to wait for fence");
   
-  
-  
   uint32_t imageIndex;
   auto result = device.device.acquireNextImageKHR(device.swapchain.swapchain,
                                                   UINT64_MAX,
@@ -61,8 +96,10 @@ void Bulkin::drawFrame() {
   if(device.device.resetFences(1, &drawFences[currentFrame]) != vk::Result::eSuccess)
     throw std::runtime_error("failed to reset fence");
   
+  update();
+  
   device.graphicsPipeline.commandBuffers[currentFrame].reset();
-  device.graphicsPipeline.recordCommandBuffer(device.graphicsPipeline.commandBuffers[currentFrame], imageIndex, device.swapchain);
+  device.graphicsPipeline.recordCommandBuffer(device.graphicsPipeline.commandBuffers[currentFrame], imageIndex, device.swapchain, currentFrame);
   
   vk::SubmitInfo submitInfo{};
   
@@ -102,6 +139,14 @@ void Bulkin::drawFrame() {
   }
   
   currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+void Bulkin::update() {
+  const double newTimeStamp = glfwGetTime();
+  deltaTime = newTimeStamp - timeStamp;
+  timeStamp = newTimeStamp;
+  camera.update(deltaTime, mouseState.pos, mouseState.pressed);
+  device.graphicsPipeline.buffers.updateUniformBuffer(currentFrame, static_cast<float>(device.swapchain.extent.width), static_cast<float>(device.swapchain.extent.height), camera);
 }
 
 void Bulkin::cleanup() {
@@ -148,7 +193,7 @@ void Bulkin::createInstance() {
   
   createInfo.enabledLayerCount = 0;
   
-  if (vk::createInstance(&createInfo, nullptr, &instance) != vk::Result::eSuccess) 
+  if (vk::createInstance(&createInfo, nullptr, &instance) != vk::Result::eSuccess)
     throw std::runtime_error("failed to create instance");
 }
 

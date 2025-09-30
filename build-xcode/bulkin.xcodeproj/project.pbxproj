@@ -3,13 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
 		98278D2D2E5572A036D08BE4 /* ZERO_CHECK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 083B49E50BFB49C2A20F3150 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildConfigurationList = 36A15271C93D4CC0982FFE11 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
 			buildPhases = (
 				3EE3CCE21C99319531230F75 /* Generate CMakeFiles/ZERO_CHECK */,
 			);
@@ -20,13 +20,13 @@
 		};
 		A2EB195A8839307B20C5D5A4 /* ALL_BUILD */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = 1AC0872C7FED44C2AF7457BF /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildConfigurationList = 8ECBCC80F20248DEB2E3F396 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
 			buildPhases = (
 				01C75D6855374EF69C64A4CC /* Generate CMakeFiles/ALL_BUILD */,
 			);
 			dependencies = (
-				E3717EA69DB444408B3E972C /* PBXTargetDependency */,
-				10B37799A68447F3BF338194 /* PBXTargetDependency */,
+				4608001644C140F1B7DD2626 /* PBXTargetDependency */,
+				8BC2C633CF1643929A151181 /* PBXTargetDependency */,
 			);
 			name = ALL_BUILD;
 			productName = ALL_BUILD;
@@ -34,87 +34,158 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		184E9B754A574A74A9BFE4E5 /* graphics-pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 930BB015AA444AC093A3C412 /* graphics-pipeline.cpp */; };
-		69ECBBCE82A34623813ECD16 /* bulkin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FADF244CE041487DBFE24C3A /* bulkin.cpp */; };
-		8683E201061E4DADB20C4A7E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BA9D2249260C4F07BC54F79A /* main.cpp */; };
-		9166C0475801400E9B82BA74 /* buffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 588444D3FAA54205A88230AF /* buffer.cpp */; };
-		9B637444704549F5B65B1B0F /* swapchain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FF6A8D39EA546DD832A8461 /* swapchain.cpp */; };
-		C57F98FE57F44063AAA5D5AF /* device.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 96DAC49D7AA34BB4A1B48AE5 /* device.cpp */; };
+		07AFBB7DF5A64A3E9DA45298 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 2F022982F50E467A9B235FF2 /* /Users/matty/projects/bulkin/CMakeLists.txt */; };
+		0D5CE24D6B13450586BD2F87 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = E1514EFA5889426ABF646B62 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */; };
+		14D96BF247E34F448EB9AC45 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXBuildFile; fileRef = 31F2D4696F9A45519A865BD3 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */; };
+		17A2B0F71AC24F4DBC0FA58C /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework */ = {isa = PBXBuildFile; fileRef = 3C325DF39E1D4E948CC445B0 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework */; };
+		22EB4841A48D42D1A7559531 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = C2E894F0298F4CB483E04BA3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */; };
+		2710F98B8BB44786B44A59DB /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework */ = {isa = PBXBuildFile; fileRef = C85DD15B8A6A4A3CB8427F13 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework */; };
+		2D6BB5322D554995B3366112 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXBuildFile; fileRef = CAB7372A6CB54511A696BAA4 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */; };
+		30CAC3A3A4E44FB886B2D314 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 9824712686134D71B0398DA1 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */; };
+		31DECDF95F294A458793E175 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = AC5299A13D6245B6941606CB /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */; };
+		470C68ABF97F4E6D82F2D23A /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 4A3EA77862F34F72BA90E325 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */; };
+		477A732598544A2F9558BB97 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = 09792DB818B94A578C43A1FE /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */; };
+		488A3EE4C6C64C73A11E1D92 /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXBuildFile; fileRef = 0CDEF3C65E79461E94EC940F /* /Users/matty/projects/bulkin/include/device.h */; };
+		49FDBEE189E74944BCC5A97C /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = B7C150F06C834506ADE60645 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */; };
+		55ADD9C1CE47408E96AE8BAE /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXBuildFile; fileRef = 1E76E6A3A40B43199CAF41E3 /* /Users/matty/projects/bulkin/include/swapchain.h */; };
+		5A192083D5BE4AE4B95779B0 /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXBuildFile; fileRef = B9280ED942F140A5B9821CF4 /* /Users/matty/projects/bulkin/src/device.cpp */; };
+		6631E4C0EFF44677B780B9BE /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework */ = {isa = PBXBuildFile; fileRef = D65262D496014FFDB2B96549 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework */; };
+		6F2A78CE1A594F10A2B07E37 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = C3C7A8C9E82D4992A30D7815 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */; };
+		7052694049D74BB98FE0F1F9 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = CF1CC67DCA784C5DB78D8818 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */; };
+		777B15F917384894B1E44143 /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXBuildFile; fileRef = C8E4AD6820CB4F8A940D349A /* /Users/matty/projects/bulkin/include/stb_image.h */; };
+		7BC970FBADCF4D1EB33401BE /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXBuildFile; fileRef = 826F2809369947B1B0E1177A /* /Users/matty/projects/bulkin/include/constants.h */; };
+		840D95BC222A4B3CA6BB083A /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = BE7B1108F12146A79484454A /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */; };
+		89AB2F30E683433DA59A41F2 /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXBuildFile; fileRef = D2A3E47C9A164371B1AFE5C3 /* /Users/matty/projects/bulkin/include/bulkin.h */; };
+		8BEE2FCC84E2471AB808AB95 /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXBuildFile; fileRef = DE2C6E07F23B41E280A2C164 /* /Users/matty/projects/bulkin/include/vertex.h */; };
+		9B1D1365256D4863ABD5940B /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXBuildFile; fileRef = 8C9F208917A44F9E88553A96 /* /Users/matty/projects/bulkin/src/bulkin.cpp */; };
+		9C257DEB8CB84DBE95E172D6 /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 60469784709B46AA9CCF179F /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */; };
+		9C2F04ED8BDC43AF9177FB72 /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXBuildFile; fileRef = 64FCEA3955944F58AB25DB5F /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */; };
+		9C5F3CDEA7E744629BE1F455 /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXBuildFile; fileRef = 928F482ABDBC49C0AF4C758F /* /Users/matty/projects/bulkin/include/buffer.h */; };
+		A301393FAAA64EB193BE0397 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXBuildFile; fileRef = 1B222D3537374B53B72D4CF4 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */; };
+		A451F37116334F3DA728B179 /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXBuildFile; fileRef = 0E237FF7F9A04E72A5F9E7B0 /* /Users/matty/projects/bulkin/include/queue-family.h */; };
+		BD1B75B160F14B5BA4BB633F /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXBuildFile; fileRef = 003FEE65BD4F419DBF2C3BD8 /* /Users/matty/projects/bulkin/src/camera.cpp */; };
+		C1F9DC840895407DA24EA79E /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = BB447F205D484887804CE463 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */; };
+		C7E8519824ED411B9C394DB5 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = 710F7CB0C243421E9C7478C9 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */; };
+		CA32AB59AD904AC98B399509 /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXBuildFile; fileRef = FF9033438C1E4EEE9531F66F /* /Users/matty/projects/bulkin/src/buffer.cpp */; };
+		DA041F21EB134F89932B1A1D /* /Users/matty/projects/bulkin/src/main.cpp */ = {isa = PBXBuildFile; fileRef = 36D64ADDF46E49F784FC47C4 /* /Users/matty/projects/bulkin/src/main.cpp */; };
+		DA95AA3252764736947E3E00 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = 176ED941D2DD424CB8FA1065 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */; };
+		DAB3516580A64829A0716988 /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = 73349FD5F31147C5ACFFFBC6 /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */; };
+		DC4EF3A377F14A3696DAA5AD /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXBuildFile; fileRef = AA5615DED76A4E6188B88369 /* /Users/matty/projects/bulkin/include/camera.h */; };
+		DE9CF44BCAFE4488B402CF2B /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = 4FB18F788DBE47828C04A013 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */; };
+		E358418F7E5944C4BFCAA64D /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXBuildFile; fileRef = 7C7835A50F4345B497A4003B /* /Users/matty/projects/bulkin/src/swapchain.cpp */; };
+		E724B82904554D4F998903C7 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXBuildFile; fileRef = 5D982E2DBA574E9CA88F9271 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */; };
+		F20A30A8ECCD4D388F14DC4C /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = 0EAEDFB2353E438A872A1E48 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */; };
+		FCCF38F6E37F40F28BF873A2 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = BD439C3AEFE4439082B18A74 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */; };
+		FCF37F0477CF4075BB90C4CA /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = B79C584338EC417E96696F52 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */; };
+		FE1C3E297F7D4A668227972D /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = FA5F2DB7D78C4F80AEB6C9AA /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildStyle section */
+		49A6D2F9FFB744A2891FCD1B /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		80BE1A74E4E143A084AF8480 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		83D2853EB86140EF850086AB /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		DF58C415047946A7BAE0684B /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXContainerItemProxy section */
-		7AC663EA8EF7455696A50F36 /* PBXContainerItemProxy */ = {
+		2B34EF302DF64F6D95BE71D1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
 			remoteInfo = ZERO_CHECK;
 		};
-		B20B828A98DB4F838B1095F8 /* PBXContainerItemProxy */ = {
+		4F7DB2946BB943FBB737D183 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
+			remoteInfo = ZERO_CHECK;
+		};
+		9DE9012906B942AD8CC96173 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F331DFE182800A842DCD4764;
 			remoteInfo = bulkin;
 		};
-		E9AA38DCD5F54B0BA41BAD0A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
-			remoteInfo = ZERO_CHECK;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01A9BBB88ABD459091750B95 /* packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
-		06BA52253E574491B1FED2A4 /* matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
-		18C5D71511D6403BB66A0A51 /* IOKit.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
-		47E2C9B38F944947AA276E8D /* graphics-pipeline.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "graphics-pipeline.h"; path = "include/graphics-pipeline.h"; sourceTree = SOURCE_ROOT; };
-		4F669CAF1D1A441A96787894 /* queue-family.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "queue-family.h"; path = "include/queue-family.h"; sourceTree = SOURCE_ROOT; };
-		506B1A5446464FDBBC97FB09 /* bulkin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bulkin.h; path = include/bulkin.h; sourceTree = SOURCE_ROOT; };
-		588444D3FAA54205A88230AF /* buffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = buffer.cpp; path = src/buffer.cpp; sourceTree = SOURCE_ROOT; };
-		5B43A4E566A34D40B491757F /* geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
-		5CF64C92A9CB4A238ECAB73A /* stb_image.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_image.h; path = include/stb_image.h; sourceTree = SOURCE_ROOT; };
-		628DF631187B40049605B7A3 /* exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
-		674241A3EFBB494EB85ACC32 /* device.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = device.h; path = include/device.h; sourceTree = SOURCE_ROOT; };
-		68760FD0F20C4848BCCBE6F5 /* packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
-		6B66BF35600E43E390541BDE /* matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
-		6BAD3BC7D6654745BB75BAE8 /* vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
-		6F12B706FE51473483A92CE6 /* trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
-		807C76B77B2F4D608BABCE85 /* neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
-		80F32A74AEC54CBF86F28755 /* swapchain.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = swapchain.h; path = include/swapchain.h; sourceTree = SOURCE_ROOT; };
-		8788B573AC4841E292AB257A /* common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
-		8869330C28724B69B0E92B81 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		8899F0E454FC4850ACBEE1EB /* neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
-		89527C7D8CFA4FBD947F3627 /* integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
-		8D82C66E79794AD48648EC96 /* Cocoa.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		930BB015AA444AC093A3C412 /* graphics-pipeline.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "graphics-pipeline.cpp"; path = "src/graphics-pipeline.cpp"; sourceTree = SOURCE_ROOT; };
-		96DAC49D7AA34BB4A1B48AE5 /* device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = src/device.cpp; sourceTree = SOURCE_ROOT; };
-		979E2181C74343BD8556BC28 /* glfw3native.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3native.h; path = include/GLFW/glfw3native.h; sourceTree = SOURCE_ROOT; };
-		9E45778C97354CE4A2BAD4D5 /* constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constants.h; path = include/constants.h; sourceTree = SOURCE_ROOT; };
-		9FF6A8D39EA546DD832A8461 /* swapchain.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = swapchain.cpp; path = src/swapchain.cpp; sourceTree = SOURCE_ROOT; };
-		A3EA08D5E3C9435D9896344F /* platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
-		AE6F638F3FEC48AEAAC49894 /* trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
-		B92BF70717F74BDEBAFD0889 /* platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
-		BA48BBDB08D74CFA95FEF8F1 /* tiny_obj_loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tiny_obj_loader.h; path = include/tiny_obj_loader.h; sourceTree = SOURCE_ROOT; };
-		BA9D2249260C4F07BC54F79A /* main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
-		BEE5F73A9DA54C05925BA875 /* integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
-		BEE841F6C36C4205ACCB8FD0 /* buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = include/buffer.h; sourceTree = SOURCE_ROOT; };
-		CF73CD39E32441E693421B63 /* bulkin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = bulkin; sourceTree = BUILT_PRODUCTS_DIR; };
-		D766BB36009747F182413EC8 /* CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		E05F28FEAEBD4E2096D48491 /* vertex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vertex.h; path = include/vertex.h; sourceTree = SOURCE_ROOT; };
-		E2A9F19B6B004710B19BD988 /* exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
-		E731255C0DBF4C1A9729FA0F /* geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
-		EA4613E3B4324C798AA47638 /* common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
-		ECB922EF1A7D44B490B2F95C /* glfw3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3.h; path = include/GLFW/glfw3.h; sourceTree = SOURCE_ROOT; };
-		EFAE376EBFAE46A0A45816D5 /* CoreVideo.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
-		F1E9D356E8794771966C1A68 /* vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
-		FADF244CE041487DBFE24C3A /* bulkin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bulkin.cpp; path = src/bulkin.cpp; sourceTree = SOURCE_ROOT; };
+		003FEE65BD4F419DBF2C3BD8 /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = camera.cpp; path = src/camera.cpp; sourceTree = SOURCE_ROOT; };
+		06E4990FFD204287BD58A449 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		09792DB818B94A578C43A1FE /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
+		0CDEF3C65E79461E94EC940F /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = device.h; path = include/device.h; sourceTree = SOURCE_ROOT; };
+		0E237FF7F9A04E72A5F9E7B0 /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "queue-family.h"; path = "include/queue-family.h"; sourceTree = SOURCE_ROOT; };
+		0EAEDFB2353E438A872A1E48 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
+		176ED941D2DD424CB8FA1065 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
+		1B222D3537374B53B72D4CF4 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tiny_obj_loader.h; path = include/tiny_obj_loader.h; sourceTree = SOURCE_ROOT; };
+		1E76E6A3A40B43199CAF41E3 /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = swapchain.h; path = include/swapchain.h; sourceTree = SOURCE_ROOT; };
+		2F022982F50E467A9B235FF2 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		31F2D4696F9A45519A865BD3 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "graphics-pipeline.cpp"; path = "src/graphics-pipeline.cpp"; sourceTree = SOURCE_ROOT; };
+		36D64ADDF46E49F784FC47C4 /* /Users/matty/projects/bulkin/src/main.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
+		3C325DF39E1D4E948CC445B0 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		4A3EA77862F34F72BA90E325 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
+		4FB18F788DBE47828C04A013 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
+		5D982E2DBA574E9CA88F9271 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "graphics-pipeline.h"; path = "include/graphics-pipeline.h"; sourceTree = SOURCE_ROOT; };
+		60469784709B46AA9CCF179F /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
+		64FCEA3955944F58AB25DB5F /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3native.h; path = include/GLFW/glfw3native.h; sourceTree = SOURCE_ROOT; };
+		710F7CB0C243421E9C7478C9 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
+		73349FD5F31147C5ACFFFBC6 /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
+		7C7835A50F4345B497A4003B /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = swapchain.cpp; path = src/swapchain.cpp; sourceTree = SOURCE_ROOT; };
+		826F2809369947B1B0E1177A /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constants.h; path = include/constants.h; sourceTree = SOURCE_ROOT; };
+		8C9F208917A44F9E88553A96 /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bulkin.cpp; path = src/bulkin.cpp; sourceTree = SOURCE_ROOT; };
+		928F482ABDBC49C0AF4C758F /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = include/buffer.h; sourceTree = SOURCE_ROOT; };
+		9824712686134D71B0398DA1 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
+		AA5615DED76A4E6188B88369 /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = camera.h; path = include/camera.h; sourceTree = SOURCE_ROOT; };
+		AC5299A13D6245B6941606CB /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
+		B79C584338EC417E96696F52 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
+		B7C150F06C834506ADE60645 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
+		B9280ED942F140A5B9821CF4 /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = src/device.cpp; sourceTree = SOURCE_ROOT; };
+		BB447F205D484887804CE463 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
+		BD439C3AEFE4439082B18A74 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
+		BE7B1108F12146A79484454A /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
+		C2E894F0298F4CB483E04BA3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
+		C3C7A8C9E82D4992A30D7815 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
+		C85DD15B8A6A4A3CB8427F13 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		C8E4AD6820CB4F8A940D349A /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_image.h; path = include/stb_image.h; sourceTree = SOURCE_ROOT; };
+		CAB7372A6CB54511A696BAA4 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3.h; path = include/GLFW/glfw3.h; sourceTree = SOURCE_ROOT; };
+		CF1CC67DCA784C5DB78D8818 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
+		D2A3E47C9A164371B1AFE5C3 /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bulkin.h; path = include/bulkin.h; sourceTree = SOURCE_ROOT; };
+		D65262D496014FFDB2B96549 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		DE2C6E07F23B41E280A2C164 /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vertex.h; path = include/vertex.h; sourceTree = SOURCE_ROOT; };
+		E1514EFA5889426ABF646B62 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
+		EB92E743F41049C7B37286E1 /* bulkin */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = bulkin; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA5F2DB7D78C4F80AEB6C9AA /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
+		FF9033438C1E4EEE9531F66F /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = buffer.cpp; path = src/buffer.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		ECE9200D562A4953A1580A33 /* Frameworks */ = {
+		47B9543886A647C382BEE876 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -124,118 +195,120 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		176044AA2E1C48DFB30C4474 /* bulkin */ = {
+		0BE0D2C0D8D64E73A55C0901 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
-				D88B5975656548059D6674EA /* Source Files */,
-				96C3533A8F1747D395E77A1A /* Header Files */,
-				8869330C28724B69B0E92B81 /* CMakeLists.txt */,
-			);
-			name = bulkin;
-			sourceTree = "<group>";
-		};
-		37635FE4FB3447E28C5E6837 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				8D82C66E79794AD48648EC96 /* Cocoa.framework */,
-				18C5D71511D6403BB66A0A51 /* IOKit.framework */,
-				EFAE376EBFAE46A0A45816D5 /* CoreVideo.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		89A7A1E517974932A0B10203 /* ALL_BUILD */ = {
-			isa = PBXGroup;
-			children = (
-				F03A4F177DED4DE09AA08914 /* CMake Rules */,
-				D766BB36009747F182413EC8 /* CMakeLists.txt */,
-			);
-			name = ALL_BUILD;
-			sourceTree = "<group>";
-		};
-		96C3533A8F1747D395E77A1A /* Header Files */ = {
-			isa = PBXGroup;
-			children = (
-				ECB922EF1A7D44B490B2F95C /* glfw3.h */,
-				979E2181C74343BD8556BC28 /* glfw3native.h */,
-				BEE841F6C36C4205ACCB8FD0 /* buffer.h */,
-				506B1A5446464FDBBC97FB09 /* bulkin.h */,
-				9E45778C97354CE4A2BAD4D5 /* constants.h */,
-				674241A3EFBB494EB85ACC32 /* device.h */,
-				8788B573AC4841E292AB257A /* common.h */,
-				628DF631187B40049605B7A3 /* exponential.h */,
-				5B43A4E566A34D40B491757F /* geometric.h */,
-				BEE5F73A9DA54C05925BA875 /* integer.h */,
-				06BA52253E574491B1FED2A4 /* matrix.h */,
-				807C76B77B2F4D608BABCE85 /* neon.h */,
-				68760FD0F20C4848BCCBE6F5 /* packing.h */,
-				B92BF70717F74BDEBAFD0889 /* platform.h */,
-				AE6F638F3FEC48AEAAC49894 /* trigonometric.h */,
-				6BAD3BC7D6654745BB75BAE8 /* vector_relational.h */,
-				EA4613E3B4324C798AA47638 /* common.h */,
-				E2A9F19B6B004710B19BD988 /* exponential.h */,
-				E731255C0DBF4C1A9729FA0F /* geometric.h */,
-				89527C7D8CFA4FBD947F3627 /* integer.h */,
-				6B66BF35600E43E390541BDE /* matrix.h */,
-				8899F0E454FC4850ACBEE1EB /* neon.h */,
-				01A9BBB88ABD459091750B95 /* packing.h */,
-				A3EA08D5E3C9435D9896344F /* platform.h */,
-				6F12B706FE51473483A92CE6 /* trigonometric.h */,
-				F1E9D356E8794771966C1A68 /* vector_relational.h */,
-				47E2C9B38F944947AA276E8D /* graphics-pipeline.h */,
-				4F669CAF1D1A441A96787894 /* queue-family.h */,
-				5CF64C92A9CB4A238ECAB73A /* stb_image.h */,
-				80F32A74AEC54CBF86F28755 /* swapchain.h */,
-				BA48BBDB08D74CFA95FEF8F1 /* tiny_obj_loader.h */,
-				E05F28FEAEBD4E2096D48491 /* vertex.h */,
-			);
-			name = "Header Files";
-			sourceTree = "<group>";
-		};
-		B63E19CE681F4E98A0AD089C = {
-			isa = PBXGroup;
-			children = (
-				176044AA2E1C48DFB30C4474 /* bulkin */,
-				89A7A1E517974932A0B10203 /* ALL_BUILD */,
-				C9353001C9EA4F41A9881FE2 /* Products */,
-				37635FE4FB3447E28C5E6837 /* Frameworks */,
-				DC41C3D1520B452F9E8AADB9 /* Resources */,
-			);
-			sourceTree = "<group>";
-		};
-		C9353001C9EA4F41A9881FE2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CF73CD39E32441E693421B63 /* bulkin */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		D88B5975656548059D6674EA /* Source Files */ = {
-			isa = PBXGroup;
-			children = (
-				588444D3FAA54205A88230AF /* buffer.cpp */,
-				FADF244CE041487DBFE24C3A /* bulkin.cpp */,
-				96DAC49D7AA34BB4A1B48AE5 /* device.cpp */,
-				930BB015AA444AC093A3C412 /* graphics-pipeline.cpp */,
-				BA9D2249260C4F07BC54F79A /* main.cpp */,
-				9FF6A8D39EA546DD832A8461 /* swapchain.cpp */,
+				FF9033438C1E4EEE9531F66F /* /Users/matty/projects/bulkin/src/buffer.cpp */,
+				8C9F208917A44F9E88553A96 /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
+				003FEE65BD4F419DBF2C3BD8 /* /Users/matty/projects/bulkin/src/camera.cpp */,
+				B9280ED942F140A5B9821CF4 /* /Users/matty/projects/bulkin/src/device.cpp */,
+				31F2D4696F9A45519A865BD3 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
+				36D64ADDF46E49F784FC47C4 /* /Users/matty/projects/bulkin/src/main.cpp */,
+				7C7835A50F4345B497A4003B /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
 			);
 			name = "Source Files";
 			sourceTree = "<group>";
 		};
-		DC41C3D1520B452F9E8AADB9 /* Resources */ = {
+		2FFDCD4511E140FEB2222964 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				EB92E743F41049C7B37286E1 /* bulkin */,
 			);
-			name = Resources;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		F03A4F177DED4DE09AA08914 /* CMake Rules */ = {
+		3262D47E80E84384AD302F95 /* bulkin */ = {
+			isa = PBXGroup;
+			children = (
+				0BE0D2C0D8D64E73A55C0901 /* Source Files */,
+				39D3521778D24699A65CC6C4 /* Header Files */,
+				2F022982F50E467A9B235FF2 /* /Users/matty/projects/bulkin/CMakeLists.txt */,
+			);
+			name = bulkin;
+			sourceTree = "<group>";
+		};
+		39D3521778D24699A65CC6C4 /* Header Files */ = {
+			isa = PBXGroup;
+			children = (
+				CAB7372A6CB54511A696BAA4 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */,
+				64FCEA3955944F58AB25DB5F /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */,
+				928F482ABDBC49C0AF4C758F /* /Users/matty/projects/bulkin/include/buffer.h */,
+				D2A3E47C9A164371B1AFE5C3 /* /Users/matty/projects/bulkin/include/bulkin.h */,
+				AA5615DED76A4E6188B88369 /* /Users/matty/projects/bulkin/include/camera.h */,
+				826F2809369947B1B0E1177A /* /Users/matty/projects/bulkin/include/constants.h */,
+				0CDEF3C65E79461E94EC940F /* /Users/matty/projects/bulkin/include/device.h */,
+				60469784709B46AA9CCF179F /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */,
+				BB447F205D484887804CE463 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */,
+				FA5F2DB7D78C4F80AEB6C9AA /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */,
+				73349FD5F31147C5ACFFFBC6 /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */,
+				C2E894F0298F4CB483E04BA3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */,
+				CF1CC67DCA784C5DB78D8818 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */,
+				176ED941D2DD424CB8FA1065 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */,
+				4A3EA77862F34F72BA90E325 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */,
+				B7C150F06C834506ADE60645 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */,
+				0EAEDFB2353E438A872A1E48 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */,
+				9824712686134D71B0398DA1 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */,
+				B79C584338EC417E96696F52 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */,
+				710F7CB0C243421E9C7478C9 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */,
+				BE7B1108F12146A79484454A /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */,
+				09792DB818B94A578C43A1FE /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */,
+				E1514EFA5889426ABF646B62 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */,
+				AC5299A13D6245B6941606CB /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */,
+				C3C7A8C9E82D4992A30D7815 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */,
+				4FB18F788DBE47828C04A013 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */,
+				BD439C3AEFE4439082B18A74 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */,
+				5D982E2DBA574E9CA88F9271 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */,
+				0E237FF7F9A04E72A5F9E7B0 /* /Users/matty/projects/bulkin/include/queue-family.h */,
+				C8E4AD6820CB4F8A940D349A /* /Users/matty/projects/bulkin/include/stb_image.h */,
+				1E76E6A3A40B43199CAF41E3 /* /Users/matty/projects/bulkin/include/swapchain.h */,
+				1B222D3537374B53B72D4CF4 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */,
+				DE2C6E07F23B41E280A2C164 /* /Users/matty/projects/bulkin/include/vertex.h */,
+			);
+			name = "Header Files";
+			sourceTree = "<group>";
+		};
+		553B56B4907A430480498D9C = {
+			isa = PBXGroup;
+			children = (
+				3262D47E80E84384AD302F95 /* bulkin */,
+				65523B42ED114D5B9B8879C3 /* ALL_BUILD */,
+				2FFDCD4511E140FEB2222964 /* Products */,
+				88DF0FF6193D434FB32921E9 /* Frameworks */,
+				A9A5296AB412489BB0977DE2 /* Resources */,
+			);
+			sourceTree = "<group>";
+		};
+		65523B42ED114D5B9B8879C3 /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				90E3C98E3039413AB1E9EE21 /* CMake Rules */,
+				06E4990FFD204287BD58A449 /* /Users/matty/projects/bulkin/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		88DF0FF6193D434FB32921E9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C85DD15B8A6A4A3CB8427F13 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/Cocoa.framework */,
+				D65262D496014FFDB2B96549 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/IOKit.framework */,
+				3C325DF39E1D4E948CC445B0 /* /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks/CoreVideo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		90E3C98E3039413AB1E9EE21 /* CMake Rules */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		A9A5296AB412489BB0977DE2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,19 +316,19 @@
 /* Begin PBXNativeTarget section */
 		F331DFE182800A842DCD4764 /* bulkin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FCE1290A50EF4705AA2FA7B7 /* Build configuration list for PBXNativeTarget "bulkin" */;
+			buildConfigurationList = 103C6CCFD6564FFBBCB5E54F /* Build configuration list for PBXNativeTarget "bulkin" */;
 			buildPhases = (
-				0F03CE4A1BD44F05B1EC62EC /* Sources */,
-				ECE9200D562A4953A1580A33 /* Frameworks */,
+				FA2B5FC16DE74305BF3F0BED /* Sources */,
+				47B9543886A647C382BEE876 /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				24095BB99ECF448BBA01BFC5 /* PBXTargetDependency */,
+				07B4976966994ECA9AABBB1B /* PBXTargetDependency */,
 			);
 			name = bulkin;
 			productName = bulkin;
-			productReference = CF73CD39E32441E693421B63 /* bulkin */;
+			productReference = EB92E743F41049C7B37286E1 /* bulkin */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -264,17 +337,21 @@
 		A699C144BB7F48C299996A6B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2600;
 			};
-			buildConfigurationList = 9ACBEEF9773A4954A1EDD501 /* Build configuration list for PBXProject "bulkin" */;
-			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = en;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
+			buildConfigurationList = 175246F45A7E43088CB69F6E /* Build configuration list for PBXProject "bulkin" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				DF58C415047946A7BAE0684B /* Debug */,
+				83D2853EB86140EF850086AB /* Release */,
+				80BE1A74E4E143A084AF8480 /* MinSizeRel */,
+				49A6D2F9FFB744A2891FCD1B /* RelWithDebInfo */,
 			);
-			mainGroup = B63E19CE681F4E98A0AD089C;
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = 553B56B4907A430480498D9C;
 			projectDirPath = /Users/matty/projects/bulkin;
 			projectRoot = "";
 			targets = (
@@ -296,11 +373,42 @@
 			);
 			name = "Generate CMakeFiles/ALL_BUILD";
 			outputPaths = (
-				"/Users/matty/projects/bulkin/build-xcode/CMakeFiles/ALL_BUILD",
+"/Users/matty/projects/bulkin/build-xcode/CMakeFiles/ALL_BUILD"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  echo Build\\ all\\ projects
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  echo Build\\ all\\ projects
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		3C0110FC8322DE7E50886E21 = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nif test \"$CONFIGURATION\" = \"Debug\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"Release\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"MinSizeRel\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  echo Build\\ all\\ projects\nfi\nif test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  echo Build\\ all\\ projects\nfi\n";
+			shellScript = "# shell script goes here
+exit 0";
 			showEnvVarsInLog = 0;
 		};
 		3EE3CCE21C99319531230F75 /* Generate CMakeFiles/ZERO_CHECK */ = {
@@ -313,287 +421,83 @@
 			);
 			name = "Generate CMakeFiles/ZERO_CHECK";
 			outputPaths = (
-				"/Users/matty/projects/bulkin/build-xcode/CMakeFiles/ZERO_CHECK",
+"/Users/matty/projects/bulkin/build-xcode/CMakeFiles/ZERO_CHECK"			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e
+if test \"$CONFIGURATION\" = \"Debug\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"Release\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"MinSizeRel\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make
+fi
+if test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :
+  cd /Users/matty/projects/bulkin/build-xcode
+  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make
+fi
+";
+			showEnvVarsInLog = 0;
+		};
+		9B50530E35CC49C82C2FACCF = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\nif test \"$CONFIGURATION\" = \"Debug\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"Release\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"MinSizeRel\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make\nfi\nif test \"$CONFIGURATION\" = \"RelWithDebInfo\"; then :\n  cd /Users/matty/projects/bulkin/build-xcode\n  make -f /Users/matty/projects/bulkin/build-xcode/CMakeScripts/ReRunCMake.make\nfi\n";
+			shellScript = "# shell script goes here
+exit 0";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0F03CE4A1BD44F05B1EC62EC /* Sources */ = {
+		FA2B5FC16DE74305BF3F0BED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9166C0475801400E9B82BA74 /* buffer.cpp in Sources */,
-				69ECBBCE82A34623813ECD16 /* bulkin.cpp in Sources */,
-				C57F98FE57F44063AAA5D5AF /* device.cpp in Sources */,
-				184E9B754A574A74A9BFE4E5 /* graphics-pipeline.cpp in Sources */,
-				8683E201061E4DADB20C4A7E /* main.cpp in Sources */,
-				9B637444704549F5B65B1B0F /* swapchain.cpp in Sources */,
+				CA32AB59AD904AC98B399509 /* /Users/matty/projects/bulkin/src/buffer.cpp */,
+				9B1D1365256D4863ABD5940B /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
+				BD1B75B160F14B5BA4BB633F /* /Users/matty/projects/bulkin/src/camera.cpp */,
+				5A192083D5BE4AE4B95779B0 /* /Users/matty/projects/bulkin/src/device.cpp */,
+				14D96BF247E34F448EB9AC45 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
+				DA041F21EB134F89932B1A1D /* /Users/matty/projects/bulkin/src/main.cpp */,
+				E358418F7E5944C4BFCAA64D /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		10B37799A68447F3BF338194 /* PBXTargetDependency */ = {
+		07B4976966994ECA9AABBB1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
+			targetProxy = 2B34EF302DF64F6D95BE71D1 /* PBXContainerItemProxy */;
+		};
+		4608001644C140F1B7DD2626 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
+			targetProxy = 4F7DB2946BB943FBB737D183 /* PBXContainerItemProxy */;
+		};
+		8BC2C633CF1643929A151181 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F331DFE182800A842DCD4764 /* bulkin */;
-			targetProxy = B20B828A98DB4F838B1095F8 /* PBXContainerItemProxy */;
-		};
-		24095BB99ECF448BBA01BFC5 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
-			targetProxy = E9AA38DCD5F54B0BA41BAD0A /* PBXContainerItemProxy */;
-		};
-		E3717EA69DB444408B3E972C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
-			targetProxy = 7AC663EA8EF7455696A50F36 /* PBXContainerItemProxy */;
+			targetProxy = 9DE9012906B942AD8CC96173 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		28FA9C56BFEF49C495C76483 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = "";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
-			};
-			name = MinSizeRel;
-		};
-		2EDC683B92C24339B9F82756 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/MinSizeRel";
-				EXECUTABLE_PREFIX = "";
-				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,
-					"$(inherited)",
-				);
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					/Users/matty/projects/bulkin/include,
-					"$(inherited)",
-				);
-				INSTALL_PATH = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Users/matty/VulkanSDK/default/macOS/lib,
-					"$(inherited)",
-				);
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNDEBUG",
-					"'-std=gnu++2b'",
-					"-Wall",
-					"-Wextra",
-				);
-				OTHER_LDFLAGS = (
-					"-Wl,-search_paths_first",
-					"-Wl,-headerpad_max_install_names",
-					"-framework",
-					Cocoa,
-					"-framework",
-					IOKit,
-					"-framework",
-					CoreVideo,
-					/Users/matty/projects/bulkin/thirdParty/libglfw3.a,
-					/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,
-					"$(inherited)",
-				);
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = bulkin;
-				SECTORDER_FLAGS = "";
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/matty/vulkanSDK/default/macOS/include,
-					"$(inherited)",
-				);
-				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = MinSizeRel;
-		};
-		462EF0CA4F204C66BADF5D4B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = Debug;
-		};
-		4CAE6528D8D34E978662686F /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = MinSizeRel;
-		};
-		505EA502B6FC4AF98DC00BF6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = Release;
-		};
-		53847668278D43139B0604D1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = Debug;
-		};
-		706D679F1D2048568C1D2F12 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/Release";
-				EXECUTABLE_PREFIX = "";
-				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,
-					"$(inherited)",
-				);
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 3;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					/Users/matty/projects/bulkin/include,
-					"$(inherited)",
-				);
-				INSTALL_PATH = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Users/matty/VulkanSDK/default/macOS/lib,
-					"$(inherited)",
-				);
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNDEBUG",
-					"'-std=gnu++2b'",
-					"-Wall",
-					"-Wextra",
-				);
-				OTHER_LDFLAGS = (
-					"-Wl,-search_paths_first",
-					"-Wl,-headerpad_max_install_names",
-					"-framework",
-					Cocoa,
-					"-framework",
-					IOKit,
-					"-framework",
-					CoreVideo,
-					/Users/matty/projects/bulkin/thirdParty/libglfw3.a,
-					/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,
-					"$(inherited)",
-				);
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = bulkin;
-				SECTORDER_FLAGS = "";
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/matty/vulkanSDK/default/macOS/include,
-					"$(inherited)",
-				);
-				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = Release;
-		};
-		7A97B2E3CB8A466FAAFC3855 /* Release */ = {
+		01F22F93D88A47269DFFF9CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
@@ -603,41 +507,7 @@
 			};
 			name = Release;
 		};
-		94D57BF627514AF5A35F78C9 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = RelWithDebInfo;
-		};
-		956D4737CC3C4792B5DE183C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = "";
-				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
-			};
-			name = Debug;
-		};
-		ADD1CE21199943B2A400FFA8 /* RelWithDebInfo */ = {
+		2C2A9AEA1D9D4628B1808D3A /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
@@ -645,9 +515,9 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
 			};
-			name = RelWithDebInfo;
+			name = MinSizeRel;
 		};
-		BD28EBF237C44EBCA95455EA /* RelWithDebInfo */ = {
+		36D7CC1AA4CD4E46B9EE4350 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -656,48 +526,64 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INSTALL_PATH = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ZERO_CHECK;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
-			};
-			name = RelWithDebInfo;
-		};
-		E626913B95E344B4B4668B80 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
+				WARNING_CFLAGS = ("$(inherited)");
 			};
 			name = MinSizeRel;
 		};
-		E87A079F901D4DC1BF067FD6 /* RelWithDebInfo */ = {
+		3D3B59C1D7774965BEF4A185 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		4BFDB88CFB4546C98DC4E6CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		57CC9D65D1AB49AD9FE01E09 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -706,61 +592,38 @@
 				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/RelWithDebInfo";
 				EXECUTABLE_PREFIX = "";
 				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 2;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					/Users/matty/projects/bulkin/include,
-					"$(inherited)",
-				);
+				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
 				INSTALL_PATH = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Users/matty/VulkanSDK/default/macOS/lib,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = (/Users/matty/VulkanSDK/default/macOS/lib,"$(inherited)");
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"-DNDEBUG",
-					"'-std=gnu++2b'",
-					"-Wall",
-					"-Wextra",
-				);
-				OTHER_LDFLAGS = (
-					"-Wl,-search_paths_first",
-					"-Wl,-headerpad_max_install_names",
-					"-framework",
-					Cocoa,
-					"-framework",
-					IOKit,
-					"-framework",
-					CoreVideo,
-					/Users/matty/projects/bulkin/thirdParty/libglfw3.a,
-					/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,
-					"$(inherited)",
-				);
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG '-std=gnu++2b' -Wall -Wextra    ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework Cocoa","-framework IOKit","-framework CoreVideo",/Users/matty/projects/bulkin/thirdParty/libglfw3.a,/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,"$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = bulkin;
 				SECTORDER_FLAGS = "";
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/matty/vulkanSDK/default/macOS/include,
-					"$(inherited)",
-				);
+				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
 				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
+				WARNING_CFLAGS = ("$(inherited)");
 			};
 			name = RelWithDebInfo;
 		};
-		EFD4C9D5FA7F4251AE270B35 /* Release */ = {
+		5BF654751F664A23A8112C84 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = "";
+				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
+			};
+			name = Debug;
+		};
+		6EFB11304E724C62BC339DEB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -769,23 +632,136 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INSTALL_PATH = "";
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = " $(inherited)";
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		6FD2810C919641DC9DA02279 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = ALL_BUILD;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		749F1289BC5F41969A21F6DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/Release";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/Users/matty/VulkanSDK/default/macOS/lib,"$(inherited)");
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++2b' -Wall -Wextra    ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework Cocoa","-framework IOKit","-framework CoreVideo",/Users/matty/projects/bulkin/thirdParty/libglfw3.a,/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,"$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = bulkin;
+				SECTORDER_FLAGS = "";
+				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
+				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
 			};
 			name = Release;
 		};
-		F04459BEC99B41F48515198B /* Debug */ = {
+		8EE10DFFF844484B84DBB210 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = (/Users/matty/VulkanSDK/default/macOS/lib,"$(inherited)");
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++2b' -Wall -Wextra    ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework Cocoa","-framework IOKit","-framework CoreVideo",/Users/matty/projects/bulkin/thirdParty/libglfw3.a,/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,"$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = bulkin;
+				SECTORDER_FLAGS = "";
+				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
+				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		A1C12A0B8FE94AC7BF0D31E9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
+			};
+			name = RelWithDebInfo;
+		};
+		ACE40DD7E31E481EB18E24B5 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		B0AAD6ECB1084FBAA1A07CD2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -794,102 +770,115 @@
 				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/Debug";
 				EXECUTABLE_PREFIX = "";
 				EXECUTABLE_SUFFIX = "";
-				FRAMEWORK_SEARCH_PATHS = (
-					/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'",
-					"$(inherited)",
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					/Users/matty/projects/bulkin/include,
-					"$(inherited)",
-				);
+				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
 				INSTALL_PATH = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					/Users/matty/VulkanSDK/default/macOS/lib,
-					"$(inherited)",
-				);
+				LD_RUNPATH_SEARCH_PATHS = (/Users/matty/VulkanSDK/default/macOS/lib,"$(inherited)");
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CPLUSPLUSFLAGS = (
-					"'-std=gnu++2b'",
-					"-Wall",
-					"-Wextra",
-				);
-				OTHER_LDFLAGS = (
-					"-Wl,-search_paths_first",
-					"-Wl,-headerpad_max_install_names",
-					"-framework",
-					Cocoa,
-					"-framework",
-					IOKit,
-					"-framework",
-					CoreVideo,
-					/Users/matty/projects/bulkin/thirdParty/libglfw3.a,
-					/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,
-					"$(inherited)",
-				);
+				OTHER_CPLUSPLUSFLAGS = "   '-std=gnu++2b' -Wall -Wextra    ";
+				OTHER_LDFLAGS = (" -Wl,-search_paths_first -Wl,-headerpad_max_install_names","-framework Cocoa","-framework IOKit","-framework CoreVideo",/Users/matty/projects/bulkin/thirdParty/libglfw3.a,/Users/matty/VulkanSDK/default/macOS/lib/libvulkan.dylib,"$(inherited)");
 				OTHER_REZFLAGS = "";
 				PRODUCT_NAME = bulkin;
 				SECTORDER_FLAGS = "";
-				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/matty/vulkanSDK/default/macOS/include,
-					"$(inherited)",
-				);
+				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
 				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = "$(inherited)";
+				WARNING_CFLAGS = ("$(inherited)");
 			};
 			name = Debug;
+		};
+		CCD93EFCE1BC40B78D79D1D6 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		FFCE9DADF8134533A51FC17A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		083B49E50BFB49C2A20F3150 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+		103C6CCFD6564FFBBCB5E54F /* Build configuration list for PBXNativeTarget "bulkin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				462EF0CA4F204C66BADF5D4B /* Debug */,
-				505EA502B6FC4AF98DC00BF6 /* Release */,
-				E626913B95E344B4B4668B80 /* MinSizeRel */,
-				BD28EBF237C44EBCA95455EA /* RelWithDebInfo */,
+				B0AAD6ECB1084FBAA1A07CD2 /* Debug */,
+				749F1289BC5F41969A21F6DA /* Release */,
+				8EE10DFFF844484B84DBB210 /* MinSizeRel */,
+				57CC9D65D1AB49AD9FE01E09 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		1AC0872C7FED44C2AF7457BF /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+		175246F45A7E43088CB69F6E /* Build configuration list for PBXProject "bulkin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				53847668278D43139B0604D1 /* Debug */,
-				EFD4C9D5FA7F4251AE270B35 /* Release */,
-				4CAE6528D8D34E978662686F /* MinSizeRel */,
-				94D57BF627514AF5A35F78C9 /* RelWithDebInfo */,
+				5BF654751F664A23A8112C84 /* Debug */,
+				01F22F93D88A47269DFFF9CF /* Release */,
+				2C2A9AEA1D9D4628B1808D3A /* MinSizeRel */,
+				A1C12A0B8FE94AC7BF0D31E9 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		9ACBEEF9773A4954A1EDD501 /* Build configuration list for PBXProject "bulkin" */ = {
+		36A15271C93D4CC0982FFE11 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				956D4737CC3C4792B5DE183C /* Debug */,
-				7A97B2E3CB8A466FAAFC3855 /* Release */,
-				28FA9C56BFEF49C495C76483 /* MinSizeRel */,
-				ADD1CE21199943B2A400FFA8 /* RelWithDebInfo */,
+				3D3B59C1D7774965BEF4A185 /* Debug */,
+				6EFB11304E724C62BC339DEB /* Release */,
+				36D7CC1AA4CD4E46B9EE4350 /* MinSizeRel */,
+				ACE40DD7E31E481EB18E24B5 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		FCE1290A50EF4705AA2FA7B7 /* Build configuration list for PBXNativeTarget "bulkin" */ = {
+		8ECBCC80F20248DEB2E3F396 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F04459BEC99B41F48515198B /* Debug */,
-				706D679F1D2048568C1D2F12 /* Release */,
-				2EDC683B92C24339B9F82756 /* MinSizeRel */,
-				E87A079F901D4DC1BF067FD6 /* RelWithDebInfo */,
+				4BFDB88CFB4546C98DC4E6CD /* Debug */,
+				FFCE9DADF8134533A51FC17A /* Release */,
+				6FD2810C919641DC9DA02279 /* MinSizeRel */,
+				CCD93EFCE1BC40B78D79D1D6 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

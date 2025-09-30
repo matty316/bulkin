@@ -8,6 +8,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/GLFW/glfw3native.h"
   "/Users/matty/projects/bulkin/include/buffer.h"
   "/Users/matty/projects/bulkin/include/bulkin.h"
+  "/Users/matty/projects/bulkin/include/camera.h"
   "/Users/matty/projects/bulkin/include/constants.h"
   "/Users/matty/projects/bulkin/include/device.h"
   "/Users/matty/projects/bulkin/include/glm/glm/simd/common.h"
@@ -56,6 +57,7 @@ file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/Users/matty/projects/bulkin/
 set(OLD_GLOB
   "/Users/matty/projects/bulkin/src/buffer.cpp"
   "/Users/matty/projects/bulkin/src/bulkin.cpp"
+  "/Users/matty/projects/bulkin/src/camera.cpp"
   "/Users/matty/projects/bulkin/src/device.cpp"
   "/Users/matty/projects/bulkin/src/graphics-pipeline.cpp"
   "/Users/matty/projects/bulkin/src/main.cpp"

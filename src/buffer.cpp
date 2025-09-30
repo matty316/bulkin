@@ -1,5 +1,11 @@
 #include "buffer.h"
 #include "vertex.h"
+#include "constants.h"
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GLFW/glfw3.h>
 
 uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, vk::PhysicalDevice device) {
   vk::PhysicalDeviceMemoryProperties memProperties = device.getMemoryProperties();
@@ -37,7 +43,8 @@ void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size,
   submitInfo.commandBufferCount = 1;
   submitInfo.pCommandBuffers = &commandBuffer;
   
-  queue.submit(1, &submitInfo, nullptr);
+  if (queue.submit(1, &submitInfo, nullptr) != vk::Result::eSuccess)
+    throw std::runtime_error("failed to submit queue");
   queue.waitIdle();
   
   device.freeCommandBuffers(commandPool, 1, &commandBuffer);
@@ -99,7 +106,36 @@ void BulkinBuffer::createIndexBuffer(vk::Device& device, vk::PhysicalDevice& phy
   device.free(stagingBufferMemory);
 }
 
+void BulkinBuffer::createUniformBuffers(vk::Device &device, vk::PhysicalDevice &physicalDevice) {
+  vk::DeviceSize size = sizeof(UniformBufferObject);
+  uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+  uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+  uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+  
+  for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eUniformBuffer, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, uniformBuffers[i], uniformBuffersMemory[i]);
+    uniformBuffersMapped[i] = device.mapMemory(uniformBuffersMemory[i], 0, size);
+  }
+}
+
+void BulkinBuffer::updateUniformBuffer(uint32_t currentImage, float width, float height, BulkinCamera& camera) {
+  UniformBufferObject ubo{};
+  auto model = glm::mat4(1.0f);
+  model = glm::translate(model, glm::vec3(0.0f));
+  model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f));
+  model = glm::scale(model, glm::vec3(1.0f));
+  ubo.model = model;
+  ubo.view = camera.getView();
+  ubo.proj = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
+  ubo.proj[1][1] *= -1;
+  memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+}
+
 void BulkinBuffer::cleanup(vk::Device& device) {
+  for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    device.destroy(uniformBuffers[i]);
+    device.free(uniformBuffersMemory[i]);
+  }
   device.destroy(vertexBuffer);
   device.free(vertexBufferMemory);
   device.destroy(indexBuffer);

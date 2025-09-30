@@ -71,7 +71,7 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
   rasterizer.polygonMode = vk::PolygonMode::eFill;
   rasterizer.lineWidth = 1.0f;
   rasterizer.cullMode = vk::CullModeFlagBits::eBack;
-  rasterizer.frontFace = vk::FrontFace::eClockwise;
+  rasterizer.frontFace = vk::FrontFace::eCounterClockwise;
   rasterizer.depthBiasEnable = vk::False;
   
   vk::PipelineMultisampleStateCreateInfo multisampling{};
@@ -101,7 +101,8 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
   dynamicState.pDynamicStates = dynamicStates.data();
   
   vk::PipelineLayoutCreateInfo pipelineLayoutInfo{};
-  pipelineLayoutInfo.setLayoutCount = 0;
+  pipelineLayoutInfo.setLayoutCount = 1;
+  pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
   pipelineLayoutInfo.pushConstantRangeCount = 0;
   
   pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
@@ -159,6 +160,8 @@ vk::ShaderModule BulkinGraphicsPipeline::createShaderModule(const std::vector<ch
 
 void BulkinGraphicsPipeline::cleanup(vk::Device &device) {
   buffers.cleanup(device);
+  device.destroy(descriptorPool);
+  device.destroy(descriptorSetLayout);
   device.destroy(commandPool);
   device.destroy(pipelineLayout);
   device.destroy(pipeline);
@@ -182,7 +185,7 @@ void BulkinGraphicsPipeline::createCommandBuffers(vk::Device &device) {
   commandBuffers = device.allocateCommandBuffers(allocInfo);
 }
 
-void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain) {
+void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame) {
   vk::CommandBufferBeginInfo beginInfo{};
   commandBuffer.begin(beginInfo);
   
@@ -221,6 +224,8 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   vk::DeviceSize offsets[] = {0};
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
   commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint16);
+  
+  commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
   
   commandBuffer.drawIndexed(static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
   
@@ -275,4 +280,62 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
 void BulkinGraphicsPipeline::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
+  buffers.createUniformBuffers(device, physicalDevice);
+  createDescriptorPool(device);
+  createDescriptorSets(device);
+}
+
+void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
+  vk::DescriptorSetLayoutBinding uboLayoutBinding{};
+  uboLayoutBinding.binding = 0;
+  uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
+  uboLayoutBinding.descriptorCount = 1;
+  uboLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eVertex;
+  
+  vk::DescriptorSetLayoutCreateInfo layoutInfo{};
+  layoutInfo.bindingCount = 1;
+  layoutInfo.pBindings = &uboLayoutBinding;
+  
+  descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+}
+
+void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
+  vk::DescriptorPoolSize poolSize{};
+  poolSize.type = vk::DescriptorType::eUniformBuffer;
+  poolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  
+  vk::DescriptorPoolCreateInfo poolInfo{};
+  poolInfo.poolSizeCount = 1;
+  poolInfo.pPoolSizes = &poolSize;
+  poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  
+  descriptorPool = device.createDescriptorPool(poolInfo);
+}
+
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device) {
+  std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+  vk::DescriptorSetAllocateInfo allocInfo{};
+  allocInfo.descriptorPool = descriptorPool;
+  allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  allocInfo.pSetLayouts = layouts.data();
+ 
+  descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+  descriptorSets = device.allocateDescriptorSets(allocInfo);
+  
+  for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    vk::DescriptorBufferInfo bufferInfo{};
+    bufferInfo.buffer = buffers.uniformBuffers[i];
+    bufferInfo.offset = 0;
+    bufferInfo.range = sizeof(UniformBufferObject);
+    
+    vk::WriteDescriptorSet descriptorWrite{};
+    descriptorWrite.dstSet = descriptorSets[i];
+    descriptorWrite.dstBinding = 0;
+    descriptorWrite.dstArrayElement = 0;
+    descriptorWrite.descriptorType = vk::DescriptorType::eUniformBuffer;
+    descriptorWrite.descriptorCount = 1;
+    descriptorWrite.pBufferInfo = &bufferInfo;
+    
+    device.updateDescriptorSets(1, &descriptorWrite, 0, nullptr);
+  }
 }
