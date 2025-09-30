@@ -1,7 +1,7 @@
 #include "camera.h"
 
-void BulkinCamera::update(double deltaTime, const glm::vec2 &mousePos, bool mousePressed) {
-  if (abs(mousePosition.x - mousePos.x) + abs(mousePosition.y - mousePos.y) > 0.0001) {
+void BulkinCamera::update(double deltaTime, const glm::vec2 &mousePos) {
+  if (abs(mousePosition.x - mousePos.x) + abs(mousePosition.y - mousePos.y) > FLT_EPSILON) {
     auto xoffset = mousePos.x * mouseSpeed;
     auto yoffset = mousePos.y * mouseSpeed;
     

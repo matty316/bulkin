@@ -145,7 +145,7 @@ void Bulkin::update() {
   const double newTimeStamp = glfwGetTime();
   deltaTime = newTimeStamp - timeStamp;
   timeStamp = newTimeStamp;
-  camera.update(deltaTime, mouseState.pos, mouseState.pressed);
+  camera.update(deltaTime, mouseState.pos);
   device.graphicsPipeline.buffers.updateUniformBuffer(currentFrame, static_cast<float>(device.swapchain.extent.width), static_cast<float>(device.swapchain.extent.height), camera);
 }
 

@@ -11,7 +11,7 @@ public:
   BulkinCamera(const glm::vec3& pos, const glm::vec3& front, const glm::vec3& up) : cameraPos(pos), front(front), up(up), worldUp(up) {
     setCameraVectors();
   }
-  void update(double deltaTime, const glm::vec2& mousePos, bool mousePressed);
+  void update(double deltaTime, const glm::vec2& mousePos);
   glm::mat4 getView();
   glm::vec3 getPosition();
   
