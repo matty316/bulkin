@@ -1,6 +1,8 @@
 #include "graphics-pipeline.h"
 #include "constants.h"
 #include "vertex.h"
+#include "frag-shader.h"
+#include "vert-shader.h"
 
 #include <fstream>
 
@@ -25,8 +27,14 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
     fragShaderStageInfo.module = slangModule;
     fragShaderStageInfo.pName = "fragMain";
   } else {
-    auto vertShaderCode = readFile("shaders/vert.spv");
-    auto fragShaderCode = readFile("shaders/frag.spv");
+    std::vector<char> vertShaderCode;
+    std::vector<char> fragShaderCode;
+    
+    for (size_t i = 0; i < shaders_vert_spv_len; i++)
+      vertShaderCode.push_back(shaders_vert_spv[i]);
+    
+    for (size_t i = 0; i < shaders_frag_spv_len; i++)
+      fragShaderCode.push_back(shaders_frag_spv[i]);
     
     auto vertModule = createShaderModule(vertShaderCode, device);
     auto fragModule = createShaderModule(fragShaderCode, device);
