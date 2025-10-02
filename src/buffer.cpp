@@ -7,6 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+
 uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, vk::PhysicalDevice device) {
   vk::PhysicalDeviceMemoryProperties memProperties = device.getMemoryProperties();
   
@@ -163,4 +166,23 @@ void BulkinBuffer::cleanup(vk::Device& device) {
   device.free(vertexBufferMemory);
   device.destroy(indexBuffer);
   device.free(indexBufferMemory);
+}
+
+void BulkinBuffer::createImageBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, const char* filename) {
+  int texWidth, texHeight, texChannels;
+  stbi_uc* pixels = stbi_load(filename, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+  vk::DeviceSize imageSize = texWidth * texHeight * 4;
+  
+  if (!pixels)
+    throw std::runtime_error("failed to load texture image");
+  vk::Buffer stagingBuffer;
+  vk::DeviceMemory stagingBufferMemory;
+  
+  createBuffer(device, physicalDevice, imageSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  
+  void* data = device.mapMemory(stagingBufferMemory, 0, imageSize);
+  memcpy(data, pixels, static_cast<size_t>(imageSize));
+  device.unmapMemory(stagingBufferMemory);
+  
+  stbi_image_free(pixels);
 }
