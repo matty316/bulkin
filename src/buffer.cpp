@@ -77,8 +77,8 @@ void BulkinBuffer::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& ph
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
   
-  void* newData = device.mapMemory(stagingBufferMemory, 0, size);
-  memcpy(newData, quadVertices.data(), size);
+  void* data = device.mapMemory(stagingBufferMemory, 0, size);
+  memcpy(data, quadVertices.data(), size);
   device.unmapMemory(stagingBufferMemory);
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eVertexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, vertexBuffer, vertexBufferMemory);
@@ -95,8 +95,8 @@ void BulkinBuffer::createIndexBuffer(vk::Device& device, vk::PhysicalDevice& phy
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
   
-  void* newData = device.mapMemory(stagingBufferMemory, 0, size);
-  memcpy(newData, quadIndices.data(), size);
+  void* data = device.mapMemory(stagingBufferMemory, 0, size);
+  memcpy(data, quadIndices.data(), size);
   device.unmapMemory(stagingBufferMemory);
   
   createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eIndexBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, indexBuffer, indexBufferMemory);
@@ -118,13 +118,34 @@ void BulkinBuffer::createUniformBuffers(vk::Device &device, vk::PhysicalDevice &
   }
 }
 
+void BulkinBuffer::createSSBOBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, Quad quad) {
+  if (quad.getInstanceCount() == 0)
+    std::runtime_error("no quads drawn");
+  vk::Buffer stagingBuffer;
+  vk::DeviceMemory stagingBufferMemory;
+  vk::DeviceSize size = sizeof(PerInstanceData) * quad.getInstanceCount();
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  
+  std::vector<PerInstanceData> perInstanceData;
+  perInstanceData.resize(quad.getInstanceCount());
+  for (size_t i = 0; i < quad.getInstanceCount(); i++) {
+    perInstanceData[i].model = quad.getModelMatrix(i);
+  }
+  
+  void* data = device.mapMemory(stagingBufferMemory, 0, size);
+  memcpy(data, perInstanceData.data(), size);
+  device.unmapMemory(stagingBufferMemory);
+  
+  createBuffer(device, physicalDevice, size, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eStorageBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, ssboBuffer, ssboBufferMemory);
+  
+  copyBuffer(stagingBuffer, ssboBuffer, size, commandPool, device, graphicsQueue);
+  device.destroy(stagingBuffer);
+  device.free(stagingBufferMemory);
+}
+
 void BulkinBuffer::updateUniformBuffer(uint32_t currentImage, float width, float height, BulkinCamera& camera) {
   UniformBufferObject ubo{};
-  auto model = glm::mat4(1.0f);
-  model = glm::translate(model, glm::vec3(0.0f));
-  model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f));
-  model = glm::scale(model, glm::vec3(1.0f));
-  ubo.model = model;
   ubo.view = camera.getView();
   ubo.proj = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
   ubo.proj[1][1] *= -1;
@@ -136,6 +157,8 @@ void BulkinBuffer::cleanup(vk::Device& device) {
     device.destroy(uniformBuffers[i]);
     device.free(uniformBuffersMemory[i]);
   }
+  device.destroy(ssboBuffer);
+  device.free(ssboBufferMemory);
   device.destroy(vertexBuffer);
   device.free(vertexBufferMemory);
   device.destroy(indexBuffer);

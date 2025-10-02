@@ -14,6 +14,7 @@ public:
   void update(double deltaTime, const glm::vec2& mousePos);
   glm::mat4 getView();
   glm::vec3 getPosition();
+  void setPlayerPos(glm::vec2 pos);
   
   struct Movement {
     bool forward = false;
@@ -33,6 +34,7 @@ private:
   float fastCoef = 2.0f;
   float yaw = -90.0f;
   float pitch = 0.0f;
+  float playerHeight = 0.5f;
   glm::vec2 mousePosition = glm::vec2(0.0f);
   glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
   glm::vec3 moveSpeed = glm::vec3(0.0f);
@@ -40,7 +42,6 @@ private:
   glm::vec3 right = glm::vec3(0.0f);
   glm::vec3 up = glm::vec3(0.0f, 0.0f, 1.0f);
   glm::vec3 worldUp = glm::vec3(0.0f, 0.0f, 1.0f);
-
   void setPosition(const glm::vec3& pos);
   void setCameraVectors();
   void resetMousePosition(const glm::vec2& p);

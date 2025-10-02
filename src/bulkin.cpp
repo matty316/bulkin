@@ -63,7 +63,7 @@ void Bulkin::initVulkan() {
   device.pickPhysicalDevice(instance);
   device.createLogicalDevice();
   device.createSwapchain(window);
-  device.createGraphicsPipeline();
+  device.createGraphicsPipeline(quad);
   createSyncObjects();
 }
 
@@ -99,7 +99,7 @@ void Bulkin::drawFrame() {
   update();
   
   device.graphicsPipeline.commandBuffers[currentFrame].reset();
-  device.graphicsPipeline.recordCommandBuffer(device.graphicsPipeline.commandBuffers[currentFrame], imageIndex, device.swapchain, currentFrame);
+  device.graphicsPipeline.recordCommandBuffer(device.graphicsPipeline.commandBuffers[currentFrame], imageIndex, device.swapchain, currentFrame, quad);
   
   vk::SubmitInfo submitInfo{};
   
@@ -146,7 +146,21 @@ void Bulkin::update() {
   deltaTime = newTimeStamp - timeStamp;
   timeStamp = newTimeStamp;
   camera.update(deltaTime, mouseState.pos);
+  updatePushConstants();
+  
   device.graphicsPipeline.buffers.updateUniformBuffer(currentFrame, static_cast<float>(device.swapchain.extent.width), static_cast<float>(device.swapchain.extent.height), camera);
+}
+
+void Bulkin::updatePushConstants() {
+//  glm::mat4 model(1.0f);
+//  
+//  model = glm::translate(model, glm::vec3(0.0f));
+//  model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f));
+//  model = glm::scale(model, glm::vec3(1.0f));
+//  
+//  pushConstants[currentFrame].model = model;
+//  pushConstants[currentFrame].view = camera.getView();
+//  pushConstants[currentFrame].proj = glm::perspective(glm::radians(45.0f), device.swapchain.extent.width / (float) device.swapchain.extent.height, 0.1f, 100.0f);
 }
 
 void Bulkin::cleanup() {
@@ -212,4 +226,12 @@ void Bulkin::createSyncObjects() {
   for (size_t i = 0; i < imageSize; i++) {
     renderFinishedSemaphores[i] = device.device.createSemaphore(vk::SemaphoreCreateInfo());
   }
+}
+
+void Bulkin::addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale) {
+  quad.addQuad(position, rotationX, rotationY, rotationZ, scale);
+}
+
+void Bulkin::setPlayerPos(glm::vec2 pos) {
+  camera.setPlayerPos(pos);
 }

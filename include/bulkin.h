@@ -9,11 +9,15 @@
 #include "device.h"
 #include "constants.h"
 #include "camera.h"
+#include "quad.h"
+#include "vertex.h"
 
 class Bulkin {
 public:
   void run();
-  
+  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale);
+  void setPlayerPos(glm::vec2 pos);
+
 private:
   GLFWwindow *window;
   vk::Instance instance;
@@ -23,6 +27,7 @@ private:
   std::vector<vk::Fence> drawFences;
   uint32_t currentFrame = 0;
   bool framebufferResized = false;
+  Quad quad;
  
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   
@@ -45,6 +50,7 @@ private:
   void drawFrame();
   void update();
   void createSyncObjects();
+  void updatePushConstants();
   static void mouse_callback(GLFWwindow *window, double x, double y);
   static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
   static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);

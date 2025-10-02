@@ -3,6 +3,8 @@
 #include "queue-family.h"
 #include "swapchain.h"
 #include "buffer.h"
+#include "quad.h"
+#include "vertex.h"
 
 #include <vulkan/vulkan.hpp>
 #include <string>
@@ -14,21 +16,24 @@ public:
   std::vector<vk::CommandBuffer> commandBuffers;
   
   void create(vk::Device& device, vk::Format& swapchainFormat);
-  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame);
+  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, Quad quad);
   void createCommandPool(vk::Device& device, QueueFamilyIndices indices);
   void createCommandBuffers(vk::Device& device);
-  void createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue);
+  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad);
   void createDescriptorLayout(vk::Device& device);
   void createDescriptorPool(vk::Device& device);
-  void createDescriptorSets(vk::Device& device);
+  void createDescriptorSets(vk::Device& device, Quad quad);
   void cleanup(vk::Device& device);
 private:
   vk::PipelineLayout pipelineLayout;
   vk::Pipeline pipeline;
   vk::CommandPool commandPool;
-  vk::DescriptorSetLayout descriptorSetLayout;
-  vk::DescriptorPool descriptorPool;
-  std::vector<vk::DescriptorSet> descriptorSets;
+  vk::DescriptorSetLayout uniformDescriptorSetLayout;
+  vk::DescriptorSetLayout ssboDescriptorSetLayout;
+  vk::DescriptorPool uniformDescriptorPool;
+  vk::DescriptorPool ssboDescriptorPool;
+  std::vector<vk::DescriptorSet> uniformDescriptorSets;
+  std::vector<vk::DescriptorSet> ssboDescriptorSets;
   bool slang = false;
   
   static std::vector<char> readFile(const std::string& filename);

@@ -1,5 +1,7 @@
 #include "camera.h"
 
+#include <print>
+
 void BulkinCamera::update(double deltaTime, const glm::vec2 &mousePos) {
   if (abs(mousePosition.x - mousePos.x) + abs(mousePosition.y - mousePos.y) > FLT_EPSILON) {
     auto xoffset = mousePos.x * mouseSpeed;
@@ -35,6 +37,8 @@ void BulkinCamera::update(double deltaTime, const glm::vec2 &mousePos) {
       moveSpeed = glm::normalize(moveSpeed) * maximumSpeed;
   }
   cameraPos += moveSpeed * static_cast<float>(deltaTime);
+  std::println("({}, {},)", cameraPos.x, cameraPos.z);
+  cameraPos.y = playerHeight;
 }
 
 glm::mat4 BulkinCamera::getView() {
@@ -43,6 +47,10 @@ glm::mat4 BulkinCamera::getView() {
 
 glm::vec3 BulkinCamera::getPosition() {
   return cameraPos;
+}
+
+void BulkinCamera::setPlayerPos(glm::vec2 pos) {
+  cameraPos = glm::vec3(pos.x, playerHeight, pos.y);
 }
 
 void BulkinCamera::setPosition(const glm::vec3 &pos) {

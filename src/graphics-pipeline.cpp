@@ -109,8 +109,9 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
   dynamicState.pDynamicStates = dynamicStates.data();
   
   vk::PipelineLayoutCreateInfo pipelineLayoutInfo{};
-  pipelineLayoutInfo.setLayoutCount = 1;
-  pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+  vk::DescriptorSetLayout descriptorSetLayouts[] = {uniformDescriptorSetLayout, ssboDescriptorSetLayout};
+  pipelineLayoutInfo.setLayoutCount = 2;
+  pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts;
   pipelineLayoutInfo.pushConstantRangeCount = 0;
   
   pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
@@ -168,8 +169,10 @@ vk::ShaderModule BulkinGraphicsPipeline::createShaderModule(const std::vector<ch
 
 void BulkinGraphicsPipeline::cleanup(vk::Device &device) {
   buffers.cleanup(device);
-  device.destroy(descriptorPool);
-  device.destroy(descriptorSetLayout);
+  device.destroy(uniformDescriptorPool);
+  device.destroy(uniformDescriptorSetLayout);
+  device.destroy(ssboDescriptorSetLayout);
+  device.destroy(ssboDescriptorPool);
   device.destroy(commandPool);
   device.destroy(pipelineLayout);
   device.destroy(pipeline);
@@ -193,7 +196,7 @@ void BulkinGraphicsPipeline::createCommandBuffers(vk::Device &device) {
   commandBuffers = device.allocateCommandBuffers(allocInfo);
 }
 
-void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame) {
+void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, Quad quad) {
   vk::CommandBufferBeginInfo beginInfo{};
   commandBuffer.begin(beginInfo);
   
@@ -233,9 +236,10 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
   commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint16);
   
-  commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
-  
-  commandBuffer.drawIndexed(static_cast<uint32_t>(quadIndices.size()), 1, 0, 0, 0);
+  vk::DescriptorSet descriptorSets[] = {uniformDescriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
+  commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSets, 0, nullptr);
+
+  commandBuffer.drawIndexed(static_cast<uint32_t>(quadIndices.size()), quad.getInstanceCount(), 0, 0, 0);
   
   commandBuffer.endRendering();
   
@@ -285,12 +289,13 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue) {
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createUniformBuffers(device, physicalDevice);
+  buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
   createDescriptorPool(device);
-  createDescriptorSets(device);
+  createDescriptorSets(device, quad);
 }
 
 void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
@@ -299,51 +304,98 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
   uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
   uboLayoutBinding.descriptorCount = 1;
   uboLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eVertex;
+    
+  vk::DescriptorSetLayoutCreateInfo uniformLayoutInfo{};
+  uniformLayoutInfo.bindingCount = 1;
+  uniformLayoutInfo.pBindings = &uboLayoutBinding;
   
-  vk::DescriptorSetLayoutCreateInfo layoutInfo{};
-  layoutInfo.bindingCount = 1;
-  layoutInfo.pBindings = &uboLayoutBinding;
+  uniformDescriptorSetLayout = device.createDescriptorSetLayout(uniformLayoutInfo);
   
-  descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
+  vk::DescriptorSetLayoutBinding ssboLayoutBinding{};
+  ssboLayoutBinding.binding = 0;
+  ssboLayoutBinding.descriptorType = vk::DescriptorType::eStorageBuffer;
+  ssboLayoutBinding.descriptorCount = 1;
+  ssboLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eVertex;
+  
+  vk::DescriptorSetLayoutCreateInfo ssboLayoutInfo{};
+  ssboLayoutInfo.bindingCount = 1;
+  ssboLayoutInfo.pBindings = &ssboLayoutBinding;
+  
+  ssboDescriptorSetLayout = device.createDescriptorSetLayout(ssboLayoutInfo);
 }
 
 void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
-  vk::DescriptorPoolSize poolSize{};
-  poolSize.type = vk::DescriptorType::eUniformBuffer;
-  poolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  vk::DescriptorPoolSize uniformPoolSize;
+  uniformPoolSize.type = vk::DescriptorType::eUniformBuffer;
+  uniformPoolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+    
+  vk::DescriptorPoolCreateInfo uniformPoolInfo{};
+  uniformPoolInfo.poolSizeCount = 1;
+  uniformPoolInfo.pPoolSizes = &uniformPoolSize;
+  uniformPoolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
   
-  vk::DescriptorPoolCreateInfo poolInfo{};
-  poolInfo.poolSizeCount = 1;
-  poolInfo.pPoolSizes = &poolSize;
-  poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  uniformDescriptorPool = device.createDescriptorPool(uniformPoolInfo);
   
-  descriptorPool = device.createDescriptorPool(poolInfo);
+  vk::DescriptorPoolSize ssboPoolSize;
+  ssboPoolSize.type = vk::DescriptorType::eStorageBuffer;
+  ssboPoolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+    
+  vk::DescriptorPoolCreateInfo ssboPoolInfo{};
+  ssboPoolInfo.poolSizeCount = 1;
+  ssboPoolInfo.pPoolSizes = &ssboPoolSize;
+  ssboPoolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  
+  ssboDescriptorPool = device.createDescriptorPool(ssboPoolInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device) {
-  std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
-  vk::DescriptorSetAllocateInfo allocInfo{};
-  allocInfo.descriptorPool = descriptorPool;
-  allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-  allocInfo.pSetLayouts = layouts.data();
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, Quad quad) {
+  std::vector<vk::DescriptorSetLayout> uniformLayouts(MAX_FRAMES_IN_FLIGHT, uniformDescriptorSetLayout);
+  vk::DescriptorSetAllocateInfo uniformAllocInfo{};
+  uniformAllocInfo.descriptorPool = uniformDescriptorPool;
+  uniformAllocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  uniformAllocInfo.pSetLayouts = uniformLayouts.data();
  
-  descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-  descriptorSets = device.allocateDescriptorSets(allocInfo);
+  uniformDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+  uniformDescriptorSets = device.allocateDescriptorSets(uniformAllocInfo);
+  
+  std::vector<vk::DescriptorSetLayout> ssboLayouts(MAX_FRAMES_IN_FLIGHT, ssboDescriptorSetLayout);
+  vk::DescriptorSetAllocateInfo ssboAllocInfo{};
+  ssboAllocInfo.descriptorPool = ssboDescriptorPool;
+  ssboAllocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  ssboAllocInfo.pSetLayouts = ssboLayouts.data();
+ 
+  ssboDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+  ssboDescriptorSets = device.allocateDescriptorSets(ssboAllocInfo);
   
   for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-    vk::DescriptorBufferInfo bufferInfo{};
-    bufferInfo.buffer = buffers.uniformBuffers[i];
-    bufferInfo.offset = 0;
-    bufferInfo.range = sizeof(UniformBufferObject);
+    vk::DescriptorBufferInfo uniformBufferInfo{};
+    uniformBufferInfo.buffer = buffers.uniformBuffers[i];
+    uniformBufferInfo.offset = 0;
+    uniformBufferInfo.range = sizeof(UniformBufferObject);
     
-    vk::WriteDescriptorSet descriptorWrite{};
-    descriptorWrite.dstSet = descriptorSets[i];
-    descriptorWrite.dstBinding = 0;
-    descriptorWrite.dstArrayElement = 0;
-    descriptorWrite.descriptorType = vk::DescriptorType::eUniformBuffer;
-    descriptorWrite.descriptorCount = 1;
-    descriptorWrite.pBufferInfo = &bufferInfo;
+    vk::WriteDescriptorSet uniformDescriptorWrite{};
+    uniformDescriptorWrite.dstSet = uniformDescriptorSets[i];
+    uniformDescriptorWrite.dstBinding = 0;
+    uniformDescriptorWrite.dstArrayElement = 0;
+    uniformDescriptorWrite.descriptorType = vk::DescriptorType::eUniformBuffer;
+    uniformDescriptorWrite.descriptorCount = 1;
+    uniformDescriptorWrite.pBufferInfo = &uniformBufferInfo;
     
-    device.updateDescriptorSets(1, &descriptorWrite, 0, nullptr);
+    vk::DescriptorBufferInfo ssboBufferInfo{};
+    ssboBufferInfo.buffer = buffers.ssboBuffer;
+    ssboBufferInfo.offset = 0;
+    ssboBufferInfo.range = sizeof(PerInstanceData) * quad.getInstanceCount();
+    
+    vk::WriteDescriptorSet ssboDescriptorWrite{};
+    ssboDescriptorWrite.dstSet = ssboDescriptorSets[i];
+    ssboDescriptorWrite.dstBinding = 0;
+    ssboDescriptorWrite.dstArrayElement = 0;
+    ssboDescriptorWrite.descriptorType = vk::DescriptorType::eStorageBuffer;
+    ssboDescriptorWrite.descriptorCount = 1;
+    ssboDescriptorWrite.pBufferInfo = &ssboBufferInfo;
+    
+    vk::WriteDescriptorSet descriptorWrite[] = {uniformDescriptorWrite, ssboDescriptorWrite};
+    
+    device.updateDescriptorSets(2, descriptorWrite, 0, nullptr);
   }
 }

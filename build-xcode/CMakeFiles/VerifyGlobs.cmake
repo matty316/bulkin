@@ -11,6 +11,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/camera.h"
   "/Users/matty/projects/bulkin/include/constants.h"
   "/Users/matty/projects/bulkin/include/device.h"
+  "/Users/matty/projects/bulkin/include/frag-shader.h"
   "/Users/matty/projects/bulkin/include/glm/glm/simd/common.h"
   "/Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h"
   "/Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h"
@@ -32,20 +33,13 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/glm/simd/trigonometric.h"
   "/Users/matty/projects/bulkin/include/glm/simd/vector_relational.h"
   "/Users/matty/projects/bulkin/include/graphics-pipeline.h"
+  "/Users/matty/projects/bulkin/include/quad.h"
   "/Users/matty/projects/bulkin/include/queue-family.h"
   "/Users/matty/projects/bulkin/include/stb_image.h"
   "/Users/matty/projects/bulkin/include/swapchain.h"
   "/Users/matty/projects/bulkin/include/tiny_obj_loader.h"
+  "/Users/matty/projects/bulkin/include/vert-shader.h"
   "/Users/matty/projects/bulkin/include/vertex.h"
-  )
-if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
-  message("-- GLOB mismatch!")
-  file(TOUCH_NOCREATE "/Users/matty/projects/bulkin/build-xcode/CMakeFiles/cmake.verify_globs")
-endif()
-
-# MY_RESOURCES at CMakeLists.txt:9 (file)
-file(GLOB_RECURSE NEW_GLOB LIST_DIRECTORIES false "/Users/matty/projects/bulkin/resources/*")
-set(OLD_GLOB
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")
@@ -60,7 +54,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/src/camera.cpp"
   "/Users/matty/projects/bulkin/src/device.cpp"
   "/Users/matty/projects/bulkin/src/graphics-pipeline.cpp"
-  "/Users/matty/projects/bulkin/src/main.cpp"
+  "/Users/matty/projects/bulkin/src/quad.cpp"
   "/Users/matty/projects/bulkin/src/swapchain.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
