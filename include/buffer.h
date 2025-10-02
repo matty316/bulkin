@@ -18,6 +18,7 @@ public:
   void createSSBOBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue, Quad quad);
   void createUniformBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice);
   void updateUniformBuffer(uint32_t currentImage, float width, float height, BulkinCamera& camera);
+  void createImageBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue, const char* filename);
   void cleanup(vk::Device& device);
 private:
   void createBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, size_t size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);

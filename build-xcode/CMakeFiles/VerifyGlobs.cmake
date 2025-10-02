@@ -37,6 +37,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/include/queue-family.h"
   "/Users/matty/projects/bulkin/include/stb_image.h"
   "/Users/matty/projects/bulkin/include/swapchain.h"
+  "/Users/matty/projects/bulkin/include/texture.h"
   "/Users/matty/projects/bulkin/include/tiny_obj_loader.h"
   "/Users/matty/projects/bulkin/include/vert-shader.h"
   "/Users/matty/projects/bulkin/include/vertex.h"
@@ -56,6 +57,7 @@ set(OLD_GLOB
   "/Users/matty/projects/bulkin/src/graphics-pipeline.cpp"
   "/Users/matty/projects/bulkin/src/quad.cpp"
   "/Users/matty/projects/bulkin/src/swapchain.cpp"
+  "/Users/matty/projects/bulkin/src/texture.cpp"
   )
 if(NOT "${NEW_GLOB}" STREQUAL "${OLD_GLOB}")
   message("-- GLOB mismatch!")

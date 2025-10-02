@@ -9,7 +9,7 @@
 /* Begin PBXAggregateTarget section */
 		98278D2D2E5572A036D08BE4 /* ZERO_CHECK */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = AF30A1AA78E441B8A2121786 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildConfigurationList = 6F2F04C79E5C4A238528634C /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
 			buildPhases = (
 				3EE3CCE21C99319531230F75 /* Generate CMakeFiles/ZERO_CHECK */,
 			);
@@ -20,13 +20,13 @@
 		};
 		A2EB195A8839307B20C5D5A4 /* ALL_BUILD */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = C3E8D8D7F16A4EF5B97C9037 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildConfigurationList = AC4723BB2B7241B483861960 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
 			buildPhases = (
 				01C75D6855374EF69C64A4CC /* Generate CMakeFiles/ALL_BUILD */,
 			);
 			dependencies = (
-				440EAE22651041D6836F553F /* PBXTargetDependency */,
-				A17F00346E78475AAA74DB89 /* PBXTargetDependency */,
+				039613C1326B4864ADAF19EE /* PBXTargetDependency */,
+				2D0865203FD547539A810F91 /* PBXTargetDependency */,
 			);
 			name = ALL_BUILD;
 			productName = ALL_BUILD;
@@ -34,158 +34,162 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		08E4A029CBA54D4C97696D83 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = F46B64B46DB04862A3FF0D96 /* /Users/matty/projects/bulkin/CMakeLists.txt */; };
-		0AFC3C3625A5459B8569A3A2 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXBuildFile; fileRef = 348109D48B8145D4B5BC864F /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */; };
-		0C8FF99A50E24E3C9EF47F28 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = 985C8D7CEDA34E69A24F40ED /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */; };
-		1ABCBB00E7E0438E8D5386D4 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = 4EB8379CF1F4409BAEF0B798 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */; };
-		272F39F58672448AA0328A36 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXBuildFile; fileRef = FEDD9A2B7F51492CBFE8F005 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */; };
-		28F5358563814D8F8B144683 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = 0312716A8467444E9E22FA96 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */; };
-		2E6D3B579F714CD991C75EA6 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXBuildFile; fileRef = 42914EEC0EAA4CC9B3972250 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */; };
-		2F0896631BB240E2A40C7943 /* /Users/matty/projects/bulkin/include/quad.h */ = {isa = PBXBuildFile; fileRef = 5ECC8CF76C4B40B69713F38F /* /Users/matty/projects/bulkin/include/quad.h */; };
-		39977F61FD7A44319B140F75 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = 38E0A40B817D47FD8E95F148 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */; };
-		3A732CB7E69B47ABB21C3940 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = AFA5033E5778424C8D83BC7D /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */; };
-		48A337A26B2047F39B67DEA4 /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXBuildFile; fileRef = 5A19D101410648A6AE1A63BC /* /Users/matty/projects/bulkin/include/swapchain.h */; };
-		4923BA43712B421FB58D1F9C /* /Users/matty/projects/bulkin/src/quad.cpp */ = {isa = PBXBuildFile; fileRef = 184673EF2D4045059E313CAC /* /Users/matty/projects/bulkin/src/quad.cpp */; };
-		4C3373EEFE8943AAA2A09588 /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = B9B152A79AEA41DB930CC08D /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */; };
-		4C3EB5808C594F63B07A9E7F /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 9DB65278F5A04259899139F3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */; };
-		4D051D3019B04734892989DC /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = D417EF6E4B204FCFAA38226D /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */; };
-		51963A89B66F4CF68E1DAECD /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = E8629FE938DF43079E5D5C11 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */; };
-		58BF6385B4A54E4394C3F650 /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXBuildFile; fileRef = 94C30E267A7F4A2D8D3B1ECB /* /Users/matty/projects/bulkin/include/vertex.h */; };
-		5E833F7038B84A24BDEB731D /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = 72BE363C224941C597583A5E /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */; };
-		5FA0EA58FA904E919990C0CA /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXBuildFile; fileRef = 992B55ED68F347F0AA8A7F1E /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */; };
-		5FEB312D85BE44ED82965F9D /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = 05ED4AC388F248E1A08D76B1 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */; };
-		7BCCB8F4367B453282BFA62E /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = 40ABC97A40B243A8A5C23E62 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */; };
-		853F0CE3BD7D42C0AEB9C871 /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXBuildFile; fileRef = 043703061F9540168AF24181 /* /Users/matty/projects/bulkin/src/buffer.cpp */; };
-		8BCA5B3E19B146C99B3CB0BC /* /Users/matty/projects/bulkin/include/frag-shader.h */ = {isa = PBXBuildFile; fileRef = D3BCF43F89ED4D80B8724FE7 /* /Users/matty/projects/bulkin/include/frag-shader.h */; };
-		96A56B3AD9864324AC72E01E /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = 71FD87A204F04C4580E14D5F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */; };
-		9FB8B7E44F2F4F7DA709AF01 /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXBuildFile; fileRef = AEBBF2C8F4604DEE8FA1D6FE /* /Users/matty/projects/bulkin/include/device.h */; };
-		A2639B1FB0294D51BD0E5AD8 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = EF314BF29D10458ABED0642C /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */; };
-		A4714EB721504F3F949969AA /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXBuildFile; fileRef = 3C11310B63DD4BE59C98F1C7 /* /Users/matty/projects/bulkin/include/constants.h */; };
-		A6D51E2BDB624AE1AD7C9B86 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 52B59B2AF96D4035BA682A94 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */; };
-		A8A58818ED1A4D59B9BAE9E2 /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXBuildFile; fileRef = D63A6C59A936462C9B2E08B5 /* /Users/matty/projects/bulkin/src/camera.cpp */; };
-		B483618E3D584E4EA29ADA8B /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = A5BA4A601ED34043B03F7DBE /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */; };
-		B8F8E17F95D94887ACE9B9B5 /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXBuildFile; fileRef = 229EBA1DE843459E926AEC67 /* /Users/matty/projects/bulkin/include/queue-family.h */; };
-		C15296E7EA2F475CABADA995 /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXBuildFile; fileRef = 0330BB60A51D4D6EB298420B /* /Users/matty/projects/bulkin/src/bulkin.cpp */; };
-		C2473FFB764B4A0B8230553A /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXBuildFile; fileRef = 1E0A0F6D29614E4BA2197DC9 /* /Users/matty/projects/bulkin/src/swapchain.cpp */; };
-		C5E294FC35764C8DA1B7571E /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXBuildFile; fileRef = 0E2F866DF95944799A6C1D4D /* /Users/matty/projects/bulkin/include/bulkin.h */; };
-		C654B113808F4B7A969BDF83 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = D67D91E1BC724F30B06B0E6D /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */; };
-		C969D886BEDB41B69F8561BC /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 2B9A87A36C5341389B05938D /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */; };
-		D6AACC7FD1F94EF7B4B32ECF /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXBuildFile; fileRef = 64805208E208401E951B0CC6 /* /Users/matty/projects/bulkin/include/buffer.h */; };
-		DA9B6296EA9643788B0601FD /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXBuildFile; fileRef = 4B7F08AC662A4BC9BAD0B11D /* /Users/matty/projects/bulkin/include/camera.h */; };
-		E1A98DC39DEF4B2C8BB3F366 /* /Users/matty/projects/bulkin/include/vert-shader.h */ = {isa = PBXBuildFile; fileRef = 41D6F4A992584EF4B2F81EE4 /* /Users/matty/projects/bulkin/include/vert-shader.h */; };
-		E1C3870296CC4A3ABB3650CD /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXBuildFile; fileRef = 19A3DBBDFC08486EB3A9FFFD /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */; };
-		E512E3D88D194F89BAADFEDF /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 82FEC87F93CD4D4EBFC9DEB8 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */; };
-		EE403BDCCC364026A7C6F346 /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXBuildFile; fileRef = E39C55D2507F4C669BD01CAA /* /Users/matty/projects/bulkin/include/stb_image.h */; };
-		F5133BFF8E4F429F8962EA8C /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = 0870AB98B23A4E3AB5B52406 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */; };
-		FB1A53C8D2D145728352643F /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXBuildFile; fileRef = A4F54834F2D143F9B052B7CA /* /Users/matty/projects/bulkin/src/device.cpp */; };
+		017208AE7CEC44D9BBCFFDB0 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = A97E493092D84FC58DD44891 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */; };
+		0274B877D8C64C5D884A5AC3 /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXBuildFile; fileRef = 05E75AE9E9E94B7AA8455EFF /* /Users/matty/projects/bulkin/src/buffer.cpp */; };
+		08A16994CA9347B3B62C83E7 /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 0A471D4915424743939251DB /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */; };
+		0DA225CBC92C46E196C418DE /* /Users/matty/projects/bulkin/src/texture.cpp */ = {isa = PBXBuildFile; fileRef = A1EB0558D6D74CB19266C7F7 /* /Users/matty/projects/bulkin/src/texture.cpp */; };
+		101F702F4E0F4CC1B77F6EA6 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = 17EDEAB2905C487F8C2D1ACB /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */; };
+		1293865BA6F24B549FA683E6 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 2699E82CB7AE433B90672942 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */; };
+		17350066FB054CE6A2C94D61 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 07E6FD93D31B4D0A989FF74B /* /Users/matty/projects/bulkin/CMakeLists.txt */; };
+		1A16DD14B14A4808A3FA9CC2 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = F1C421E9F0804A34B4F4FAE2 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */; };
+		24A3478251B54FD992AC28FF /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = AD5F5B83F50E4DE6938AF5E1 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */; };
+		287F2CCCB17E46C5B59E82E9 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = DFE1C447F2C24C048F8AC413 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */; };
+		29EF20BF305142B99C7D0111 /* /Users/matty/projects/bulkin/include/vert-shader.h */ = {isa = PBXBuildFile; fileRef = 291E23175C94425580F41291 /* /Users/matty/projects/bulkin/include/vert-shader.h */; };
+		2B49CD629BB34672B739A71E /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = 70FA39E9313F4A86A54187C7 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */; };
+		2C793510E63E40D2BE1B9501 /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXBuildFile; fileRef = 944B8C1E979047D29545C781 /* /Users/matty/projects/bulkin/include/bulkin.h */; };
+		2CA3FC06992E4431BC68B6F5 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXBuildFile; fileRef = 9E882E650BAF431AAD10A9B7 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */; };
+		2E1479DC66D2462186D1C019 /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXBuildFile; fileRef = 1D0209E537EE4DE5A947008D /* /Users/matty/projects/bulkin/src/swapchain.cpp */; };
+		2F6D1EE38921466C8FDDF3E5 /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXBuildFile; fileRef = 7FE9DA678275451383808324 /* /Users/matty/projects/bulkin/include/vertex.h */; };
+		32BFBBB5240B409FBCCB2A12 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXBuildFile; fileRef = 4D30C7F625A948E0B82B22B9 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */; };
+		3417C3EC5B68473AB67C9C7C /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXBuildFile; fileRef = 708B7C0021AD425394857065 /* /Users/matty/projects/bulkin/include/device.h */; };
+		3748D81B6273438C90A243AB /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXBuildFile; fileRef = CC104605C9B94B01BBE4F75A /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */; };
+		39EDE2848D9A4A9FA3D67F0C /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXBuildFile; fileRef = F746E0CC670546818E8DC787 /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */; };
+		3FEDB743F6BD4899BACA276A /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXBuildFile; fileRef = 717CE30F1F8E45E0BCA7832A /* /Users/matty/projects/bulkin/include/stb_image.h */; };
+		40BF0BC0D7674A87BDA0D32C /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = 39E303BEA8BC411CBF3B6134 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */; };
+		4F6548ADE5204C62B7D9F8AF /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXBuildFile; fileRef = 48565B8217F64C07BCC07728 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */; };
+		56354B90773E421C958D3889 /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = D56408540AD74422A9923E0F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */; };
+		5BDBF6A2AD43468589EFCB8B /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXBuildFile; fileRef = 113519EAB8A64170AAEC8834 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */; };
+		5BE2A6879A104EBFA061B84E /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXBuildFile; fileRef = 21834FE62DC24003867D75B0 /* /Users/matty/projects/bulkin/include/queue-family.h */; };
+		5D9AABA892044817A8E44628 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXBuildFile; fileRef = 61ACA7C84C504D90B9AB5E22 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */; };
+		6CA916E9AAAC4778A2A2F449 /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXBuildFile; fileRef = A02EFCD1F3F44E9594AEFBC3 /* /Users/matty/projects/bulkin/include/camera.h */; };
+		822BCB86910E4F1BA6267935 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXBuildFile; fileRef = 3534F964D794484E9EC272BE /* /Users/matty/projects/bulkin/include/glm/simd/common.h */; };
+		85477CDA3795421DA4E7CB1D /* /Users/matty/projects/bulkin/include/quad.h */ = {isa = PBXBuildFile; fileRef = 21E8FEFCAFBE43EEBA823366 /* /Users/matty/projects/bulkin/include/quad.h */; };
+		861C5482F2EA4C52BF55F45C /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXBuildFile; fileRef = 8D4E53E2C528468C90A7DFEB /* /Users/matty/projects/bulkin/src/camera.cpp */; };
+		891B351BD4DA4B66B365D5EA /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXBuildFile; fileRef = 24BD86DC6D2743D090F631B4 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */; };
+		8F999FE5286644B88D4DE4BA /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXBuildFile; fileRef = 66B136EC3210410488D21563 /* /Users/matty/projects/bulkin/include/swapchain.h */; };
+		8F9BE5903AA04298ADA2635F /* /Users/matty/projects/bulkin/include/texture.h */ = {isa = PBXBuildFile; fileRef = 44EA65ABFA744059862298EC /* /Users/matty/projects/bulkin/include/texture.h */; };
+		9103003A12294A1FA7162756 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXBuildFile; fileRef = 92D9F1FF6B9E450493F46400 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */; };
+		A3EE016D08C442ECB61E23B3 /* /Users/matty/projects/bulkin/include/frag-shader.h */ = {isa = PBXBuildFile; fileRef = 9123468E5C974975BB7630DC /* /Users/matty/projects/bulkin/include/frag-shader.h */; };
+		B70EAD67B6EA4A39B476EC77 /* /Users/matty/projects/bulkin/src/quad.cpp */ = {isa = PBXBuildFile; fileRef = 3CFB41D743D345BCA5BEBC46 /* /Users/matty/projects/bulkin/src/quad.cpp */; };
+		C325DF6C24B6451C8BBA6605 /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXBuildFile; fileRef = D9E1A5C5A78F4A2F834C9EBE /* /Users/matty/projects/bulkin/src/device.cpp */; };
+		C8580F9A045645339CA32E80 /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXBuildFile; fileRef = C06E24A3670244EDAE20E540 /* /Users/matty/projects/bulkin/src/bulkin.cpp */; };
+		CD950810783448BEA7B1F305 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXBuildFile; fileRef = 6FC21C6D09F142FA8C732031 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */; };
+		CF5DA8B9AE4B415A804AB040 /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXBuildFile; fileRef = 833B590128624F7EA9841F4E /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */; };
+		D510F40D020D45B9BCC28DAE /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXBuildFile; fileRef = 505B33D7B55843C6947D4997 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */; };
+		E7913E39578A4D10BE72CC16 /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXBuildFile; fileRef = 7916817FB7D74110ABF388F3 /* /Users/matty/projects/bulkin/include/buffer.h */; };
+		E955F0E0F0E4446096D052F0 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXBuildFile; fileRef = 4A6542208BEF45E281C10231 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */; };
+		EA7C45C1543E41529018B873 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXBuildFile; fileRef = F83081ED13DF4A2DAE612A95 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */; };
+		F5CE061355574064A00F819C /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXBuildFile; fileRef = 77636B305DD9438CB4740860 /* /Users/matty/projects/bulkin/include/constants.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildStyle section */
-		0F8C6211C92746ACBBCA2B81 /* MinSizeRel */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = MinSizeRel;
-		};
-		2B4B837E2FB24D71BB100FF2 /* RelWithDebInfo */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = RelWithDebInfo;
-		};
-		85C1AE1468F345959A282223 /* Debug */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = Debug;
-		};
-		96406078CDBC4DACBDF26380 /* Release */ = {
+		48847E0DB31A4EFAAA3A49E7 /* Release */ = {
 			isa = PBXBuildStyle;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 			};
 			name = Release;
 		};
+		5E910C2F0D0645CCAD9E6EE0 /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+		C017373D9B0B4C58A5D3BBC2 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		CF90C5CB1F7440938DAE6668 /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
 /* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
-		56EA204EC7CA48C695292A92 /* PBXContainerItemProxy */ = {
+		14B72708AED94A9B8578196A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
 			remoteInfo = ZERO_CHECK;
 		};
-		977926ED5E154BBD9E1293FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
-			remoteInfo = ZERO_CHECK;
-		};
-		C5D0D06BDFB0465987E9FBF6 /* PBXContainerItemProxy */ = {
+		1DF04F9543BB4D6DA3499D6A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = F331DFE182800A842DCD4764;
 			remoteInfo = bulkin;
 		};
+		E1E0A2964F1F428F90EB8BEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A699C144BB7F48C299996A6B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 98278D2D2E5572A036D08BE4;
+			remoteInfo = ZERO_CHECK;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0312716A8467444E9E22FA96 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
-		0330BB60A51D4D6EB298420B /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bulkin.cpp; path = src/bulkin.cpp; sourceTree = SOURCE_ROOT; };
-		043703061F9540168AF24181 /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = buffer.cpp; path = src/buffer.cpp; sourceTree = SOURCE_ROOT; };
-		05ED4AC388F248E1A08D76B1 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
-		0870AB98B23A4E3AB5B52406 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
-		0E2F866DF95944799A6C1D4D /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bulkin.h; path = include/bulkin.h; sourceTree = SOURCE_ROOT; };
-		184673EF2D4045059E313CAC /* /Users/matty/projects/bulkin/src/quad.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = quad.cpp; path = src/quad.cpp; sourceTree = SOURCE_ROOT; };
-		19A3DBBDFC08486EB3A9FFFD /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "graphics-pipeline.cpp"; path = "src/graphics-pipeline.cpp"; sourceTree = SOURCE_ROOT; };
-		1E0A0F6D29614E4BA2197DC9 /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = swapchain.cpp; path = src/swapchain.cpp; sourceTree = SOURCE_ROOT; };
-		229EBA1DE843459E926AEC67 /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "queue-family.h"; path = "include/queue-family.h"; sourceTree = SOURCE_ROOT; };
-		2B9A87A36C5341389B05938D /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
-		348109D48B8145D4B5BC864F /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3.h; path = include/GLFW/glfw3.h; sourceTree = SOURCE_ROOT; };
-		38E0A40B817D47FD8E95F148 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
-		3C11310B63DD4BE59C98F1C7 /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constants.h; path = include/constants.h; sourceTree = SOURCE_ROOT; };
-		40ABC97A40B243A8A5C23E62 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
-		41D6F4A992584EF4B2F81EE4 /* /Users/matty/projects/bulkin/include/vert-shader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "vert-shader.h"; path = "include/vert-shader.h"; sourceTree = SOURCE_ROOT; };
-		42914EEC0EAA4CC9B3972250 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "graphics-pipeline.h"; path = "include/graphics-pipeline.h"; sourceTree = SOURCE_ROOT; };
-		4B7F08AC662A4BC9BAD0B11D /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = camera.h; path = include/camera.h; sourceTree = SOURCE_ROOT; };
-		4EB8379CF1F4409BAEF0B798 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
-		52B59B2AF96D4035BA682A94 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
-		5A19D101410648A6AE1A63BC /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = swapchain.h; path = include/swapchain.h; sourceTree = SOURCE_ROOT; };
-		5ECC8CF76C4B40B69713F38F /* /Users/matty/projects/bulkin/include/quad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = quad.h; path = include/quad.h; sourceTree = SOURCE_ROOT; };
-		64805208E208401E951B0CC6 /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = include/buffer.h; sourceTree = SOURCE_ROOT; };
-		71FD87A204F04C4580E14D5F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
-		72BE363C224941C597583A5E /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
-		82FEC87F93CD4D4EBFC9DEB8 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
-		94C30E267A7F4A2D8D3B1ECB /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vertex.h; path = include/vertex.h; sourceTree = SOURCE_ROOT; };
-		985C8D7CEDA34E69A24F40ED /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
-		992B55ED68F347F0AA8A7F1E /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3native.h; path = include/GLFW/glfw3native.h; sourceTree = SOURCE_ROOT; };
-		9DB65278F5A04259899139F3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
-		A4F54834F2D143F9B052B7CA /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = src/device.cpp; sourceTree = SOURCE_ROOT; };
-		A5BA4A601ED34043B03F7DBE /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
-		A8AFF76CBEF843C7B64F51AB /* bulkin */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libbulkin.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		AEBBF2C8F4604DEE8FA1D6FE /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = device.h; path = include/device.h; sourceTree = SOURCE_ROOT; };
-		AFA5033E5778424C8D83BC7D /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
-		B9B152A79AEA41DB930CC08D /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
-		BA4F76E4D7E1484D8DDCE452 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		D3BCF43F89ED4D80B8724FE7 /* /Users/matty/projects/bulkin/include/frag-shader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "frag-shader.h"; path = "include/frag-shader.h"; sourceTree = SOURCE_ROOT; };
-		D417EF6E4B204FCFAA38226D /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
-		D63A6C59A936462C9B2E08B5 /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = camera.cpp; path = src/camera.cpp; sourceTree = SOURCE_ROOT; };
-		D67D91E1BC724F30B06B0E6D /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
-		E39C55D2507F4C669BD01CAA /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_image.h; path = include/stb_image.h; sourceTree = SOURCE_ROOT; };
-		E8629FE938DF43079E5D5C11 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
-		EF314BF29D10458ABED0642C /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
-		F46B64B46DB04862A3FF0D96 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
-		FEDD9A2B7F51492CBFE8F005 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tiny_obj_loader.h; path = include/tiny_obj_loader.h; sourceTree = SOURCE_ROOT; };
+		05E75AE9E9E94B7AA8455EFF /* /Users/matty/projects/bulkin/src/buffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = buffer.cpp; path = src/buffer.cpp; sourceTree = SOURCE_ROOT; };
+		07E6FD93D31B4D0A989FF74B /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		0A471D4915424743939251DB /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
+		113519EAB8A64170AAEC8834 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
+		17EDEAB2905C487F8C2D1ACB /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
+		1D0209E537EE4DE5A947008D /* /Users/matty/projects/bulkin/src/swapchain.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = swapchain.cpp; path = src/swapchain.cpp; sourceTree = SOURCE_ROOT; };
+		21834FE62DC24003867D75B0 /* /Users/matty/projects/bulkin/include/queue-family.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "queue-family.h"; path = "include/queue-family.h"; sourceTree = SOURCE_ROOT; };
+		21E8FEFCAFBE43EEBA823366 /* /Users/matty/projects/bulkin/include/quad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = quad.h; path = include/quad.h; sourceTree = SOURCE_ROOT; };
+		24BD86DC6D2743D090F631B4 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
+		2699E82CB7AE433B90672942 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
+		291E23175C94425580F41291 /* /Users/matty/projects/bulkin/include/vert-shader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "vert-shader.h"; path = "include/vert-shader.h"; sourceTree = SOURCE_ROOT; };
+		3534F964D794484E9EC272BE /* /Users/matty/projects/bulkin/include/glm/simd/common.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = common.h; path = include/glm/simd/common.h; sourceTree = SOURCE_ROOT; };
+		39E303BEA8BC411CBF3B6134 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vector_relational.h; path = include/glm/glm/simd/vector_relational.h; sourceTree = SOURCE_ROOT; };
+		3CFB41D743D345BCA5BEBC46 /* /Users/matty/projects/bulkin/src/quad.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = quad.cpp; path = src/quad.cpp; sourceTree = SOURCE_ROOT; };
+		44EA65ABFA744059862298EC /* /Users/matty/projects/bulkin/include/texture.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = texture.h; path = include/texture.h; sourceTree = SOURCE_ROOT; };
+		48565B8217F64C07BCC07728 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = "graphics-pipeline.cpp"; path = "src/graphics-pipeline.cpp"; sourceTree = SOURCE_ROOT; };
+		4A6542208BEF45E281C10231 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3.h; path = include/GLFW/glfw3.h; sourceTree = SOURCE_ROOT; };
+		4D30C7F625A948E0B82B22B9 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
+		4DF2771D55BF42BAA1EE5F6D /* bulkin */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libbulkin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		505B33D7B55843C6947D4997 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "graphics-pipeline.h"; path = "include/graphics-pipeline.h"; sourceTree = SOURCE_ROOT; };
+		61ACA7C84C504D90B9AB5E22 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = platform.h; path = include/glm/glm/simd/platform.h; sourceTree = SOURCE_ROOT; };
+		66B136EC3210410488D21563 /* /Users/matty/projects/bulkin/include/swapchain.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = swapchain.h; path = include/swapchain.h; sourceTree = SOURCE_ROOT; };
+		6FC21C6D09F142FA8C732031 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = matrix.h; path = include/glm/glm/simd/matrix.h; sourceTree = SOURCE_ROOT; };
+		708B7C0021AD425394857065 /* /Users/matty/projects/bulkin/include/device.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = device.h; path = include/device.h; sourceTree = SOURCE_ROOT; };
+		70FA39E9313F4A86A54187C7 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = trigonometric.h; path = include/glm/simd/trigonometric.h; sourceTree = SOURCE_ROOT; };
+		717CE30F1F8E45E0BCA7832A /* /Users/matty/projects/bulkin/include/stb_image.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = stb_image.h; path = include/stb_image.h; sourceTree = SOURCE_ROOT; };
+		77636B305DD9438CB4740860 /* /Users/matty/projects/bulkin/include/constants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = constants.h; path = include/constants.h; sourceTree = SOURCE_ROOT; };
+		7916817FB7D74110ABF388F3 /* /Users/matty/projects/bulkin/include/buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = buffer.h; path = include/buffer.h; sourceTree = SOURCE_ROOT; };
+		7FE9DA678275451383808324 /* /Users/matty/projects/bulkin/include/vertex.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = vertex.h; path = include/vertex.h; sourceTree = SOURCE_ROOT; };
+		833B590128624F7EA9841F4E /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
+		8D4E53E2C528468C90A7DFEB /* /Users/matty/projects/bulkin/src/camera.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = camera.cpp; path = src/camera.cpp; sourceTree = SOURCE_ROOT; };
+		9123468E5C974975BB7630DC /* /Users/matty/projects/bulkin/include/frag-shader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = "frag-shader.h"; path = "include/frag-shader.h"; sourceTree = SOURCE_ROOT; };
+		92D9F1FF6B9E450493F46400 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
+		944B8C1E979047D29545C781 /* /Users/matty/projects/bulkin/include/bulkin.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = bulkin.h; path = include/bulkin.h; sourceTree = SOURCE_ROOT; };
+		9E882E650BAF431AAD10A9B7 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
+		A02EFCD1F3F44E9594AEFBC3 /* /Users/matty/projects/bulkin/include/camera.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = camera.h; path = include/camera.h; sourceTree = SOURCE_ROOT; };
+		A1EB0558D6D74CB19266C7F7 /* /Users/matty/projects/bulkin/src/texture.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = texture.cpp; path = src/texture.cpp; sourceTree = SOURCE_ROOT; };
+		A97E493092D84FC58DD44891 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = geometric.h; path = include/glm/glm/simd/geometric.h; sourceTree = SOURCE_ROOT; };
+		AD5F5B83F50E4DE6938AF5E1 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = exponential.h; path = include/glm/simd/exponential.h; sourceTree = SOURCE_ROOT; };
+		C06E24A3670244EDAE20E540 /* /Users/matty/projects/bulkin/src/bulkin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = bulkin.cpp; path = src/bulkin.cpp; sourceTree = SOURCE_ROOT; };
+		C2370E3960C840328B54F634 /* /Users/matty/projects/bulkin/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		CC104605C9B94B01BBE4F75A /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = tiny_obj_loader.h; path = include/tiny_obj_loader.h; sourceTree = SOURCE_ROOT; };
+		D56408540AD74422A9923E0F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = integer.h; path = include/glm/glm/simd/integer.h; sourceTree = SOURCE_ROOT; };
+		D9E1A5C5A78F4A2F834C9EBE /* /Users/matty/projects/bulkin/src/device.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = device.cpp; path = src/device.cpp; sourceTree = SOURCE_ROOT; };
+		DFE1C447F2C24C048F8AC413 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
+		F1C421E9F0804A34B4F4FAE2 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = neon.h; path = include/glm/glm/simd/neon.h; sourceTree = SOURCE_ROOT; };
+		F746E0CC670546818E8DC787 /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = glfw3native.h; path = include/GLFW/glfw3native.h; sourceTree = SOURCE_ROOT; };
+		F83081ED13DF4A2DAE612A95 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 4; name = packing.h; path = include/glm/glm/simd/packing.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		39F910A3FC4A4D0CB84EB0E2 /* Frameworks */ = {
+		9DD2528F7E484D1595DB208D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -195,120 +199,122 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		07B423011A8F4E10A14B1043 /* Resources */ = {
+		0E713418E62A44DC88C0F11C /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				57F83DB58AE54097A824D7A9 /* CMake Rules */,
+				C2370E3960C840328B54F634 /* /Users/matty/projects/bulkin/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		1BACE3EC351247768C65F2A9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Resources;
 			sourceTree = "<group>";
 		};
-		23ED99E943924CE092AF1E0D = {
+		2C5FAABF3EE54338B480D4EC /* bulkin */ = {
 			isa = PBXGroup;
 			children = (
-				D63BA842F978477BBF3ADE93 /* bulkin */,
-				737FBACCE3734144BFFE3E95 /* ALL_BUILD */,
-				425F14CF99E04D1BA5B72B9F /* Products */,
-				8095C737943F445F99351B84 /* Frameworks */,
-				07B423011A8F4E10A14B1043 /* Resources */,
+				DB0305851FFA476CA0F740A4 /* Source Files */,
+				50B0309DF00C4AA0837698E0 /* Header Files */,
+				07E6FD93D31B4D0A989FF74B /* /Users/matty/projects/bulkin/CMakeLists.txt */,
 			);
+			name = bulkin;
 			sourceTree = "<group>";
 		};
-		425F14CF99E04D1BA5B72B9F /* Products */ = {
+		50B0309DF00C4AA0837698E0 /* Header Files */ = {
 			isa = PBXGroup;
 			children = (
-				A8AFF76CBEF843C7B64F51AB /* bulkin */,
+				4A6542208BEF45E281C10231 /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */,
+				F746E0CC670546818E8DC787 /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */,
+				7916817FB7D74110ABF388F3 /* /Users/matty/projects/bulkin/include/buffer.h */,
+				944B8C1E979047D29545C781 /* /Users/matty/projects/bulkin/include/bulkin.h */,
+				A02EFCD1F3F44E9594AEFBC3 /* /Users/matty/projects/bulkin/include/camera.h */,
+				77636B305DD9438CB4740860 /* /Users/matty/projects/bulkin/include/constants.h */,
+				708B7C0021AD425394857065 /* /Users/matty/projects/bulkin/include/device.h */,
+				9123468E5C974975BB7630DC /* /Users/matty/projects/bulkin/include/frag-shader.h */,
+				0A471D4915424743939251DB /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */,
+				92D9F1FF6B9E450493F46400 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */,
+				A97E493092D84FC58DD44891 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */,
+				D56408540AD74422A9923E0F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */,
+				6FC21C6D09F142FA8C732031 /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */,
+				F1C421E9F0804A34B4F4FAE2 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */,
+				F83081ED13DF4A2DAE612A95 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */,
+				61ACA7C84C504D90B9AB5E22 /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */,
+				4D30C7F625A948E0B82B22B9 /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */,
+				39E303BEA8BC411CBF3B6134 /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */,
+				3534F964D794484E9EC272BE /* /Users/matty/projects/bulkin/include/glm/simd/common.h */,
+				AD5F5B83F50E4DE6938AF5E1 /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */,
+				9E882E650BAF431AAD10A9B7 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */,
+				833B590128624F7EA9841F4E /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */,
+				17EDEAB2905C487F8C2D1ACB /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */,
+				113519EAB8A64170AAEC8834 /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */,
+				DFE1C447F2C24C048F8AC413 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */,
+				2699E82CB7AE433B90672942 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */,
+				70FA39E9313F4A86A54187C7 /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */,
+				24BD86DC6D2743D090F631B4 /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */,
+				505B33D7B55843C6947D4997 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */,
+				21E8FEFCAFBE43EEBA823366 /* /Users/matty/projects/bulkin/include/quad.h */,
+				21834FE62DC24003867D75B0 /* /Users/matty/projects/bulkin/include/queue-family.h */,
+				717CE30F1F8E45E0BCA7832A /* /Users/matty/projects/bulkin/include/stb_image.h */,
+				66B136EC3210410488D21563 /* /Users/matty/projects/bulkin/include/swapchain.h */,
+				44EA65ABFA744059862298EC /* /Users/matty/projects/bulkin/include/texture.h */,
+				CC104605C9B94B01BBE4F75A /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */,
+				291E23175C94425580F41291 /* /Users/matty/projects/bulkin/include/vert-shader.h */,
+				7FE9DA678275451383808324 /* /Users/matty/projects/bulkin/include/vertex.h */,
 			);
-			name = Products;
+			name = "Header Files";
 			sourceTree = "<group>";
 		};
-		655285602D884F66AD39ACEE /* Source Files */ = {
+		57F83DB58AE54097A824D7A9 /* CMake Rules */ = {
 			isa = PBXGroup;
 			children = (
-				043703061F9540168AF24181 /* /Users/matty/projects/bulkin/src/buffer.cpp */,
-				0330BB60A51D4D6EB298420B /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
-				D63A6C59A936462C9B2E08B5 /* /Users/matty/projects/bulkin/src/camera.cpp */,
-				A4F54834F2D143F9B052B7CA /* /Users/matty/projects/bulkin/src/device.cpp */,
-				19A3DBBDFC08486EB3A9FFFD /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
-				184673EF2D4045059E313CAC /* /Users/matty/projects/bulkin/src/quad.cpp */,
-				1E0A0F6D29614E4BA2197DC9 /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
 			);
-			name = "Source Files";
+			name = "CMake Rules";
 			sourceTree = "<group>";
 		};
-		737FBACCE3734144BFFE3E95 /* ALL_BUILD */ = {
-			isa = PBXGroup;
-			children = (
-				E047F4530E204CD6B52A1AE7 /* CMake Rules */,
-				BA4F76E4D7E1484D8DDCE452 /* /Users/matty/projects/bulkin/CMakeLists.txt */,
-			);
-			name = ALL_BUILD;
-			sourceTree = "<group>";
-		};
-		8095C737943F445F99351B84 /* Frameworks */ = {
+		7F85C2D2AC664813B94ACCDE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		C3FF534DC4514CB8BFCCDE20 /* Header Files */ = {
+		DB0305851FFA476CA0F740A4 /* Source Files */ = {
 			isa = PBXGroup;
 			children = (
-				348109D48B8145D4B5BC864F /* /Users/matty/projects/bulkin/include/GLFW/glfw3.h */,
-				992B55ED68F347F0AA8A7F1E /* /Users/matty/projects/bulkin/include/GLFW/glfw3native.h */,
-				64805208E208401E951B0CC6 /* /Users/matty/projects/bulkin/include/buffer.h */,
-				0E2F866DF95944799A6C1D4D /* /Users/matty/projects/bulkin/include/bulkin.h */,
-				4B7F08AC662A4BC9BAD0B11D /* /Users/matty/projects/bulkin/include/camera.h */,
-				3C11310B63DD4BE59C98F1C7 /* /Users/matty/projects/bulkin/include/constants.h */,
-				AEBBF2C8F4604DEE8FA1D6FE /* /Users/matty/projects/bulkin/include/device.h */,
-				D3BCF43F89ED4D80B8724FE7 /* /Users/matty/projects/bulkin/include/frag-shader.h */,
-				9DB65278F5A04259899139F3 /* /Users/matty/projects/bulkin/include/glm/glm/simd/common.h */,
-				E8629FE938DF43079E5D5C11 /* /Users/matty/projects/bulkin/include/glm/glm/simd/exponential.h */,
-				4EB8379CF1F4409BAEF0B798 /* /Users/matty/projects/bulkin/include/glm/glm/simd/geometric.h */,
-				71FD87A204F04C4580E14D5F /* /Users/matty/projects/bulkin/include/glm/glm/simd/integer.h */,
-				D417EF6E4B204FCFAA38226D /* /Users/matty/projects/bulkin/include/glm/glm/simd/matrix.h */,
-				40ABC97A40B243A8A5C23E62 /* /Users/matty/projects/bulkin/include/glm/glm/simd/neon.h */,
-				05ED4AC388F248E1A08D76B1 /* /Users/matty/projects/bulkin/include/glm/glm/simd/packing.h */,
-				2B9A87A36C5341389B05938D /* /Users/matty/projects/bulkin/include/glm/glm/simd/platform.h */,
-				985C8D7CEDA34E69A24F40ED /* /Users/matty/projects/bulkin/include/glm/glm/simd/trigonometric.h */,
-				D67D91E1BC724F30B06B0E6D /* /Users/matty/projects/bulkin/include/glm/glm/simd/vector_relational.h */,
-				82FEC87F93CD4D4EBFC9DEB8 /* /Users/matty/projects/bulkin/include/glm/simd/common.h */,
-				AFA5033E5778424C8D83BC7D /* /Users/matty/projects/bulkin/include/glm/simd/exponential.h */,
-				0870AB98B23A4E3AB5B52406 /* /Users/matty/projects/bulkin/include/glm/simd/geometric.h */,
-				B9B152A79AEA41DB930CC08D /* /Users/matty/projects/bulkin/include/glm/simd/integer.h */,
-				0312716A8467444E9E22FA96 /* /Users/matty/projects/bulkin/include/glm/simd/matrix.h */,
-				A5BA4A601ED34043B03F7DBE /* /Users/matty/projects/bulkin/include/glm/simd/neon.h */,
-				38E0A40B817D47FD8E95F148 /* /Users/matty/projects/bulkin/include/glm/simd/packing.h */,
-				52B59B2AF96D4035BA682A94 /* /Users/matty/projects/bulkin/include/glm/simd/platform.h */,
-				EF314BF29D10458ABED0642C /* /Users/matty/projects/bulkin/include/glm/simd/trigonometric.h */,
-				72BE363C224941C597583A5E /* /Users/matty/projects/bulkin/include/glm/simd/vector_relational.h */,
-				42914EEC0EAA4CC9B3972250 /* /Users/matty/projects/bulkin/include/graphics-pipeline.h */,
-				5ECC8CF76C4B40B69713F38F /* /Users/matty/projects/bulkin/include/quad.h */,
-				229EBA1DE843459E926AEC67 /* /Users/matty/projects/bulkin/include/queue-family.h */,
-				E39C55D2507F4C669BD01CAA /* /Users/matty/projects/bulkin/include/stb_image.h */,
-				5A19D101410648A6AE1A63BC /* /Users/matty/projects/bulkin/include/swapchain.h */,
-				FEDD9A2B7F51492CBFE8F005 /* /Users/matty/projects/bulkin/include/tiny_obj_loader.h */,
-				41D6F4A992584EF4B2F81EE4 /* /Users/matty/projects/bulkin/include/vert-shader.h */,
-				94C30E267A7F4A2D8D3B1ECB /* /Users/matty/projects/bulkin/include/vertex.h */,
+				05E75AE9E9E94B7AA8455EFF /* /Users/matty/projects/bulkin/src/buffer.cpp */,
+				C06E24A3670244EDAE20E540 /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
+				8D4E53E2C528468C90A7DFEB /* /Users/matty/projects/bulkin/src/camera.cpp */,
+				D9E1A5C5A78F4A2F834C9EBE /* /Users/matty/projects/bulkin/src/device.cpp */,
+				48565B8217F64C07BCC07728 /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
+				3CFB41D743D345BCA5BEBC46 /* /Users/matty/projects/bulkin/src/quad.cpp */,
+				1D0209E537EE4DE5A947008D /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
+				A1EB0558D6D74CB19266C7F7 /* /Users/matty/projects/bulkin/src/texture.cpp */,
 			);
-			name = "Header Files";
+			name = "Source Files";
 			sourceTree = "<group>";
 		};
-		D63BA842F978477BBF3ADE93 /* bulkin */ = {
+		DDD75561A056464CA236AB55 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				655285602D884F66AD39ACEE /* Source Files */,
-				C3FF534DC4514CB8BFCCDE20 /* Header Files */,
-				F46B64B46DB04862A3FF0D96 /* /Users/matty/projects/bulkin/CMakeLists.txt */,
+				4DF2771D55BF42BAA1EE5F6D /* bulkin */,
 			);
-			name = bulkin;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		E047F4530E204CD6B52A1AE7 /* CMake Rules */ = {
+		F6FB1B2CCCE04F9A9483B197 = {
 			isa = PBXGroup;
 			children = (
+				2C5FAABF3EE54338B480D4EC /* bulkin */,
+				0E713418E62A44DC88C0F11C /* ALL_BUILD */,
+				DDD75561A056464CA236AB55 /* Products */,
+				7F85C2D2AC664813B94ACCDE /* Frameworks */,
+				1BACE3EC351247768C65F2A9 /* Resources */,
 			);
-			name = "CMake Rules";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -316,19 +322,19 @@
 /* Begin PBXNativeTarget section */
 		F331DFE182800A842DCD4764 /* bulkin */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D9B5D01E02D44B159BF68B35 /* Build configuration list for PBXNativeTarget "bulkin" */;
+			buildConfigurationList = B81D389BB9664788AD70D339 /* Build configuration list for PBXNativeTarget "bulkin" */;
 			buildPhases = (
-				67038D0D64B14610B9733B91 /* Sources */,
-				39F910A3FC4A4D0CB84EB0E2 /* Frameworks */,
+				B6438F353D6E4035B2D01491 /* Sources */,
+				9DD2528F7E484D1595DB208D /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				15333C74528947CD80E75C34 /* PBXTargetDependency */,
+				026C51BEEC3B4018B2774B40 /* PBXTargetDependency */,
 			);
 			name = bulkin;
 			productName = bulkin;
-			productReference = A8AFF76CBEF843C7B64F51AB /* bulkin */;
+			productReference = 4DF2771D55BF42BAA1EE5F6D /* bulkin */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -340,18 +346,18 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 2600;
 			};
-			buildConfigurationList = EFCA9652C0DF4F12AB2C898F /* Build configuration list for PBXProject "bulkin" */;
+			buildConfigurationList = C646CBF1644147D780D0E4BC /* Build configuration list for PBXProject "bulkin" */;
 			buildSettings = {
 			};
 			buildStyles = (
-				85C1AE1468F345959A282223 /* Debug */,
-				96406078CDBC4DACBDF26380 /* Release */,
-				0F8C6211C92746ACBBCA2B81 /* MinSizeRel */,
-				2B4B837E2FB24D71BB100FF2 /* RelWithDebInfo */,
+				C017373D9B0B4C58A5D3BBC2 /* Debug */,
+				48847E0DB31A4EFAAA3A49E7 /* Release */,
+				5E910C2F0D0645CCAD9E6EE0 /* MinSizeRel */,
+				CF90C5CB1F7440938DAE6668 /* RelWithDebInfo */,
 			);
 			compatibilityVersion = "Xcode 3.2";
 			hasScannedForEncodings = 0;
-			mainGroup = 23ED99E943924CE092AF1E0D;
+			mainGroup = F6FB1B2CCCE04F9A9483B197;
 			projectDirPath = /Users/matty/projects/bulkin;
 			projectRoot = "";
 			targets = (
@@ -462,64 +468,43 @@ exit 0";
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		67038D0D64B14610B9733B91 /* Sources */ = {
+		B6438F353D6E4035B2D01491 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				853F0CE3BD7D42C0AEB9C871 /* /Users/matty/projects/bulkin/src/buffer.cpp */,
-				C15296E7EA2F475CABADA995 /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
-				A8A58818ED1A4D59B9BAE9E2 /* /Users/matty/projects/bulkin/src/camera.cpp */,
-				FB1A53C8D2D145728352643F /* /Users/matty/projects/bulkin/src/device.cpp */,
-				E1C3870296CC4A3ABB3650CD /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
-				4923BA43712B421FB58D1F9C /* /Users/matty/projects/bulkin/src/quad.cpp */,
-				C2473FFB764B4A0B8230553A /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
+				0274B877D8C64C5D884A5AC3 /* /Users/matty/projects/bulkin/src/buffer.cpp */,
+				C8580F9A045645339CA32E80 /* /Users/matty/projects/bulkin/src/bulkin.cpp */,
+				861C5482F2EA4C52BF55F45C /* /Users/matty/projects/bulkin/src/camera.cpp */,
+				C325DF6C24B6451C8BBA6605 /* /Users/matty/projects/bulkin/src/device.cpp */,
+				4F6548ADE5204C62B7D9F8AF /* /Users/matty/projects/bulkin/src/graphics-pipeline.cpp */,
+				B70EAD67B6EA4A39B476EC77 /* /Users/matty/projects/bulkin/src/quad.cpp */,
+				2E1479DC66D2462186D1C019 /* /Users/matty/projects/bulkin/src/swapchain.cpp */,
+				0DA225CBC92C46E196C418DE /* /Users/matty/projects/bulkin/src/texture.cpp */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		15333C74528947CD80E75C34 /* PBXTargetDependency */ = {
+		026C51BEEC3B4018B2774B40 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
-			targetProxy = 977926ED5E154BBD9E1293FA /* PBXContainerItemProxy */;
+			targetProxy = 14B72708AED94A9B8578196A /* PBXContainerItemProxy */;
 		};
-		440EAE22651041D6836F553F /* PBXTargetDependency */ = {
+		039613C1326B4864ADAF19EE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F331DFE182800A842DCD4764 /* bulkin */;
-			targetProxy = C5D0D06BDFB0465987E9FBF6 /* PBXContainerItemProxy */;
+			targetProxy = 1DF04F9543BB4D6DA3499D6A /* PBXContainerItemProxy */;
 		};
-		A17F00346E78475AAA74DB89 /* PBXTargetDependency */ = {
+		2D0865203FD547539A810F91 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 98278D2D2E5572A036D08BE4 /* ZERO_CHECK */;
-			targetProxy = 56EA204EC7CA48C695292A92 /* PBXContainerItemProxy */;
+			targetProxy = E1E0A2964F1F428F90EB8BEE /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		124FFAFBAD4E41BA917CD727 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = RelWithDebInfo;
-		};
-		168BBE3071DC4732BF3121BD /* MinSizeRel */ = {
+		2F55F11E2E114102B6E21030 /* MinSizeRel */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -541,101 +526,7 @@ exit 0";
 			};
 			name = MinSizeRel;
 		};
-		4847F43C847141AC960F6B68 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Release;
-		};
-		4A0453F8B43344C8A134ED6E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Debug;
-		};
-		55671EBCB4D543D88CFF1E44 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = "";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
-			};
-			name = MinSizeRel;
-		};
-		56EFC2ADA7294D68A4D85405 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/MinSizeRel";
-				EXECUTABLE_PREFIX = lib;
-				EXECUTABLE_SUFFIX = .a;
-				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
-				INSTALL_PATH = "";
-				LIBRARY_STYLE = STATIC;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++2b' -Wall -Wextra    ";
-				OTHER_LIBTOOLFLAGS = ("");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = bulkin;
-				SECTORDER_FLAGS = "";
-				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
-				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		63A4617FB23C4E159736BB69 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = "";
-				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
-			};
-			name = Debug;
-		};
-		7E91007558004E32B5635266 /* RelWithDebInfo */ = {
+		45D76AEC939D41C998C340D7 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -666,7 +557,146 @@ exit 0";
 			};
 			name = RelWithDebInfo;
 		};
-		9326457A9872407E90AED74A /* Debug */ = {
+		4F461F45F15E41908312A0C0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		589BB6C002324A4D9FC1CAA9 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		64DC877780A44788A76869AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Debug;
+		};
+		6FB83928EDFE46259537A4EF /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
+			};
+			name = MinSizeRel;
+		};
+		B442A5996732421795CE4CD5 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				CONFIGURATION_BUILD_DIR = "/Users/matty/projects/bulkin/build-xcode/MinSizeRel";
+				EXECUTABLE_PREFIX = lib;
+				EXECUTABLE_SUFFIX = .a;
+				FRAMEWORK_SEARCH_PATHS = (/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.0.sdk/System/Library/Frameworks,"$(inherited)");
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (/Users/matty/projects/bulkin/include,"$(inherited)");
+				INSTALL_PATH = "";
+				LIBRARY_STYLE = STATIC;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG '-std=gnu++2b' -Wall -Wextra    ";
+				OTHER_LIBTOOLFLAGS = ("");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = bulkin;
+				SECTORDER_FLAGS = "";
+				SYSTEM_HEADER_SEARCH_PATHS = (/Users/matty/vulkanSDK/default/macOS/include,"$(inherited)");
+				TARGET_TEMP_DIR = "/Users/matty/projects/bulkin/build-xcode/build/bulkin.build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		B52CAC3BE4264F00A82EA0BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = Release;
+		};
+		C0C4177106914EA78D401FBF /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
+			};
+			name = RelWithDebInfo;
+		};
+		C70F355E104040668164F43D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -697,51 +727,7 @@ exit 0";
 			};
 			name = Debug;
 		};
-		A1B7F1E114F1487888DAAEDF /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = Release;
-		};
-		AFE94AB93DBF4F9597DDA485 /* MinSizeRel */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
-				COMBINE_HIDPI_IMAGES = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INSTALL_PATH = "";
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = ("","$(inherited)");
-				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ALL_BUILD;
-				SECTORDER_FLAGS = "";
-				USE_HEADERMAP = NO;
-				WARNING_CFLAGS = ("$(inherited)");
-			};
-			name = MinSizeRel;
-		};
-		B096EE11B4DC47229634034F /* Release */ = {
+		CB97BD0DD6644B37B018D2B0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -772,7 +758,7 @@ exit 0";
 			};
 			name = Release;
 		};
-		B3342337019B4D26B81AE377 /* Debug */ = {
+		DB284E3CA4C94208BA43E6E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -787,24 +773,14 @@ exit 0";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = ("","$(inherited)");
 				OTHER_REZFLAGS = "";
-				PRODUCT_NAME = ZERO_CHECK;
+				PRODUCT_NAME = ALL_BUILD;
 				SECTORDER_FLAGS = "";
 				USE_HEADERMAP = NO;
 				WARNING_CFLAGS = ("$(inherited)");
 			};
 			name = Debug;
 		};
-		BF80945D5F3246C9B879DF60 /* RelWithDebInfo */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = arm64;
-				SDKROOT = "";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
-			};
-			name = RelWithDebInfo;
-		};
-		C7AA69605E054F0891A0805E /* Release */ = {
+		E91E8F321A23454A93207F2E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = arm64;
@@ -814,7 +790,7 @@ exit 0";
 			};
 			name = Release;
 		};
-		E48D1B9EA4354FF58F8DBE75 /* RelWithDebInfo */ = {
+		F4EA4C05D82E487F9E8895F1 /* RelWithDebInfo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -836,49 +812,80 @@ exit 0";
 			};
 			name = RelWithDebInfo;
 		};
+		F9DFAAE186664AED94E04563 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = arm64;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'","$(inherited)");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				INSTALL_PATH = "";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = ("","$(inherited)");
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		FD760987DE7743368BE996F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				SDKROOT = "";
+				SYMROOT = "/Users/matty/projects/bulkin/build-xcode/build";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AF30A1AA78E441B8A2121786 /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+		6F2F04C79E5C4A238528634C /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B3342337019B4D26B81AE377 /* Debug */,
-				4847F43C847141AC960F6B68 /* Release */,
-				168BBE3071DC4732BF3121BD /* MinSizeRel */,
-				124FFAFBAD4E41BA917CD727 /* RelWithDebInfo */,
+				64DC877780A44788A76869AF /* Debug */,
+				B52CAC3BE4264F00A82EA0BB /* Release */,
+				2F55F11E2E114102B6E21030 /* MinSizeRel */,
+				589BB6C002324A4D9FC1CAA9 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		C3E8D8D7F16A4EF5B97C9037 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+		AC4723BB2B7241B483861960 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4A0453F8B43344C8A134ED6E /* Debug */,
-				A1B7F1E114F1487888DAAEDF /* Release */,
-				AFE94AB93DBF4F9597DDA485 /* MinSizeRel */,
-				E48D1B9EA4354FF58F8DBE75 /* RelWithDebInfo */,
+				DB284E3CA4C94208BA43E6E2 /* Debug */,
+				4F461F45F15E41908312A0C0 /* Release */,
+				F9DFAAE186664AED94E04563 /* MinSizeRel */,
+				F4EA4C05D82E487F9E8895F1 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		D9B5D01E02D44B159BF68B35 /* Build configuration list for PBXNativeTarget "bulkin" */ = {
+		B81D389BB9664788AD70D339 /* Build configuration list for PBXNativeTarget "bulkin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9326457A9872407E90AED74A /* Debug */,
-				B096EE11B4DC47229634034F /* Release */,
-				56EFC2ADA7294D68A4D85405 /* MinSizeRel */,
-				7E91007558004E32B5635266 /* RelWithDebInfo */,
+				C70F355E104040668164F43D /* Debug */,
+				CB97BD0DD6644B37B018D2B0 /* Release */,
+				B442A5996732421795CE4CD5 /* MinSizeRel */,
+				45D76AEC939D41C998C340D7 /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		EFCA9652C0DF4F12AB2C898F /* Build configuration list for PBXProject "bulkin" */ = {
+		C646CBF1644147D780D0E4BC /* Build configuration list for PBXProject "bulkin" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				63A4617FB23C4E159736BB69 /* Debug */,
-				C7AA69605E054F0891A0805E /* Release */,
-				55671EBCB4D543D88CFF1E44 /* MinSizeRel */,
-				BF80945D5F3246C9B879DF60 /* RelWithDebInfo */,
+				FD760987DE7743368BE996F5 /* Debug */,
+				E91E8F321A23454A93207F2E /* Release */,
+				6FB83928EDFE46259537A4EF /* MinSizeRel */,
+				C0C4177106914EA78D401FBF /* RelWithDebInfo */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
