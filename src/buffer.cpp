@@ -7,10 +7,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <GLFW/glfw3.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-
-uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, vk::PhysicalDevice device) {
+uint32_t BulkinBuffer::findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties, vk::PhysicalDevice device) {
   vk::PhysicalDeviceMemoryProperties memProperties = device.getMemoryProperties();
   
   for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
@@ -22,35 +19,14 @@ uint32_t findMemoryType(uint32_t typeFilter, vk::MemoryPropertyFlags properties,
   throw std::runtime_error("failed to find suitable memory type!");
 }
 
-void copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size, vk::CommandPool& commandPool, vk::Device& device, vk::Queue& queue) {
-  vk::CommandBufferAllocateInfo allocInfo{};
-  allocInfo.level = vk::CommandBufferLevel::ePrimary;
-  allocInfo.commandPool = commandPool;
-  allocInfo.commandBufferCount = 1;
+void BulkinBuffer::copyBuffer(vk::Buffer srcBuffer, vk::Buffer dstBuffer, vk::DeviceSize size, vk::CommandPool& commandPool, vk::Device& device, vk::Queue& queue) {
+  auto commandBuffer = beginSingleTimeCommands(device, commandPool);
   
-  vk::CommandBuffer commandBuffer = std::move(device.allocateCommandBuffers(allocInfo).front());
+  vk::BufferCopy region{};
+  region.size = size;
+  commandBuffer.copyBuffer(srcBuffer, dstBuffer, region);
   
-  vk::CommandBufferBeginInfo beginInfo{};
-  beginInfo.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
-  commandBuffer.begin(beginInfo);
-  
-  vk::BufferCopy copyRegion{};
-  copyRegion.srcOffset = 0;
-  copyRegion.dstOffset = 0;
-  copyRegion.size = size;
-  commandBuffer.copyBuffer(srcBuffer, dstBuffer, 1, &copyRegion);
-  
-  commandBuffer.end();
-  
-  vk::SubmitInfo submitInfo{};
-  submitInfo.commandBufferCount = 1;
-  submitInfo.pCommandBuffers = &commandBuffer;
-  
-  if (queue.submit(1, &submitInfo, nullptr) != vk::Result::eSuccess)
-    throw std::runtime_error("failed to submit queue");
-  queue.waitIdle();
-  
-  device.freeCommandBuffers(commandPool, 1, &commandBuffer);
+  endSingleTimeCommands(commandBuffer, device, queue, commandPool);
 }
 
 void BulkinBuffer::createBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, size_t size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory) {
@@ -133,7 +109,7 @@ void BulkinBuffer::createSSBOBuffer(vk::Device &device, vk::PhysicalDevice &phys
   std::vector<PerInstanceData> perInstanceData;
   perInstanceData.resize(quad.getInstanceCount());
   for (size_t i = 0; i < quad.getInstanceCount(); i++) {
-    perInstanceData[i].model = quad.getModelMatrix(i);
+    perInstanceData[i] = quad.getInstanceData(i);
   }
   
   void* data = device.mapMemory(stagingBufferMemory, 0, size);
@@ -168,21 +144,27 @@ void BulkinBuffer::cleanup(vk::Device& device) {
   device.free(indexBufferMemory);
 }
 
-void BulkinBuffer::createImageBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, const char* filename) {
-  int texWidth, texHeight, texChannels;
-  stbi_uc* pixels = stbi_load(filename, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-  vk::DeviceSize imageSize = texWidth * texHeight * 4;
+vk::CommandBuffer BulkinBuffer::beginSingleTimeCommands(vk::Device device, vk::CommandPool& commandPool) {
+  vk::CommandBufferAllocateInfo allocInfo{};
+  allocInfo.level = vk::CommandBufferLevel::ePrimary;
+  allocInfo.commandPool = commandPool;
+  allocInfo.commandBufferCount = 1;
+  vk::CommandBuffer commandBuffer = std::move(device.allocateCommandBuffers(allocInfo).front());
+  vk::CommandBufferBeginInfo beginInfo{};
+  beginInfo.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
   
-  if (!pixels)
-    throw std::runtime_error("failed to load texture image");
-  vk::Buffer stagingBuffer;
-  vk::DeviceMemory stagingBufferMemory;
+  commandBuffer.begin(beginInfo);
+  return commandBuffer;
+}
+
+void BulkinBuffer::endSingleTimeCommands(vk::CommandBuffer commandBuffer, vk::Device device, vk::Queue graphicsQueue, vk::CommandPool commandPool) {
+  commandBuffer.end();
   
-  createBuffer(device, physicalDevice, imageSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  vk::SubmitInfo submitInfo{};
+  submitInfo.commandBufferCount = 1;
+  submitInfo.pCommandBuffers = &commandBuffer;
+  graphicsQueue.submit(submitInfo);
+  graphicsQueue.waitIdle();
   
-  void* data = device.mapMemory(stagingBufferMemory, 0, imageSize);
-  memcpy(data, pixels, static_cast<size_t>(imageSize));
-  device.unmapMemory(stagingBufferMemory);
-  
-  stbi_image_free(pixels);
+  device.freeCommandBuffers(commandPool, 1, &commandBuffer);
 }

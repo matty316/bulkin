@@ -37,7 +37,6 @@ void BulkinCamera::update(double deltaTime, const glm::vec2 &mousePos) {
       moveSpeed = glm::normalize(moveSpeed) * maximumSpeed;
   }
   cameraPos += moveSpeed * static_cast<float>(deltaTime);
-  std::println("({}, {},)", cameraPos.x, cameraPos.z);
   cameraPos.y = playerHeight;
 }
 

@@ -21,7 +21,7 @@ public:
   void createLogicalDevice();
   void createSurface(vk::Instance& instance, GLFWwindow *window);
   void createSwapchain(GLFWwindow* window);
-  void createGraphicsPipeline(Quad quad);
+  void createGraphicsPipeline(Quad quad, BulkinTexture& texture);
   void cleanup(vk::Instance& instance);
   QueueFamilyIndices findQueueFamilies(vk::PhysicalDevice& device);
 private:

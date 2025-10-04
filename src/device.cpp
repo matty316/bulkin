@@ -66,7 +66,10 @@ bool BulkinDevice::isDeviceSuitable(vk::PhysicalDevice &physicalDevice) {
     if (swapchainAdequate)
       this->swapchain = swapchain;
   }
-  return indices.isComplete() && extensionsSupported && swapchainAdequate;
+  
+  vk::PhysicalDeviceFeatures supportedFeatures = physicalDevice.getFeatures();
+  
+  return indices.isComplete() && extensionsSupported && swapchainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
 bool BulkinDevice::checkDeviceExtensionSupport(
@@ -109,6 +112,7 @@ void BulkinDevice::createLogicalDevice() {
   }
 
   vk::PhysicalDeviceFeatures2 deviceFeatures;
+  deviceFeatures.features.samplerAnisotropy = true;
   vk::PhysicalDeviceVulkan13Features vulkan13Features;
   vulkan13Features.dynamicRendering = true;
   vulkan13Features.synchronization2 = true;
@@ -163,10 +167,12 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
   swapchain.createImageViews(device);
 }
 
-void BulkinDevice::createGraphicsPipeline(Quad quad) {
+void BulkinDevice::createGraphicsPipeline(Quad quad, BulkinTexture& texture) {
   graphicsPipeline.createDescriptorLayout(device);
-  graphicsPipeline.create(device, swapchain.imageFormat);
+  graphicsPipeline.create(device, physicalDevice, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
-  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad);
+  graphicsPipeline.createDepthResources(device, physicalDevice, graphicsQueue, swapchain.extent.width, swapchain.extent.height);
+  texture.load("textures/wall.png", device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
+  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, texture);
   graphicsPipeline.createCommandBuffers(device);
 }

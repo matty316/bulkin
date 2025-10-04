@@ -1,5 +1,7 @@
 #include "bulkin.h"
 
+#include <print>
+
 void Bulkin::run() {
   initWindow();
   initVulkan();
@@ -10,7 +12,7 @@ void Bulkin::run() {
 void Bulkin::initWindow() {
   glfwInit();
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  window = glfwCreateWindow(WIDTH, HEIGHT, "bulkin", glfwGetPrimaryMonitor(), nullptr);
+  window = glfwCreateWindow(WIDTH, HEIGHT, "bulkin", fullsize ? glfwGetPrimaryMonitor() : nullptr, nullptr);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
   glfwSetCursorPosCallback(window, mouse_callback);
@@ -61,7 +63,7 @@ void Bulkin::key_callback(GLFWwindow *window, int key, int scancode, int action,
     app->camera.movement.left = press;
   if (key == GLFW_KEY_D)
     app->camera.movement.right = press;
-  if (mods & GLFW_MOD_SHIFT)
+  if (key == GLFW_KEY_LEFT_SHIFT)
     app->camera.movement.fast = press;
 }
 
@@ -71,14 +73,18 @@ void Bulkin::initVulkan() {
   device.pickPhysicalDevice(instance);
   device.createLogicalDevice();
   device.createSwapchain(window);
-  device.createGraphicsPipeline(quad);
+  device.createGraphicsPipeline(quad, texture);
   createSyncObjects();
 }
 
 void Bulkin::mainLoop() {
   while (!glfwWindowShouldClose(window)) {
+    if (showFrametime)
+      currentTime = glfwGetTime();
     glfwPollEvents();
     drawFrame();
+    if (showFrametime)
+      std::println("{} milliseconds", (glfwGetTime() - currentTime) * 1000);
   }
 
   device.device.waitIdle();
@@ -95,8 +101,7 @@ void Bulkin::drawFrame() {
       presentCompleteSemaphores[currentFrame], nullptr, &imageIndex);
 
   if (result == vk::Result::eErrorOutOfDateKHR) {
-    device.swapchain.recreate(device.device, device.surface, window,
-                              device.findQueueFamilies(device.physicalDevice));
+    recreateSwapchain();
   } else if (result != vk::Result::eSuccess &&
              result != vk::Result::eSuboptimalKHR) {
     throw std::runtime_error("failed to acquire next image");
@@ -149,8 +154,7 @@ void Bulkin::drawFrame() {
   if (result == vk::Result::eErrorOutOfDateKHR ||
       result == vk::Result::eSuboptimalKHR || framebufferResized) {
     framebufferResized = false;
-    device.swapchain.recreate(device.device, device.surface, window,
-                              device.findQueueFamilies(device.physicalDevice));
+    recreateSwapchain();
   } else if (result != vk::Result::eSuccess) {
     throw std::runtime_error("failed to present graphics queue");
   }
@@ -192,6 +196,7 @@ void Bulkin::cleanup() {
   for (size_t i = 0; i < device.swapchain.images.size(); i++) {
     device.device.destroy(renderFinishedSemaphores[i]);
   }
+  texture.cleanup(device.device);
   device.cleanup(instance);
   instance.destroy();
   glfwDestroyWindow(window);
@@ -254,8 +259,112 @@ void Bulkin::createSyncObjects() {
 }
 
 void Bulkin::addQuad(glm::vec3 position, float rotationX, float rotationY,
-                     float rotationZ, float scale) {
-  quad.addQuad(position, rotationX, rotationY, rotationZ, scale);
+                     float rotationZ, float scale, int shadingId) {
+  quad.addQuad(position, rotationX, rotationY, rotationZ, scale, shadingId);
 }
 
 void Bulkin::setPlayerPos(glm::vec2 pos) { camera.setPlayerPos(pos); }
+
+vk::ImageView Bulkin::createImageView(vk::Device& device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags) {
+  vk::ImageViewCreateInfo viewInfo{};
+  viewInfo.image = image;
+  viewInfo.viewType = vk::ImageViewType::e2D;
+  viewInfo.format = format;
+  viewInfo.subresourceRange.aspectMask = aspectFlags;
+  viewInfo.subresourceRange.baseMipLevel = 0;
+  viewInfo.subresourceRange.levelCount = 1;
+  viewInfo.subresourceRange.baseArrayLayer = 0;
+  viewInfo.subresourceRange.layerCount = 1;
+
+  return device.createImageView(viewInfo);
+}
+
+void Bulkin::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Image& image, vk::DeviceMemory& imageMemory) {
+  vk::ImageCreateInfo imageInfo{};
+  imageInfo.imageType = vk::ImageType::e2D;
+  imageInfo.extent.width = static_cast<uint32_t>(width);
+  imageInfo.extent.height = static_cast<uint32_t>(height);
+  imageInfo.extent.depth = 1;
+  imageInfo.mipLevels = 1;
+  imageInfo.arrayLayers = 1;
+  imageInfo.format = format;
+  imageInfo.tiling = tiling;
+  imageInfo.initialLayout = vk::ImageLayout::eUndefined;
+  imageInfo.usage = usage;
+  imageInfo.sharingMode = vk::SharingMode::eExclusive;
+  imageInfo.samples = vk::SampleCountFlagBits::e1;
+  
+  image = device.createImage(imageInfo);
+  
+  vk::MemoryRequirements memRequirements = device.getImageMemoryRequirements(image);
+  
+  vk::MemoryAllocateInfo allocInfo{};
+  allocInfo.allocationSize = memRequirements.size;
+  allocInfo.memoryTypeIndex = BulkinBuffer::findMemoryType(memRequirements.memoryTypeBits, properties, physicalDevice);
+ 
+  imageMemory = device.allocateMemory(allocInfo);
+  device.bindImageMemory(image, imageMemory, 0);
+}
+
+void Bulkin::transitionImageLayout(vk::Device device, vk::CommandPool commandPool, vk::Queue graphicsQueue, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, vk::Image& image) {
+  auto commandBuffer = BulkinBuffer::beginSingleTimeCommands(device, commandPool);
+  
+  vk::ImageMemoryBarrier barrier{};
+  barrier.oldLayout = oldLayout;
+  barrier.newLayout = newLayout;
+  barrier.srcQueueFamilyIndex = vk::QueueFamilyIgnored;
+  barrier.dstQueueFamilyIndex = vk::QueueFamilyIgnored;
+  barrier.image = image;
+  if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+    barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
+    
+    if (BulkinGraphicsPipeline::hasStencilComponent(format)) {
+      barrier.subresourceRange.aspectMask |= vk::ImageAspectFlagBits::eStencil;
+    }
+  } else {
+    barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
+  }
+  barrier.subresourceRange.baseMipLevel = 0;
+  barrier.subresourceRange.levelCount = 1;
+  barrier.subresourceRange.baseArrayLayer = 0;
+  barrier.subresourceRange.layerCount = 1;
+  
+  vk::PipelineStageFlags sourceStage;
+  vk::PipelineStageFlags destinationStage;
+  
+  if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eTransferDstOptimal) {
+    barrier.srcAccessMask = {};
+    barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
+    
+    sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
+    destinationStage = vk::PipelineStageFlagBits::eTransfer;
+  } else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+    barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
+    barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
+    
+    sourceStage = vk::PipelineStageFlagBits::eTransfer;
+    destinationStage = vk::PipelineStageFlagBits::eFragmentShader;
+  } else if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+    barrier.srcAccessMask = {};
+    barrier.dstAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+    
+    sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
+    destinationStage = vk::PipelineStageFlagBits::eEarlyFragmentTests;
+  } else {
+    throw std::runtime_error("unsupported layout transition");
+  }
+
+  commandBuffer.pipelineBarrier(sourceStage,
+                                destinationStage,
+                                {},
+                                0, nullptr,
+                                0, nullptr,
+                                1, &barrier);
+  
+  BulkinBuffer::endSingleTimeCommands(commandBuffer, device, graphicsQueue, commandPool);
+}
+
+void Bulkin::recreateSwapchain() {
+  device.swapchain.recreate(device.device, device.surface, window, device.findQueueFamilies(device.physicalDevice));
+  device.graphicsPipeline.createDepthResources(device.device, device.physicalDevice, device.graphicsQueue, device.swapchain.extent.width, device.swapchain.extent.height);
+}

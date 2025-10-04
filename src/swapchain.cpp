@@ -1,4 +1,5 @@
 #include "swapchain.h"
+#include "bulkin.h"
 
 void BulkinSwapchain::chooseSwapSurfaceFormat() {
   for (const auto& availableFormat : formats) {
@@ -89,20 +90,7 @@ void BulkinSwapchain::createImageViews(vk::Device& device) {
   imageViews.resize(images.size());
   
   for (size_t i = 0; i < images.size(); i++) {
-    vk::ImageViewCreateInfo createInfo{};
-    createInfo.image = images[i];
-    createInfo.viewType = vk::ImageViewType::e2D;
-    createInfo.format = imageFormat;
-    createInfo.components.r = vk::ComponentSwizzle::eIdentity;
-    createInfo.components.g = vk::ComponentSwizzle::eIdentity;
-    createInfo.components.b = vk::ComponentSwizzle::eIdentity;
-    createInfo.components.a = vk::ComponentSwizzle::eIdentity;
-    createInfo.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
-    createInfo.subresourceRange.baseMipLevel = 0;
-    createInfo.subresourceRange.levelCount = 1;
-    createInfo.subresourceRange.baseArrayLayer = 0;
-    createInfo.subresourceRange.layerCount = 1;
-    imageViews[i] = device.createImageView(createInfo);
+    imageViews[i] = Bulkin::createImageView(device, images[i], imageFormat, vk::ImageAspectFlagBits::eColor);
   }
 }
 

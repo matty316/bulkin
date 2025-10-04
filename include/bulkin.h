@@ -15,9 +15,12 @@
 class Bulkin {
 public:
   void run();
-  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale);
+  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId);
   void setPlayerPos(glm::vec2 pos);
-
+  
+  static vk::ImageView createImageView(vk::Device& device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
+  static void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Image& image, vk::DeviceMemory& imageMemory);
+  static void transitionImageLayout(vk::Device device, vk::CommandPool commandPool, vk::Queue graphicsQueue, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, vk::Image& image);
 private:
   GLFWwindow *window;
   vk::Instance instance;
@@ -27,8 +30,13 @@ private:
   std::vector<vk::Fence> drawFences;
   uint32_t currentFrame = 0;
   bool framebufferResized = false;
+  bool fullsize = true;
   Quad quad;
- 
+  
+  bool showFrametime = false;
+  double currentTime = 0.0;
+  BulkinTexture texture;
+  
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   
   struct MouseState {
@@ -41,6 +49,7 @@ private:
   
   double timeStamp = glfwGetTime();
   double deltaTime = 0.0f;
+ 
   
   void initWindow();
   void initVulkan();
@@ -51,6 +60,7 @@ private:
   void update();
   void createSyncObjects();
   void updatePushConstants();
+  void recreateSwapchain();
   static void mouse_callback(GLFWwindow *window, double x, double y);
   static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
   static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);

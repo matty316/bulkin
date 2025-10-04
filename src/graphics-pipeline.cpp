@@ -3,10 +3,11 @@
 #include "vertex.h"
 #include "frag-shader.h"
 #include "vert-shader.h"
+#include "bulkin.h"
 
 #include <fstream>
 
-void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFormat) {
+void BulkinGraphicsPipeline::create(vk::Device &device, vk::PhysicalDevice& physicalDevice, vk::Format& swapchainFormat) {
   vk::PipelineShaderStageCreateInfo fragShaderStageInfo{};
   vk::PipelineShaderStageCreateInfo vertShaderStageInfo{};
   
@@ -109,16 +110,25 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
   dynamicState.pDynamicStates = dynamicStates.data();
   
   vk::PipelineLayoutCreateInfo pipelineLayoutInfo{};
-  vk::DescriptorSetLayout descriptorSetLayouts[] = {uniformDescriptorSetLayout, ssboDescriptorSetLayout};
+  vk::DescriptorSetLayout descriptorSetLayouts[] = {descriptorSetLayout, ssboDescriptorSetLayout};
   pipelineLayoutInfo.setLayoutCount = 2;
   pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts;
   pipelineLayoutInfo.pushConstantRangeCount = 0;
   
+  vk::PipelineDepthStencilStateCreateInfo depthStencil{};
+  depthStencil.depthTestEnable = vk::True;
+  depthStencil.depthWriteEnable = vk::True;
+  depthStencil.depthCompareOp = vk::CompareOp::eLess;
+  depthStencil.depthBoundsTestEnable = vk::False;
+  depthStencil.stencilTestEnable = vk::False;
+  
   pipelineLayout = device.createPipelineLayout(pipelineLayoutInfo);
   
+  auto depthFormat = findDepthFormat(physicalDevice);
   vk::PipelineRenderingCreateInfo pipelineRenderingInfo{};
   pipelineRenderingInfo.colorAttachmentCount = 1;
   pipelineRenderingInfo.pColorAttachmentFormats = &swapchainFormat;
+  pipelineRenderingInfo.depthAttachmentFormat = depthFormat;
   
   vk::GraphicsPipelineCreateInfo pipelineInfo{};
   pipelineInfo.pNext = &pipelineRenderingInfo;
@@ -131,6 +141,7 @@ void BulkinGraphicsPipeline::create(vk::Device &device, vk::Format& swapchainFor
   pipelineInfo.pMultisampleState = &multisampling;
   pipelineInfo.pColorBlendState = &colorBlending;
   pipelineInfo.pDynamicState = &dynamicState;
+  pipelineInfo.pDepthStencilState = &depthStencil;
   pipelineInfo.layout = pipelineLayout;
   pipelineInfo.renderPass = nullptr;
   
@@ -169,13 +180,16 @@ vk::ShaderModule BulkinGraphicsPipeline::createShaderModule(const std::vector<ch
 
 void BulkinGraphicsPipeline::cleanup(vk::Device &device) {
   buffers.cleanup(device);
-  device.destroy(uniformDescriptorPool);
-  device.destroy(uniformDescriptorSetLayout);
+  device.destroy(descriptorPool);
+  device.destroy(descriptorSetLayout);
   device.destroy(ssboDescriptorSetLayout);
   device.destroy(ssboDescriptorPool);
   device.destroy(commandPool);
   device.destroy(pipelineLayout);
   device.destroy(pipeline);
+  device.destroy(depthImage);
+  device.destroy(depthImageView);
+  device.free(depthImageMemory);
 }
 
 void BulkinGraphicsPipeline::createCommandPool(vk::Device &device, QueueFamilyIndices indices) {
@@ -218,12 +232,21 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   attachmentInfo.storeOp = vk::AttachmentStoreOp::eStore;
   attachmentInfo.clearValue = clearColor;
   
+  vk::ClearValue clearDepth = vk::ClearDepthStencilValue(1.0f, 0.0f);
+  vk::RenderingAttachmentInfo depthAttachmentInfo{};
+  depthAttachmentInfo.imageView = depthImageView;
+  depthAttachmentInfo.imageLayout = vk::ImageLayout::eDepthStencilAttachmentOptimal;
+  depthAttachmentInfo.loadOp = vk::AttachmentLoadOp::eClear;
+  depthAttachmentInfo.storeOp = vk::AttachmentStoreOp::eDontCare;
+  depthAttachmentInfo.clearValue = clearDepth;
+  
   vk::RenderingInfo renderingInfo{};
   renderingInfo.renderArea.offset = vk::Offset2D(0, 0);
   renderingInfo.renderArea.extent = swapchain.extent;
   renderingInfo.layerCount = 1;
   renderingInfo.colorAttachmentCount = 1;
   renderingInfo.pColorAttachments = &attachmentInfo;
+  renderingInfo.pDepthAttachment = &depthAttachmentInfo;
   
   commandBuffer.beginRendering(renderingInfo);
   
@@ -236,8 +259,8 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
   commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint16);
   
-  vk::DescriptorSet descriptorSets[] = {uniformDescriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
-  commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSets, 0, nullptr);
+  vk::DescriptorSet descriptorSet[] = {descriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
+  commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSet, 0, nullptr);
 
   commandBuffer.drawIndexed(static_cast<uint32_t>(quadIndices.size()), quad.getInstanceCount(), 0, 0, 0);
   
@@ -289,13 +312,13 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad) {
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad, BulkinTexture& texture) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createUniformBuffers(device, physicalDevice);
   buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
   createDescriptorPool(device);
-  createDescriptorSets(device, quad);
+  createDescriptorSets(device, quad, texture);
 }
 
 void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
@@ -304,12 +327,20 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
   uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
   uboLayoutBinding.descriptorCount = 1;
   uboLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eVertex;
-    
-  vk::DescriptorSetLayoutCreateInfo uniformLayoutInfo{};
-  uniformLayoutInfo.bindingCount = 1;
-  uniformLayoutInfo.pBindings = &uboLayoutBinding;
   
-  uniformDescriptorSetLayout = device.createDescriptorSetLayout(uniformLayoutInfo);
+  vk::DescriptorSetLayoutBinding samplerLayoutBinding{};
+  samplerLayoutBinding.binding = 1;
+  samplerLayoutBinding.descriptorCount = 1;
+  samplerLayoutBinding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
+  samplerLayoutBinding.pImmutableSamplers = nullptr;
+  samplerLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eFragment;
+  
+  std::array<vk::DescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+  vk::DescriptorSetLayoutCreateInfo layoutInfo{};
+  layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+  layoutInfo.pBindings = bindings.data();
+  
+  descriptorSetLayout = device.createDescriptorSetLayout(layoutInfo);
   
   vk::DescriptorSetLayoutBinding ssboLayoutBinding{};
   ssboLayoutBinding.binding = 0;
@@ -325,16 +356,18 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
 }
 
 void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
-  vk::DescriptorPoolSize uniformPoolSize;
-  uniformPoolSize.type = vk::DescriptorType::eUniformBuffer;
-  uniformPoolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  std::array<vk::DescriptorPoolSize, 2> poolSizes;
+  poolSizes[0].type = vk::DescriptorType::eUniformBuffer;
+  poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  poolSizes[1].type = vk::DescriptorType::eCombinedImageSampler;
+  poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
     
-  vk::DescriptorPoolCreateInfo uniformPoolInfo{};
-  uniformPoolInfo.poolSizeCount = 1;
-  uniformPoolInfo.pPoolSizes = &uniformPoolSize;
-  uniformPoolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  vk::DescriptorPoolCreateInfo poolInfo{};
+  poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+  poolInfo.pPoolSizes = poolSizes.data();
+  poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
   
-  uniformDescriptorPool = device.createDescriptorPool(uniformPoolInfo);
+  descriptorPool = device.createDescriptorPool(poolInfo);
   
   vk::DescriptorPoolSize ssboPoolSize;
   ssboPoolSize.type = vk::DescriptorType::eStorageBuffer;
@@ -348,15 +381,15 @@ void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
   ssboDescriptorPool = device.createDescriptorPool(ssboPoolInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, Quad quad) {
-  std::vector<vk::DescriptorSetLayout> uniformLayouts(MAX_FRAMES_IN_FLIGHT, uniformDescriptorSetLayout);
-  vk::DescriptorSetAllocateInfo uniformAllocInfo{};
-  uniformAllocInfo.descriptorPool = uniformDescriptorPool;
-  uniformAllocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-  uniformAllocInfo.pSetLayouts = uniformLayouts.data();
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, Quad quad, BulkinTexture& texture) {
+  std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+  vk::DescriptorSetAllocateInfo allocInfo{};
+  allocInfo.descriptorPool = descriptorPool;
+  allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  allocInfo.pSetLayouts = layouts.data();
  
-  uniformDescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-  uniformDescriptorSets = device.allocateDescriptorSets(uniformAllocInfo);
+  descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+  descriptorSets = device.allocateDescriptorSets(allocInfo);
   
   std::vector<vk::DescriptorSetLayout> ssboLayouts(MAX_FRAMES_IN_FLIGHT, ssboDescriptorSetLayout);
   vk::DescriptorSetAllocateInfo ssboAllocInfo{};
@@ -373,29 +406,77 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, Quad quad)
     uniformBufferInfo.offset = 0;
     uniformBufferInfo.range = sizeof(UniformBufferObject);
     
-    vk::WriteDescriptorSet uniformDescriptorWrite{};
-    uniformDescriptorWrite.dstSet = uniformDescriptorSets[i];
-    uniformDescriptorWrite.dstBinding = 0;
-    uniformDescriptorWrite.dstArrayElement = 0;
-    uniformDescriptorWrite.descriptorType = vk::DescriptorType::eUniformBuffer;
-    uniformDescriptorWrite.descriptorCount = 1;
-    uniformDescriptorWrite.pBufferInfo = &uniformBufferInfo;
+    vk::DescriptorImageInfo imageInfo{};
+    imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+    imageInfo.imageView = texture.imageView;
+    imageInfo.sampler = texture.sampler;
     
     vk::DescriptorBufferInfo ssboBufferInfo{};
     ssboBufferInfo.buffer = buffers.ssboBuffer;
     ssboBufferInfo.offset = 0;
     ssboBufferInfo.range = sizeof(PerInstanceData) * quad.getInstanceCount();
     
-    vk::WriteDescriptorSet ssboDescriptorWrite{};
-    ssboDescriptorWrite.dstSet = ssboDescriptorSets[i];
-    ssboDescriptorWrite.dstBinding = 0;
-    ssboDescriptorWrite.dstArrayElement = 0;
-    ssboDescriptorWrite.descriptorType = vk::DescriptorType::eStorageBuffer;
-    ssboDescriptorWrite.descriptorCount = 1;
-    ssboDescriptorWrite.pBufferInfo = &ssboBufferInfo;
+    std::array<vk::WriteDescriptorSet, 3> descriptorWrites{};
     
-    vk::WriteDescriptorSet descriptorWrite[] = {uniformDescriptorWrite, ssboDescriptorWrite};
+    descriptorWrites[0].dstSet = descriptorSets[i];
+    descriptorWrites[0].dstBinding = 0;
+    descriptorWrites[0].dstArrayElement = 0;
+    descriptorWrites[0].descriptorType = vk::DescriptorType::eUniformBuffer;
+    descriptorWrites[0].descriptorCount = 1;
+    descriptorWrites[0].pBufferInfo = &uniformBufferInfo;
     
-    device.updateDescriptorSets(2, descriptorWrite, 0, nullptr);
+    descriptorWrites[1].dstSet = descriptorSets[i];
+    descriptorWrites[1].dstBinding = 1;
+    descriptorWrites[1].dstArrayElement = 0;
+    descriptorWrites[1].descriptorType = vk::DescriptorType::eCombinedImageSampler;
+    descriptorWrites[1].descriptorCount = 1;
+    descriptorWrites[1].pImageInfo = &imageInfo;
+    
+    descriptorWrites[2].dstSet = ssboDescriptorSets[i];
+    descriptorWrites[2].dstBinding = 0;
+    descriptorWrites[2].dstArrayElement = 0;
+    descriptorWrites[2].descriptorType = vk::DescriptorType::eStorageBuffer;
+    descriptorWrites[2].descriptorCount = 1;
+    descriptorWrites[2].pBufferInfo = &ssboBufferInfo;
+    
+    device.updateDescriptorSets(static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
   }
+}
+
+void BulkinGraphicsPipeline::createDepthResources(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue graphicsQueue, uint32_t width, uint32_t height) {
+  auto depthFormat = findDepthFormat(physicalDevice);
+  
+  Bulkin::createImage(width,
+                      height,
+                      depthFormat,
+                      vk::ImageTiling::eOptimal,
+                      vk::ImageUsageFlagBits::eDepthStencilAttachment,
+                      vk::MemoryPropertyFlagBits::eDeviceLocal,
+                      device,
+                      physicalDevice,
+                      depthImage,
+                      depthImageMemory);
+  depthImageView = Bulkin::createImageView(device, depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
+  Bulkin::transitionImageLayout(device, commandPool, graphicsQueue, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal, depthImage);
+}
+
+vk::Format BulkinGraphicsPipeline::findSupportedFormat(const std::vector<vk::Format> &candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, vk::PhysicalDevice& physicalDevice) {
+  for (vk::Format format : candidates) {
+    auto props = physicalDevice.getFormatProperties(format);
+    if (tiling == vk::ImageTiling::eLinear && (props.linearTilingFeatures & features) == features) {
+      return format;
+    } else if (tiling == vk::ImageTiling::eOptimal && (props.optimalTilingFeatures & features) == features) {
+      return format;
+    }
+  }
+  
+  throw std::runtime_error("failed to find supported format");
+}
+
+vk::Format BulkinGraphicsPipeline::findDepthFormat(vk::PhysicalDevice& physicalDevice) {
+  return findSupportedFormat({vk::Format::eD32Sfloat, vk::Format::eD32SfloatS8Uint, vk::Format::eD24UnormS8Uint}, vk::ImageTiling::eOptimal, vk::FormatFeatureFlagBits::eDepthStencilAttachment, physicalDevice);
+}
+
+bool BulkinGraphicsPipeline::hasStencilComponent(vk::Format format) {
+  return format == vk::Format::eD32SfloatS8Uint || format == vk::Format::eD24UnormS8Uint;
 }
