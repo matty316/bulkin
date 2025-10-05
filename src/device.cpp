@@ -167,12 +167,12 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
   swapchain.createImageViews(device);
 }
 
-void BulkinDevice::createGraphicsPipeline(Quad quad, BulkinTexture& texture) {
+void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, BulkinTexture& texture) {
   graphicsPipeline.createDescriptorLayout(device);
   graphicsPipeline.create(device, physicalDevice, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
   graphicsPipeline.createDepthResources(device, physicalDevice, graphicsQueue, swapchain.extent.width, swapchain.extent.height);
-  texture.load("textures/wall.png", device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
+  texture.load(device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
   graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, texture);
   graphicsPipeline.createCommandBuffers(device);
 }

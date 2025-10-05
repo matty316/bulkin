@@ -7,8 +7,18 @@ layout(location = 0) out vec4 outColor;
 
 layout(binding = 1) uniform sampler2D texSampler;
 
-void main() {
-  vec4 color = texture(texSampler, fragTexCoord) * shading;
+const vec3 gamma = vec3(2.2);
+const vec3 fog_color = vec3(0.05);
 
-  outColor = color;
+void main() {
+  vec3 color = texture(texSampler, fragTexCoord).rgb;
+
+  color *= shading;
+  //float fog_dist = gl_FragCoord.z / gl_FragCoord.w;
+  //color = mix(color, fog_color, (1.0 - exp2(-0.015 * fog_dist * fog_dist)));
+
+  color = pow(color, 1/gamma);
+
+
+  outColor = vec4(color, 1.0);
 }

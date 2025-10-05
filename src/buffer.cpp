@@ -97,7 +97,7 @@ void BulkinBuffer::createUniformBuffers(vk::Device &device, vk::PhysicalDevice &
   }
 }
 
-void BulkinBuffer::createSSBOBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, Quad quad) {
+void BulkinBuffer::createSSBOBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, BulkinQuad quad) {
   if (quad.getInstanceCount() == 0)
     std::runtime_error("no quads drawn");
   vk::Buffer stagingBuffer;

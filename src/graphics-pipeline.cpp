@@ -210,7 +210,7 @@ void BulkinGraphicsPipeline::createCommandBuffers(vk::Device &device) {
   commandBuffers = device.allocateCommandBuffers(allocInfo);
 }
 
-void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, Quad quad) {
+void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad) {
   vk::CommandBufferBeginInfo beginInfo{};
   commandBuffer.begin(beginInfo);
   
@@ -257,7 +257,7 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   vk::Buffer vertexBuffers[] = {buffers.vertexBuffer};
   vk::DeviceSize offsets[] = {0};
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-  commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint16);
+  commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint32);
   
   vk::DescriptorSet descriptorSet[] = {descriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
   commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSet, 0, nullptr);
@@ -312,7 +312,7 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad, BulkinTexture& texture) {
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, BulkinTexture& texture) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createUniformBuffers(device, physicalDevice);
@@ -381,7 +381,7 @@ void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
   ssboDescriptorPool = device.createDescriptorPool(ssboPoolInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, Quad quad, BulkinTexture& texture) {
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad quad, BulkinTexture& texture) {
   std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
   vk::DescriptorSetAllocateInfo allocInfo{};
   allocInfo.descriptorPool = descriptorPool;

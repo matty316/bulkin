@@ -13,7 +13,8 @@ void BulkinSwapchain::chooseSwapSurfaceFormat() {
 
 void BulkinSwapchain::chooseSwapPresentMode() {
   for (const auto& availablePresentMode : presentModes) {
-    if (availablePresentMode == vk::PresentModeKHR::eImmediate) {
+    vk::PresentModeKHR mode = vsync ? vk::PresentModeKHR::eMailbox : vk::PresentModeKHR::eImmediate;
+    if (availablePresentMode == mode) {
       presentMode = availablePresentMode;
       return;
     }

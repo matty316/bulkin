@@ -4,9 +4,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-void BulkinTexture::load(const char* filename, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
+void BulkinTexture::load(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue) {
   int texWidth, texHeight, texChannels;
-  stbi_uc* pixels = stbi_load(filename, &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+  stbi_uc* pixels = stbi_load(filename.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
   vk::DeviceSize imageSize = texWidth * texHeight * 4;
   
   if (!pixels)
@@ -34,13 +34,9 @@ void BulkinTexture::load(const char* filename, vk::Device& device, vk::PhysicalD
   createTextureSampler(device, physicalDevice);
 }
 
-
-
 void BulkinTexture::createImageView(vk::Device& device) {
   imageView = Bulkin::createImageView(device, image, vk::Format::eR8G8B8A8Srgb, vk::ImageAspectFlagBits::eColor);
 }
-
-
 
 void BulkinTexture::copyBufferToImage(vk::Buffer buffer, uint32_t width, uint32_t height, vk::Device device, vk::CommandPool commandPool, vk::Queue graphicsQueue) {
   auto commandBuffer = BulkinBuffer::beginSingleTimeCommands(device, commandPool);

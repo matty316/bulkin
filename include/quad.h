@@ -5,7 +5,7 @@
 
 #include "vertex.h"
 
-class Quad {
+class BulkinQuad {
 public:
   void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId);
   uint32_t getInstanceCount();

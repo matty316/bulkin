@@ -12,6 +12,7 @@ public:
   std::vector<vk::ImageView> imageViews;
   vk::Extent2D extent;
   vk::Format imageFormat;
+  bool vsync = true;
 
   void querySwapchainSupport(vk::PhysicalDevice& physicalDevice, vk::SurfaceKHR& surface);
   void chooseSwapSurfaceFormat();

@@ -15,7 +15,7 @@ public:
 
   void createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue);
   void createIndexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue);
-  void createSSBOBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue, Quad quad);
+  void createSSBOBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue, BulkinQuad quad);
   void createUniformBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice);
   void updateUniformBuffer(uint32_t currentImage, float width, float height, BulkinCamera& camera);
   void cleanup(vk::Device& device);

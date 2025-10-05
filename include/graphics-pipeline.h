@@ -18,13 +18,13 @@ public:
   std::vector<vk::CommandBuffer> commandBuffers;
   
   void create(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Format& swapchainFormat);
-  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, Quad quad);
+  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad);
   void createCommandPool(vk::Device& device, QueueFamilyIndices indices);
   void createCommandBuffers(vk::Device& device);
-  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, Quad quad, BulkinTexture& texture);
+  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, BulkinTexture& texture);
   void createDescriptorLayout(vk::Device& device);
   void createDescriptorPool(vk::Device& device);
-  void createDescriptorSets(vk::Device& device, Quad quad, BulkinTexture& texture);
+  void createDescriptorSets(vk::Device& device, BulkinQuad quad, BulkinTexture& texture);
   static bool hasStencilComponent(vk::Format format);
   void createDepthResources(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue graphicsQueue, uint32_t width, uint32_t height);
   void cleanup(vk::Device& device);

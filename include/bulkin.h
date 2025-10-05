@@ -30,12 +30,12 @@ private:
   std::vector<vk::Fence> drawFences;
   uint32_t currentFrame = 0;
   bool framebufferResized = false;
-  bool fullsize = true;
-  Quad quad;
+  bool fullsize = false;
+  BulkinQuad quad;
   
   bool showFrametime = false;
   double currentTime = 0.0;
-  BulkinTexture texture;
+  BulkinTexture texture{"textures/wall.png"};
   
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   
