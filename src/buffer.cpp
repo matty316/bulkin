@@ -97,6 +97,24 @@ void BulkinBuffer::createUniformBuffers(vk::Device &device, vk::PhysicalDevice &
   }
 }
 
+void BulkinBuffer::createPointLightBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, std::vector<PointLight> &pointLights) {
+  vk::Buffer stagingBuffer;
+  vk::DeviceMemory stagingBufferMemory;
+  vk::DeviceSize pointLightBufferSize = sizeof(pointLights[0]) * pointLights.size();
+    
+  createBuffer(device, physicalDevice, pointLightBufferSize, vk::BufferUsageFlagBits::eTransferSrc, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent, stagingBuffer, stagingBufferMemory);
+  
+  void* data = device.mapMemory(stagingBufferMemory, 0, pointLightBufferSize);
+  memcpy(data, pointLights.data(), pointLightBufferSize);
+  device.unmapMemory(stagingBufferMemory);
+  
+  createBuffer(device, physicalDevice, pointLightBufferSize, vk::BufferUsageFlagBits::eTransferDst | vk::BufferUsageFlagBits::eStorageBuffer, vk::MemoryPropertyFlagBits::eDeviceLocal, pointLightBuffer, pointLightBufferMemory);
+  
+  copyBuffer(stagingBuffer, pointLightBuffer, pointLightBufferSize, commandPool, device, graphicsQueue);
+  device.destroy(stagingBuffer);
+  device.free(stagingBufferMemory);
+}
+
 void BulkinBuffer::createSSBOBuffer(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, BulkinQuad quad) {
   if (quad.getInstanceCount() == 0)
     std::runtime_error("no quads drawn");
@@ -128,6 +146,7 @@ void BulkinBuffer::updateUniformBuffer(uint32_t currentImage, float width, float
   ubo.view = camera.getView();
   ubo.proj = glm::perspective(glm::radians(45.0f), width / height, 0.1f, 100.0f);
   ubo.proj[1][1] *= -1;
+  ubo.viewPos = camera.getPosition();
   memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
 
@@ -136,6 +155,8 @@ void BulkinBuffer::cleanup(vk::Device& device) {
     device.destroy(uniformBuffers[i]);
     device.free(uniformBuffersMemory[i]);
   }
+  device.destroy(pointLightBuffer);
+  device.free(pointLightBufferMemory);
   device.destroy(ssboBuffer);
   device.free(ssboBufferMemory);
   device.destroy(vertexBuffer);

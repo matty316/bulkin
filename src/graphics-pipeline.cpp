@@ -312,16 +312,17 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures) {
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createUniformBuffers(device, physicalDevice);
+  buffers.createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
   buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
-  createDescriptorPool(device, static_cast<uint32_t>(textures.size()));
-  createDescriptorSets(device, quad, textures);
+  createDescriptorPool(device, static_cast<uint32_t>(textures.size()), static_cast<uint32_t>(pointLights.size()));
+  createDescriptorSets(device, quad, textures, pointLights);
 }
 
-void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount) {
+void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount, uint32_t pointLightCount) {
   vk::DescriptorSetLayoutBinding uboLayoutBinding{};
   uboLayoutBinding.binding = 0;
   uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
@@ -335,7 +336,13 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t
   samplerLayoutBinding.pImmutableSamplers = nullptr;
   samplerLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eFragment;
   
-  std::array<vk::DescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+  vk::DescriptorSetLayoutBinding pointLightBinding{};
+  pointLightBinding.binding = 2;
+  pointLightBinding.descriptorType = vk::DescriptorType::eStorageBuffer;
+  pointLightBinding.descriptorCount = 1;
+  pointLightBinding.stageFlags = vk::ShaderStageFlagBits::eFragment;
+  
+  std::array<vk::DescriptorSetLayoutBinding, 3> bindings = {uboLayoutBinding, samplerLayoutBinding, pointLightBinding};
   vk::DescriptorSetLayoutCreateInfo layoutInfo{};
   layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
   layoutInfo.pBindings = bindings.data();
@@ -355,13 +362,15 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t
   ssboDescriptorSetLayout = device.createDescriptorSetLayout(ssboLayoutInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t textureCount) {
-  std::array<vk::DescriptorPoolSize, 2> poolSizes;
+void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t textureCount, uint32_t pointLightCount) {
+  std::array<vk::DescriptorPoolSize, 3> poolSizes;
   poolSizes[0].type = vk::DescriptorType::eUniformBuffer;
   poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
   poolSizes[1].type = vk::DescriptorType::eCombinedImageSampler;
   poolSizes[1].descriptorCount = textureCount * static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-    
+  poolSizes[2].type = vk::DescriptorType::eStorageBuffer;
+  poolSizes[2].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  
   vk::DescriptorPoolCreateInfo poolInfo{};
   poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
   poolInfo.pPoolSizes = poolSizes.data();
@@ -381,7 +390,7 @@ void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t t
   ssboDescriptorPool = device.createDescriptorPool(ssboPoolInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad quad, std::vector<BulkinTexture>& textures) {
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
   std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
   vk::DescriptorSetAllocateInfo allocInfo{};
   allocInfo.descriptorPool = descriptorPool;
@@ -416,12 +425,17 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
       imageInfos[i] = imageInfo;
     }
     
+    vk::DescriptorBufferInfo pointLightBufferInfo{};
+    pointLightBufferInfo.buffer = buffers.pointLightBuffer;
+    pointLightBufferInfo.offset = 0;
+    pointLightBufferInfo.range = sizeof(pointLights[0]) * pointLights.size();
+    
     vk::DescriptorBufferInfo ssboBufferInfo{};
     ssboBufferInfo.buffer = buffers.ssboBuffer;
     ssboBufferInfo.offset = 0;
     ssboBufferInfo.range = sizeof(PerInstanceData) * quad.getInstanceCount();
     
-    std::array<vk::WriteDescriptorSet, 3> descriptorWrites{};
+    std::array<vk::WriteDescriptorSet, 4> descriptorWrites{};
     
     descriptorWrites[0].dstSet = descriptorSets[i];
     descriptorWrites[0].dstBinding = 0;
@@ -437,12 +451,19 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
     descriptorWrites[1].descriptorCount = static_cast<uint32_t>(imageInfos.size());
     descriptorWrites[1].pImageInfo = imageInfos.data();
     
-    descriptorWrites[2].dstSet = ssboDescriptorSets[i];
-    descriptorWrites[2].dstBinding = 0;
+    descriptorWrites[2].dstSet = descriptorSets[i];
+    descriptorWrites[2].dstBinding = 2;
     descriptorWrites[2].dstArrayElement = 0;
     descriptorWrites[2].descriptorType = vk::DescriptorType::eStorageBuffer;
     descriptorWrites[2].descriptorCount = 1;
-    descriptorWrites[2].pBufferInfo = &ssboBufferInfo;
+    descriptorWrites[2].pBufferInfo = &pointLightBufferInfo;
+    
+    descriptorWrites[3].dstSet = ssboDescriptorSets[i];
+    descriptorWrites[3].dstBinding = 0;
+    descriptorWrites[3].dstArrayElement = 0;
+    descriptorWrites[3].descriptorType = vk::DescriptorType::eStorageBuffer;
+    descriptorWrites[3].descriptorCount = 1;
+    descriptorWrites[3].pBufferInfo = &ssboBufferInfo;
     
     device.updateDescriptorSets(static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
   }

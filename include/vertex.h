@@ -8,11 +8,12 @@
 struct UniformBufferObject {
   glm::mat4 view;
   glm::mat4 proj;
+  glm::vec3 viewPos;
 };
 
 struct PerInstanceData {
   glm::mat4 model;
-  float shadingId;
+  uint32_t faceId;
   uint32_t textureIndex;
   glm::vec2 padding;
 };

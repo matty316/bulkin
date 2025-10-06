@@ -73,7 +73,7 @@ void Bulkin::initVulkan() {
   device.pickPhysicalDevice(instance);
   device.createLogicalDevice();
   device.createSwapchain(window);
-  device.createGraphicsPipeline(quad, textures);
+  device.createGraphicsPipeline(quad, textures, pointLights);
   createSyncObjects();
 }
 
@@ -377,4 +377,8 @@ uint32_t Bulkin::addTexture(std::string filename) {
   textures.push_back(texture);
   loadedTextures[filename] = static_cast<uint32_t>(textures.size()) - 1;
   return static_cast<uint32_t>(textures.size()) - 1;
+}
+
+void Bulkin::addPointLight(PointLight& light) {
+  pointLights.push_back(light);
 }

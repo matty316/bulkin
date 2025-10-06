@@ -40,8 +40,8 @@ private:
   glm::vec3 moveSpeed = glm::vec3(0.0f);
   glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
   glm::vec3 right = glm::vec3(0.0f);
-  glm::vec3 up = glm::vec3(0.0f, 0.0f, 1.0f);
-  glm::vec3 worldUp = glm::vec3(0.0f, 0.0f, 1.0f);
+  glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+  glm::vec3 worldUp = glm::vec3(0.0f, 1.0f, 0.0f);
   void setPosition(const glm::vec3& pos);
   void setCameraVectors();
   void resetMousePosition(const glm::vec2& p);

@@ -171,13 +171,13 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
   swapchain.createImageViews(device);
 }
 
-void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, std::vector<BulkinTexture>& textures) {
-  graphicsPipeline.createDescriptorLayout(device, static_cast<uint32_t>(textures.size()));
+void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
+  graphicsPipeline.createDescriptorLayout(device, static_cast<uint32_t>(textures.size()), static_cast<uint32_t>(pointLights.size()));
   graphicsPipeline.create(device, physicalDevice, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
   graphicsPipeline.createDepthResources(device, physicalDevice, graphicsQueue, swapchain.extent.width, swapchain.extent.height);
   for (auto& texture : textures)
     texture.load(device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
-  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, textures);
+  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, textures, pointLights);
   graphicsPipeline.createCommandBuffers(device);
 }

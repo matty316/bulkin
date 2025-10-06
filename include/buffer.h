@@ -3,20 +3,21 @@
 #include <vulkan/vulkan.hpp>
 #include "camera.h"
 #include "quad.h"
+#include "light.h"
 
 class BulkinBuffer {
 public:
   vk::Buffer vertexBuffer;
   vk::Buffer indexBuffer;
   std::vector<vk::Buffer> uniformBuffers;
-  std::vector<vk::DeviceMemory> uniformBuffersMemory;
-  std::vector<void*> uniformBuffersMapped;
   vk::Buffer ssboBuffer;
+  vk::Buffer pointLightBuffer;
 
   void createVertexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue);
   void createIndexBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue);
   void createSSBOBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool& commandPool, vk::Queue& graphicsQueue, BulkinQuad quad);
   void createUniformBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice);
+  void createPointLightBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, std::vector<PointLight>& pointLights);
   void updateUniformBuffer(uint32_t currentImage, float width, float height, BulkinCamera& camera);
   void cleanup(vk::Device& device);
   static void createBuffer(vk::Device& device, vk::PhysicalDevice& physicalDevice, size_t size, vk::BufferUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Buffer& buffer, vk::DeviceMemory& bufferMemory);
@@ -27,5 +28,8 @@ public:
 private:
   vk::DeviceMemory vertexBufferMemory;
   vk::DeviceMemory indexBufferMemory;
+  std::vector<vk::DeviceMemory> uniformBuffersMemory;
+  std::vector<void*> uniformBuffersMapped;
   vk::DeviceMemory ssboBufferMemory;
+  vk::DeviceMemory pointLightBufferMemory;
 };

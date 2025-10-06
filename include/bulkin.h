@@ -12,11 +12,13 @@
 #include "camera.h"
 #include "quad.h"
 #include "vertex.h"
+#include "light.h"
 
 class Bulkin {
 public:
   void run();
-  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId, uint32_t tetureId);
+  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId, uint32_t textureId);
+  void addPointLight(PointLight& light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);
   
@@ -40,6 +42,8 @@ private:
   
   std::unordered_map<std::string, uint32_t> loadedTextures;
   std::vector<BulkinTexture> textures;
+  
+  std::vector<PointLight> pointLights;
   
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   
