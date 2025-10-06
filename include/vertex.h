@@ -13,7 +13,8 @@ struct UniformBufferObject {
 struct PerInstanceData {
   glm::mat4 model;
   float shadingId;
-  glm::vec3 padding;
+  uint32_t textureIndex;
+  glm::vec2 padding;
 };
 
 struct Vertex {

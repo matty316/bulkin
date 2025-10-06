@@ -1,17 +1,19 @@
 #version 460
-
+#extension GL_EXT_nonuniform_qualifier : require
 layout(location = 0) in vec3 fragColor;
 layout(location = 1) in float shading;
 layout(location = 2) in vec2 fragTexCoord;
+layout(location = 3) flat in uint fragTextureId;
 layout(location = 0) out vec4 outColor;
 
-layout(binding = 1) uniform sampler2D texSampler;
+const int MAX_TEXTURES = 8;
+layout(binding = 1) uniform sampler2D texSamplers[];
 
 const vec3 gamma = vec3(2.2);
 const vec3 fog_color = vec3(0.05);
 
 void main() {
-  vec3 color = texture(texSampler, fragTexCoord).rgb;
+  vec3 color = texture(texSamplers[fragTextureId], fragTexCoord).rgb;
 
   color *= shading;
   //float fog_dist = gl_FragCoord.z / gl_FragCoord.w;

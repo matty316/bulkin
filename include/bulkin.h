@@ -15,8 +15,9 @@
 class Bulkin {
 public:
   void run();
-  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId);
+  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId, uint32_t tetureId);
   void setPlayerPos(glm::vec2 pos);
+  uint32_t addTexture(std::string filename);
   
   static vk::ImageView createImageView(vk::Device& device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
   static void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Image& image, vk::DeviceMemory& imageMemory);
@@ -35,7 +36,8 @@ private:
   
   bool showFrametime = false;
   double currentTime = 0.0;
-  BulkinTexture texture{"textures/wall.png"};
+  
+  std::vector<BulkinTexture> textures;
   
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
   

@@ -5,7 +5,7 @@
 #include <tmxlite/ObjectGroup.hpp>
 #include <iostream>
 
-BulkinLevel::BulkinLevel(const char *path) {
+BulkinLevel::BulkinLevel(std::string path, uint32_t wallTextureId) : wallTextureId(wallTextureId) {
   tmx::Map map;
   if (map.load(path)) {
     const auto& layers = map.getLayers();
@@ -39,13 +39,13 @@ void BulkinLevel::renderLevel(Bulkin& app) {
       auto wall = walls[z][x];
       if (wall == 1) {
         if (z != height - 1 && walls[z + 1][x] == 0)
-          app.addQuad(glm::vec3(0.0f + x, 0.0f, 0.0f + z), 0.0f, 0.0f, 0.0f, 1.0f, 2);
+          app.addQuad(glm::vec3(0.0f + x, 0.0f, 0.0f + z), 0.0f, 0.0f, 0.0f, 1.0f, 2, wallTextureId);
         if (x != width - 1 && walls[z][x + 1] == 0)
-          app.addQuad(glm::vec3(0.5f + x, 0.0f, -0.5f + z), 0.0f, 90.0f, 0.0f, 1.0f, 3);
+          app.addQuad(glm::vec3(0.5f + x, 0.0f, -0.5f + z), 0.0f, 90.0f, 0.0f, 1.0f, 3, wallTextureId);
         if (x != 0 && walls[z][x - 1] == 0)
-          app.addQuad(glm::vec3(-0.5f + x, 0.0f, -0.5f + z), 0.0f, 270.0f, 0.0f, 1.0f, 4);
+          app.addQuad(glm::vec3(-0.5f + x, 0.0f, -0.5f + z), 0.0f, 270.0f, 0.0f, 1.0f, 4, wallTextureId);
         if (z != 0 && walls[z - 1][x] == 0)
-          app.addQuad(glm::vec3(0.0f + x, 0.0f, -1.0f + z), 0.0f, 180.0f, 0.0f, 1.0f, 5);
+          app.addQuad(glm::vec3(0.0f + x, 0.0f, -1.0f + z), 0.0f, 180.0f, 0.0f, 1.0f, 5, wallTextureId);
       }
     }
   }

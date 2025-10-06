@@ -7,10 +7,11 @@
 
 class BulkinLevel {
 public:
-  BulkinLevel(const char* path);
+  BulkinLevel(std::string path, uint32_t wallTextureId);
   void renderLevel(Bulkin& app);
 private:
   std::vector<std::vector<uint32_t>> walls;
   size_t height = 0, width = 0;
   glm::vec2 playerPos;
+  uint32_t wallTextureId = 0;
 };

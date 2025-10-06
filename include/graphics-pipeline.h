@@ -21,10 +21,10 @@ public:
   void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad);
   void createCommandPool(vk::Device& device, QueueFamilyIndices indices);
   void createCommandBuffers(vk::Device& device);
-  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, BulkinTexture& texture);
-  void createDescriptorLayout(vk::Device& device);
-  void createDescriptorPool(vk::Device& device);
-  void createDescriptorSets(vk::Device& device, BulkinQuad quad, BulkinTexture& texture);
+  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures);
+  void createDescriptorLayout(vk::Device& device, uint32_t textureCount);
+  void createDescriptorPool(vk::Device& device, uint32_t textureCount);
+  void createDescriptorSets(vk::Device& device, BulkinQuad quad, std::vector<BulkinTexture>& textures);
   static bool hasStencilComponent(vk::Format format);
   void createDepthResources(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue graphicsQueue, uint32_t width, uint32_t height);
   void cleanup(vk::Device& device);

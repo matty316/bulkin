@@ -73,7 +73,7 @@ void Bulkin::initVulkan() {
   device.pickPhysicalDevice(instance);
   device.createLogicalDevice();
   device.createSwapchain(window);
-  device.createGraphicsPipeline(quad, texture);
+  device.createGraphicsPipeline(quad, textures);
   createSyncObjects();
 }
 
@@ -196,7 +196,8 @@ void Bulkin::cleanup() {
   for (size_t i = 0; i < device.swapchain.images.size(); i++) {
     device.device.destroy(renderFinishedSemaphores[i]);
   }
-  texture.cleanup(device.device);
+  for (size_t i = 0; i < textures.size(); i++)
+    textures[i].cleanup(device.device);
   device.cleanup(instance);
   instance.destroy();
   glfwDestroyWindow(window);
@@ -259,8 +260,8 @@ void Bulkin::createSyncObjects() {
 }
 
 void Bulkin::addQuad(glm::vec3 position, float rotationX, float rotationY,
-                     float rotationZ, float scale, int shadingId) {
-  quad.addQuad(position, rotationX, rotationY, rotationZ, scale, shadingId);
+                     float rotationZ, float scale, int shadingId, uint32_t textureId) {
+  quad.addQuad(position, rotationX, rotationY, rotationZ, scale, shadingId, textureId);
 }
 
 void Bulkin::setPlayerPos(glm::vec2 pos) { camera.setPlayerPos(pos); }
@@ -367,4 +368,10 @@ void Bulkin::transitionImageLayout(vk::Device device, vk::CommandPool commandPoo
 void Bulkin::recreateSwapchain() {
   device.swapchain.recreate(device.device, device.surface, window, device.findQueueFamilies(device.physicalDevice));
   device.graphicsPipeline.createDepthResources(device.device, device.physicalDevice, device.graphicsQueue, device.swapchain.extent.width, device.swapchain.extent.height);
+}
+
+uint32_t Bulkin::addTexture(std::string filename) {
+  BulkinTexture texture{filename};
+  textures.push_back(texture);
+  return static_cast<uint32_t>(textures.size()) - 1;
 }

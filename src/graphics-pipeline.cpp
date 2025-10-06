@@ -312,16 +312,16 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, BulkinTexture& texture) {
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures) {
   buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
   buffers.createUniformBuffers(device, physicalDevice);
   buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
-  createDescriptorPool(device);
-  createDescriptorSets(device, quad, texture);
+  createDescriptorPool(device, static_cast<uint32_t>(textures.size()));
+  createDescriptorSets(device, quad, textures);
 }
 
-void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
+void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount) {
   vk::DescriptorSetLayoutBinding uboLayoutBinding{};
   uboLayoutBinding.binding = 0;
   uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
@@ -330,7 +330,7 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
   
   vk::DescriptorSetLayoutBinding samplerLayoutBinding{};
   samplerLayoutBinding.binding = 1;
-  samplerLayoutBinding.descriptorCount = 1;
+  samplerLayoutBinding.descriptorCount = textureCount;
   samplerLayoutBinding.descriptorType = vk::DescriptorType::eCombinedImageSampler;
   samplerLayoutBinding.pImmutableSamplers = nullptr;
   samplerLayoutBinding.stageFlags = vk::ShaderStageFlagBits::eFragment;
@@ -355,12 +355,12 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device) {
   ssboDescriptorSetLayout = device.createDescriptorSetLayout(ssboLayoutInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
+void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t textureCount) {
   std::array<vk::DescriptorPoolSize, 2> poolSizes;
   poolSizes[0].type = vk::DescriptorType::eUniformBuffer;
   poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
   poolSizes[1].type = vk::DescriptorType::eCombinedImageSampler;
-  poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+  poolSizes[1].descriptorCount = textureCount * static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
     
   vk::DescriptorPoolCreateInfo poolInfo{};
   poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
@@ -381,7 +381,7 @@ void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device) {
   ssboDescriptorPool = device.createDescriptorPool(ssboPoolInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad quad, BulkinTexture& texture) {
+void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad quad, std::vector<BulkinTexture>& textures) {
   std::vector<vk::DescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
   vk::DescriptorSetAllocateInfo allocInfo{};
   allocInfo.descriptorPool = descriptorPool;
@@ -406,10 +406,15 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
     uniformBufferInfo.offset = 0;
     uniformBufferInfo.range = sizeof(UniformBufferObject);
     
-    vk::DescriptorImageInfo imageInfo{};
-    imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
-    imageInfo.imageView = texture.imageView;
-    imageInfo.sampler = texture.sampler;
+    std::vector<vk::DescriptorImageInfo> imageInfos{};
+    imageInfos.resize(textures.size());
+    for (size_t i = 0; i < textures.size(); i++) {
+      vk::DescriptorImageInfo imageInfo{};
+      imageInfo.imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
+      imageInfo.imageView = textures[i].imageView;
+      imageInfo.sampler = textures[i].sampler;
+      imageInfos[i] = imageInfo;
+    }
     
     vk::DescriptorBufferInfo ssboBufferInfo{};
     ssboBufferInfo.buffer = buffers.ssboBuffer;
@@ -429,8 +434,8 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
     descriptorWrites[1].dstBinding = 1;
     descriptorWrites[1].dstArrayElement = 0;
     descriptorWrites[1].descriptorType = vk::DescriptorType::eCombinedImageSampler;
-    descriptorWrites[1].descriptorCount = 1;
-    descriptorWrites[1].pImageInfo = &imageInfo;
+    descriptorWrites[1].descriptorCount = static_cast<uint32_t>(imageInfos.size());
+    descriptorWrites[1].pImageInfo = imageInfos.data();
     
     descriptorWrites[2].dstSet = ssboDescriptorSets[i];
     descriptorWrites[2].dstBinding = 0;

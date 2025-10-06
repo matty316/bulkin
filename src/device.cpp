@@ -113,16 +113,20 @@ void BulkinDevice::createLogicalDevice() {
 
   vk::PhysicalDeviceFeatures2 deviceFeatures;
   deviceFeatures.features.samplerAnisotropy = true;
+  vk::PhysicalDeviceVulkan12Features vulkan12Features;
+  vulkan12Features.runtimeDescriptorArray = true;
   vk::PhysicalDeviceVulkan13Features vulkan13Features;
   vulkan13Features.dynamicRendering = true;
   vulkan13Features.synchronization2 = true;
   vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT extendedStateFeatures;
   extendedStateFeatures.extendedDynamicState = true;
   vk::StructureChain<vk::PhysicalDeviceFeatures2,
+                      vk::PhysicalDeviceVulkan12Features,
                      vk::PhysicalDeviceVulkan13Features,
                      vk::PhysicalDeviceExtendedDynamicStateFeaturesEXT>
       featureChain = {
           deviceFeatures,       // vk::PhysicalDeviceFeatures2 (empty for now)
+          vulkan12Features,
           vulkan13Features,     // Enable dynamic rendering from Vulkan 1.3
           extendedStateFeatures // Enable extended dynamic state from the
                                 // extension
@@ -167,12 +171,13 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
   swapchain.createImageViews(device);
 }
 
-void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, BulkinTexture& texture) {
-  graphicsPipeline.createDescriptorLayout(device);
+void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, std::vector<BulkinTexture>& textures) {
+  graphicsPipeline.createDescriptorLayout(device, static_cast<uint32_t>(textures.size()));
   graphicsPipeline.create(device, physicalDevice, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
   graphicsPipeline.createDepthResources(device, physicalDevice, graphicsQueue, swapchain.extent.width, swapchain.extent.height);
-  texture.load(device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
-  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, texture);
+  for (auto& texture : textures)
+    texture.load(device, physicalDevice, graphicsPipeline.commandPool, graphicsQueue);
+  graphicsPipeline.createBuffers(device, physicalDevice, graphicsQueue, quad, textures);
   graphicsPipeline.createCommandBuffers(device);
 }
