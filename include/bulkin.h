@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include <vulkan/vulkan.hpp>
+#include <unordered_map>
 
 #include "device.h"
 #include "constants.h"
@@ -37,6 +38,7 @@ private:
   bool showFrametime = false;
   double currentTime = 0.0;
   
+  std::unordered_map<std::string, uint32_t> loadedTextures;
   std::vector<BulkinTexture> textures;
   
   BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));

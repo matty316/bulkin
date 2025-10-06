@@ -371,7 +371,10 @@ void Bulkin::recreateSwapchain() {
 }
 
 uint32_t Bulkin::addTexture(std::string filename) {
+  if (loadedTextures.contains(filename))
+    return loadedTextures[filename];
   BulkinTexture texture{filename};
   textures.push_back(texture);
+  loadedTextures[filename] = static_cast<uint32_t>(textures.size()) - 1;
   return static_cast<uint32_t>(textures.size()) - 1;
 }
