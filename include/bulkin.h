@@ -98,6 +98,6 @@ private:
   float avgInterval = 0.5f;
   uint32_t numFrames = 0;
   double accumTime = 0.0;
-  float current = 0.0f;
+  float currentFPS = 0.0f;
   bool printFPS = true;
 };

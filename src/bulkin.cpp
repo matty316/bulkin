@@ -393,9 +393,11 @@ bool Bulkin::tick(float deltaTime, bool frameRendered) {
   if (frameRendered) numFrames++;
   accumTime += deltaTime;
   if (accumTime > avgInterval) {
-    current = static_cast<float>(numFrames / accumTime);
-    if (printFPS)
-      std::println("FPS: {}", current);
+    currentFPS = static_cast<float>(numFrames / accumTime);
+    if (printFPS) {
+      auto fps = std::format("FPS {}", currentFPS);
+      glfwSetWindowTitle(window, fps.c_str());
+    }
     numFrames = 0;
     accumTime = 0;
     return true;
