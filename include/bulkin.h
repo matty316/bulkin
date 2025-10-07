@@ -6,6 +6,7 @@
 
 #include <unordered_map>
 #include <vulkan/vulkan.hpp>
+#include <print>
 
 #include "camera.h"
 #include "constants.h"
@@ -51,7 +52,7 @@ private:
   bool fullsize = false;
   BulkinQuad quad;
 
-  bool showFrametime = true;
+  bool showFrametime = false;
   double currentTime = 0.0;
 
   std::unordered_map<std::string, uint32_t> loadedTextures;
@@ -91,4 +92,12 @@ private:
                            int action, int mods);
   static void framebufferResizeCallback(GLFWwindow *window, int width,
                                         int height);
+
+  bool tick(float deltaTime, bool frameRendered = true);
+  
+  float avgInterval = 0.5f;
+  uint32_t numFrames = 0;
+  double accumTime = 0.0;
+  float current = 0.0f;
+  bool printFPS = true;
 };

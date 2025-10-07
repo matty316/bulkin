@@ -68,6 +68,7 @@ void Bulkin::initVulkan() {
 
 void Bulkin::mainLoop() {
   while (!glfwWindowShouldClose(window)) {
+    tick(deltaTime);
     if (showFrametime)
       currentTime = glfwGetTime();
     drawFrame();
@@ -387,3 +388,17 @@ uint32_t Bulkin::addTexture(std::string filename) {
 }
 
 void Bulkin::addPointLight(PointLight &light) { pointLights.push_back(light); }
+
+bool Bulkin::tick(float deltaTime, bool frameRendered) {
+  if (frameRendered) numFrames++;
+  accumTime += deltaTime;
+  if (accumTime > avgInterval) {
+    current = static_cast<float>(numFrames / accumTime);
+    if (printFPS)
+      std::println("FPS: {}", current);
+    numFrames = 0;
+    accumTime = 0;
+    return true;
+  }
+  return false;
+}
