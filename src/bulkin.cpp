@@ -259,9 +259,8 @@ void Bulkin::createSyncObjects() {
   }
 }
 
-void Bulkin::addQuad(glm::vec3 position, float rotationX, float rotationY,
-                     float rotationZ, float scale, int shadingId, uint32_t textureId) {
-  quad.addQuad(position, rotationX, rotationY, rotationZ, scale, shadingId, textureId);
+void Bulkin::addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int shadingId, uint32_t textureId) {
+  quad.addQuad(position, angle, rotation, scale, shadingId, textureId);
 }
 
 void Bulkin::setPlayerPos(glm::vec2 pos) { camera.setPlayerPos(pos); }

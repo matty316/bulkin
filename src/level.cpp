@@ -73,33 +73,33 @@ void BulkinLevel::renderLevel(Bulkin& app) {
       if (wall == 1) {
         if (z != depth - 1 && walls[z + 1][x] == 0) {
           for (size_t height = 0; height < maxHeight; height++) {
-            app.addQuad(glm::vec3(0.0f + x, static_cast<float>(height), 0.0f + z), 0.0f, 0.0f, 0.0f, 1.0f, 1, wallTexture);
+            app.addQuad(glm::vec3(0.0f + x, static_cast<float>(height), 0.0f + z), 0.0f, glm::vec3(1.0f), 1.0f, 1, wallTexture);
           }
         }
         if (x != width - 1 && walls[z][x + 1] == 0) {
           for (size_t height = 0; height < maxHeight; height++) {
-            app.addQuad(glm::vec3(0.5f + x, static_cast<float>(height), -0.5f + z), 0.0f, 90.0f, 0.0f, 1.0f, 2, wallTexture);
+            app.addQuad(glm::vec3(0.5f + x, static_cast<float>(height), -0.5f + z), 90.0f, glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 2, wallTexture);
           }
         }
         if (x != 0 && walls[z][x - 1] == 0) {
           for (size_t height = 0; height < maxHeight; height++) {
-            app.addQuad(glm::vec3(-0.5f + x, static_cast<float>(height), -0.5f + z), 0.0f, 270.0f, 0.0f, 1.0f, 3, wallTexture);
+            app.addQuad(glm::vec3(-0.5f + x, static_cast<float>(height), -0.5f + z), 270.0f, glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 3, wallTexture);
           }
         }
         if (z != 0 && walls[z - 1][x] == 0) {
           for (size_t height = 0; height < maxHeight; height++) {
-            app.addQuad(glm::vec3(0.0f + x, static_cast<float>(height), -1.0f + z), 0.0f, 180.0f, 0.0f, 1.0f, 0, wallTexture);
+            app.addQuad(glm::vec3(0.0f + x, static_cast<float>(height), -1.0f + z), 180.0f, glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 0, wallTexture);
           }
         }
       }
       
       auto floor = floors[z][x];
       if (floor == 1 && wall != 1)
-        app.addQuad(glm::vec3(x, 0.0f, z), 270.0f, 0.0f, 0.0f, 1.0f, 4, floorTexture);
+        app.addQuad(glm::vec3(x, 0.0f, z), 270.0f, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 4, floorTexture);
       
       auto ceiling = ceilings[z][x];
       if (ceiling == 1 && wall != 1)
-        app.addQuad(glm::vec3(x, static_cast<float>(maxHeight), -1.0f + z), 90.0f, 0.0f, 0.0f, 1.0f, 5, ceilingTexture);
+        app.addQuad(glm::vec3(x, static_cast<float>(maxHeight), -1.0f + z), 90.0f, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 5, ceilingTexture);
     }
   }
 }

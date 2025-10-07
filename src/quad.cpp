@@ -1,12 +1,12 @@
 #include "quad.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
-void BulkinQuad::addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int faceId, uint32_t textureIndex) {
+void BulkinQuad::addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int faceId, uint32_t textureIndex) {
   auto model = glm::mat4(1.0f);
   model = glm::translate(model, position);
-  model = glm::rotate(model, glm::radians(rotationX), glm::vec3(1.0f, 0.0f, 0.0f));
-  model = glm::rotate(model, glm::radians(rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
-  model = glm::rotate(model, glm::radians(rotationZ), glm::vec3(0.0f, 0.0f, 1.0f));
+  glm::quat rot = glm::angleAxis(glm::radians(angle), rotation);
+  model = model * glm::mat4_cast(rot);
   model = glm::scale(model, glm::vec3(scale));
   matrices.push_back(model);
   faceIds.push_back(faceId);

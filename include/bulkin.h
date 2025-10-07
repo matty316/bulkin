@@ -17,7 +17,7 @@
 class Bulkin {
 public:
   void run();
-  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int shadingId, uint32_t textureId);
+  void addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int shadingId, uint32_t textureId);
   void addPointLight(PointLight& light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);

@@ -7,7 +7,7 @@
 
 class BulkinQuad {
 public:
-  void addQuad(glm::vec3 position, float rotationX, float rotationY, float rotationZ, float scale, int faceId, uint32_t textureIndex);
+  void addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int faceId, uint32_t textureIndex);
   uint32_t getInstanceCount();
   PerInstanceData getInstanceData(size_t i);
 private:

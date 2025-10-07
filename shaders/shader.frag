@@ -29,39 +29,44 @@ layout(std430, set = 0, binding = 2) readonly buffer PointLights {
 const vec3 gamma = vec3(2.2);
 const vec3 fog_color = vec3(0.05);
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor);
 
 void main() {
   vec3 norm = normalize(normal);
-  vec3 viewDir = normalize(viewPos - fragPos);
 
-  vec3 result = vec3(0.0);
+  vec3 color = texture(texSamplers[fragTextureId], fragTexCoord).rgb;
+  vec3 lighting = vec3(0.0);
 
   for (int i = 0; i < pointLights.length(); i++)
-    result += CalcPointLight(pointLights[i], norm, fragPos, viewDir);
+    lighting += BlinnPhong(norm, fragPos, pointLights[i].position, pointLights[i].diffuse);
+  color *= lighting;
 
-  result = pow(result, 1/gamma);
-  outColor = vec4(result, 1.0);
+  color = pow(color, 1/gamma);
+  outColor = vec4(color, 1.0);
 }
 
-vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor)
 {
-    vec3 lightDir = normalize(light.position - fragPos);
-    // diffuse shading
-    float diff = max(dot(normal, lightDir), 0.0);
-    // specular shading
+    vec3 ambient = lightColor * 0.1;
+    // diffuse
+    vec3 lightDir = normalize(lightPos - fragPos);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * lightColor;
+    // specular
+    vec3 viewDir = normalize(viewPos - fragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0f);
-
-        // attenuation
-    float distance    = length(light.position - fragPos);
-    float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));    
-    // combine results
-    vec3 ambient  = light.ambient  * vec3(texture(texSamplers[fragTextureId], fragTexCoord));
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(texSamplers[fragTextureId], fragTexCoord));
-    vec3 specular = light.specular * spec * vec3(texture(texSamplers[fragTextureId], fragTexCoord));
-    ambient  *= attenuation;
-    diffuse  *= attenuation;
-   specular *= attenuation;
-    return (ambient + diffuse + specular);
+    float spec = 0.0;
+    vec3 halfwayDir = normalize(lightDir + viewDir);  
+    spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
+    vec3 specular = spec * lightColor;    
+    // simple attenuation
+    float max_distance = 1.5;
+    float distance = length(lightPos - fragPos);
+    float attenuation = 1.0 / distance;
+    
+    diffuse *= attenuation;
+    specular *= attenuation;
+    ambient *= attenuation;
+    
+    return diffuse;
 }
