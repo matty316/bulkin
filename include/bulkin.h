@@ -4,27 +4,41 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include <vulkan/vulkan.hpp>
 #include <unordered_map>
+#include <vulkan/vulkan.hpp>
 
-#include "device.h"
-#include "constants.h"
 #include "camera.h"
+#include "constants.h"
+#include "device.h"
+#include "light.h"
 #include "quad.h"
 #include "vertex.h"
-#include "light.h"
 
 class Bulkin {
 public:
   void run();
-  void addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int shadingId, uint32_t textureId);
-  void addPointLight(PointLight& light);
+  void addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale,
+               int shadingId, uint32_t textureId);
+  void addPointLight(PointLight &light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);
-  
-  static vk::ImageView createImageView(vk::Device& device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags);
-  static void createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Image& image, vk::DeviceMemory& imageMemory);
-  static void transitionImageLayout(vk::Device device, vk::CommandPool commandPool, vk::Queue graphicsQueue, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, vk::Image& image);
+
+  static vk::ImageView createImageView(vk::Device &device, vk::Image image,
+                                       vk::Format format,
+                                       vk::ImageAspectFlags aspectFlags);
+  static void createImage(uint32_t width, uint32_t height, vk::Format format,
+                          vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                          vk::MemoryPropertyFlags properties,
+                          vk::Device &device,
+                          vk::PhysicalDevice &physicalDevice, vk::Image &image,
+                          vk::DeviceMemory &imageMemory);
+  static void transitionImageLayout(vk::Device device,
+                                    vk::CommandPool commandPool,
+                                    vk::Queue graphicsQueue, vk::Format format,
+                                    vk::ImageLayout oldLayout,
+                                    vk::ImageLayout newLayout,
+                                    vk::Image &image);
+
 private:
   GLFWwindow *window;
   vk::Instance instance;
@@ -36,17 +50,19 @@ private:
   bool framebufferResized = false;
   bool fullsize = false;
   BulkinQuad quad;
-  
-  bool showFrametime = false;
+
+  bool showFrametime = true;
   double currentTime = 0.0;
-  
+
   std::unordered_map<std::string, uint32_t> loadedTextures;
   std::vector<BulkinTexture> textures;
-  
+
   std::vector<PointLight> pointLights;
-  
-  BulkinCamera camera = BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-  
+
+  BulkinCamera camera =
+      BulkinCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f),
+                   glm::vec3(0.0f, 1.0f, 0.0f));
+
   struct MouseState {
     glm::vec2 pos = glm::vec2(0.0f);
     bool pressed = false;
@@ -54,11 +70,10 @@ private:
   float lastX = WIDTH / 2.0f;
   float lastY = HEIGHT / 2.0f;
   bool firstMouse = true;
-  
+
   double timeStamp = glfwGetTime();
   double deltaTime = 0.0f;
- 
-  
+
   void initWindow();
   void initVulkan();
   void mainLoop();
@@ -70,7 +85,10 @@ private:
   void updatePushConstants();
   void recreateSwapchain();
   static void mouse_callback(GLFWwindow *window, double x, double y);
-  static void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
-  static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-  static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+  static void mouse_button_callback(GLFWwindow *window, int button, int action,
+                                    int mods);
+  static void key_callback(GLFWwindow *window, int key, int scancode,
+                           int action, int mods);
+  static void framebufferResizeCallback(GLFWwindow *window, int width,
+                                        int height);
 };

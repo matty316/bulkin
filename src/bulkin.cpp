@@ -1,5 +1,6 @@
 #include "bulkin.h"
 
+#include <GLFW/glfw3.h>
 #include <print>
 
 void Bulkin::run() {
@@ -12,7 +13,9 @@ void Bulkin::run() {
 void Bulkin::initWindow() {
   glfwInit();
   glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-  window = glfwCreateWindow(WIDTH, HEIGHT, "bulkin", fullsize ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+  window =
+      glfwCreateWindow(WIDTH, HEIGHT, "bulkin",
+                       fullsize ? glfwGetPrimaryMonitor() : nullptr, nullptr);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
   glfwSetCursorPosCallback(window, mouse_callback);
@@ -30,23 +33,9 @@ void Bulkin::mouse_callback(GLFWwindow *window, double x, double y) {
   auto app = reinterpret_cast<Bulkin *>(glfwGetWindowUserPointer(window));
   int width, height;
   glfwGetFramebufferSize(window, &width, &height);
-  float xpos = static_cast<float>(x / width);
-  float ypos = static_cast<float>(y / height);
 
-  if (app->firstMouse) {
-    app->lastX = xpos;
-    app->lastY = ypos;
-    app->firstMouse = false;
-  }
-
-  float xoffset = xpos - app->lastX;
-  float yoffset = app->lastY - ypos;
-
-  app->lastX = xpos;
-  app->lastY = ypos;
-
-  app->mouseState.pos.x = xoffset;
-  app->mouseState.pos.y = yoffset;
+  app->mouseState.pos.x = static_cast<float>(x / width);
+  app->mouseState.pos.y = static_cast<float>(y / height);
 }
 
 void Bulkin::key_callback(GLFWwindow *window, int key, int scancode, int action,
@@ -81,10 +70,10 @@ void Bulkin::mainLoop() {
   while (!glfwWindowShouldClose(window)) {
     if (showFrametime)
       currentTime = glfwGetTime();
-    glfwPollEvents();
     drawFrame();
     if (showFrametime)
       std::println("{} milliseconds", (glfwGetTime() - currentTime) * 1000);
+    glfwPollEvents();
   }
 
   device.device.waitIdle();
@@ -259,13 +248,16 @@ void Bulkin::createSyncObjects() {
   }
 }
 
-void Bulkin::addQuad(glm::vec3 position, float angle, glm::vec3 rotation, float scale, int shadingId, uint32_t textureId) {
+void Bulkin::addQuad(glm::vec3 position, float angle, glm::vec3 rotation,
+                     float scale, int shadingId, uint32_t textureId) {
   quad.addQuad(position, angle, rotation, scale, shadingId, textureId);
 }
 
 void Bulkin::setPlayerPos(glm::vec2 pos) { camera.setPlayerPos(pos); }
 
-vk::ImageView Bulkin::createImageView(vk::Device& device, vk::Image image, vk::Format format, vk::ImageAspectFlags aspectFlags) {
+vk::ImageView Bulkin::createImageView(vk::Device &device, vk::Image image,
+                                      vk::Format format,
+                                      vk::ImageAspectFlags aspectFlags) {
   vk::ImageViewCreateInfo viewInfo{};
   viewInfo.image = image;
   viewInfo.viewType = vk::ImageViewType::e2D;
@@ -279,7 +271,11 @@ vk::ImageView Bulkin::createImageView(vk::Device& device, vk::Image image, vk::F
   return device.createImageView(viewInfo);
 }
 
-void Bulkin::createImage(uint32_t width, uint32_t height, vk::Format format, vk::ImageTiling tiling, vk::ImageUsageFlags usage, vk::MemoryPropertyFlags properties, vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Image& image, vk::DeviceMemory& imageMemory) {
+void Bulkin::createImage(uint32_t width, uint32_t height, vk::Format format,
+                         vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                         vk::MemoryPropertyFlags properties, vk::Device &device,
+                         vk::PhysicalDevice &physicalDevice, vk::Image &image,
+                         vk::DeviceMemory &imageMemory) {
   vk::ImageCreateInfo imageInfo{};
   imageInfo.imageType = vk::ImageType::e2D;
   imageInfo.extent.width = static_cast<uint32_t>(width);
@@ -293,22 +289,30 @@ void Bulkin::createImage(uint32_t width, uint32_t height, vk::Format format, vk:
   imageInfo.usage = usage;
   imageInfo.sharingMode = vk::SharingMode::eExclusive;
   imageInfo.samples = vk::SampleCountFlagBits::e1;
-  
+
   image = device.createImage(imageInfo);
-  
-  vk::MemoryRequirements memRequirements = device.getImageMemoryRequirements(image);
-  
+
+  vk::MemoryRequirements memRequirements =
+      device.getImageMemoryRequirements(image);
+
   vk::MemoryAllocateInfo allocInfo{};
   allocInfo.allocationSize = memRequirements.size;
-  allocInfo.memoryTypeIndex = BulkinBuffer::findMemoryType(memRequirements.memoryTypeBits, properties, physicalDevice);
- 
+  allocInfo.memoryTypeIndex = BulkinBuffer::findMemoryType(
+      memRequirements.memoryTypeBits, properties, physicalDevice);
+
   imageMemory = device.allocateMemory(allocInfo);
   device.bindImageMemory(image, imageMemory, 0);
 }
 
-void Bulkin::transitionImageLayout(vk::Device device, vk::CommandPool commandPool, vk::Queue graphicsQueue, vk::Format format, vk::ImageLayout oldLayout, vk::ImageLayout newLayout, vk::Image& image) {
-  auto commandBuffer = BulkinBuffer::beginSingleTimeCommands(device, commandPool);
-  
+void Bulkin::transitionImageLayout(vk::Device device,
+                                   vk::CommandPool commandPool,
+                                   vk::Queue graphicsQueue, vk::Format format,
+                                   vk::ImageLayout oldLayout,
+                                   vk::ImageLayout newLayout,
+                                   vk::Image &image) {
+  auto commandBuffer =
+      BulkinBuffer::beginSingleTimeCommands(device, commandPool);
+
   vk::ImageMemoryBarrier barrier{};
   barrier.oldLayout = oldLayout;
   barrier.newLayout = newLayout;
@@ -317,7 +321,7 @@ void Bulkin::transitionImageLayout(vk::Device device, vk::CommandPool commandPoo
   barrier.image = image;
   if (newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
     barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eDepth;
-    
+
     if (BulkinGraphicsPipeline::hasStencilComponent(format)) {
       barrier.subresourceRange.aspectMask |= vk::ImageAspectFlagBits::eStencil;
     }
@@ -328,45 +332,49 @@ void Bulkin::transitionImageLayout(vk::Device device, vk::CommandPool commandPoo
   barrier.subresourceRange.levelCount = 1;
   barrier.subresourceRange.baseArrayLayer = 0;
   barrier.subresourceRange.layerCount = 1;
-  
+
   vk::PipelineStageFlags sourceStage;
   vk::PipelineStageFlags destinationStage;
-  
-  if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eTransferDstOptimal) {
+
+  if (oldLayout == vk::ImageLayout::eUndefined &&
+      newLayout == vk::ImageLayout::eTransferDstOptimal) {
     barrier.srcAccessMask = {};
     barrier.dstAccessMask = vk::AccessFlagBits::eTransferWrite;
-    
+
     sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
     destinationStage = vk::PipelineStageFlagBits::eTransfer;
-  } else if (oldLayout == vk::ImageLayout::eTransferDstOptimal && newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
+  } else if (oldLayout == vk::ImageLayout::eTransferDstOptimal &&
+             newLayout == vk::ImageLayout::eShaderReadOnlyOptimal) {
     barrier.srcAccessMask = vk::AccessFlagBits::eTransferWrite;
     barrier.dstAccessMask = vk::AccessFlagBits::eShaderRead;
-    
+
     sourceStage = vk::PipelineStageFlagBits::eTransfer;
     destinationStage = vk::PipelineStageFlagBits::eFragmentShader;
-  } else if (oldLayout == vk::ImageLayout::eUndefined && newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
+  } else if (oldLayout == vk::ImageLayout::eUndefined &&
+             newLayout == vk::ImageLayout::eDepthStencilAttachmentOptimal) {
     barrier.srcAccessMask = {};
-    barrier.dstAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentRead | vk::AccessFlagBits::eDepthStencilAttachmentWrite;
-    
+    barrier.dstAccessMask = vk::AccessFlagBits::eDepthStencilAttachmentRead |
+                            vk::AccessFlagBits::eDepthStencilAttachmentWrite;
+
     sourceStage = vk::PipelineStageFlagBits::eTopOfPipe;
     destinationStage = vk::PipelineStageFlagBits::eEarlyFragmentTests;
   } else {
     throw std::runtime_error("unsupported layout transition");
   }
 
-  commandBuffer.pipelineBarrier(sourceStage,
-                                destinationStage,
-                                {},
-                                0, nullptr,
-                                0, nullptr,
-                                1, &barrier);
-  
-  BulkinBuffer::endSingleTimeCommands(commandBuffer, device, graphicsQueue, commandPool);
+  commandBuffer.pipelineBarrier(sourceStage, destinationStage, {}, 0, nullptr,
+                                0, nullptr, 1, &barrier);
+
+  BulkinBuffer::endSingleTimeCommands(commandBuffer, device, graphicsQueue,
+                                      commandPool);
 }
 
 void Bulkin::recreateSwapchain() {
-  device.swapchain.recreate(device.device, device.surface, window, device.findQueueFamilies(device.physicalDevice));
-  device.graphicsPipeline.createDepthResources(device.device, device.physicalDevice, device.graphicsQueue, device.swapchain.extent.width, device.swapchain.extent.height);
+  device.swapchain.recreate(device.device, device.surface, window,
+                            device.findQueueFamilies(device.physicalDevice));
+  device.graphicsPipeline.createDepthResources(
+      device.device, device.physicalDevice, device.graphicsQueue,
+      device.swapchain.extent.width, device.swapchain.extent.height);
 }
 
 uint32_t Bulkin::addTexture(std::string filename) {
@@ -378,6 +386,4 @@ uint32_t Bulkin::addTexture(std::string filename) {
   return static_cast<uint32_t>(textures.size()) - 1;
 }
 
-void Bulkin::addPointLight(PointLight& light) {
-  pointLights.push_back(light);
-}
+void Bulkin::addPointLight(PointLight &light) { pointLights.push_back(light); }
