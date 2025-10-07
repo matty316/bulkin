@@ -23,8 +23,8 @@ public:
   void createCommandPool(vk::Device& device, QueueFamilyIndices indices);
   void createCommandBuffers(vk::Device& device);
   void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights);
-  void createDescriptorLayout(vk::Device& device, uint32_t textureCount, uint32_t pointLightCount);
-  void createDescriptorPool(vk::Device& device, uint32_t textureCount, uint32_t pointLightCount);
+  void createDescriptorLayout(vk::Device& device, uint32_t textureCount);
+  void createDescriptorPool(vk::Device& device, uint32_t textureCount);
   void createDescriptorSets(vk::Device& device, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights);
   static bool hasStencilComponent(vk::Format format);
   void createDepthResources(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue graphicsQueue, uint32_t width, uint32_t height);

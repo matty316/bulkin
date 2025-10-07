@@ -172,7 +172,7 @@ void BulkinDevice::createSwapchain(GLFWwindow *window) {
 }
 
 void BulkinDevice::createGraphicsPipeline(BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
-  graphicsPipeline.createDescriptorLayout(device, static_cast<uint32_t>(textures.size()), static_cast<uint32_t>(pointLights.size()));
+  graphicsPipeline.createDescriptorLayout(device, static_cast<uint32_t>(textures.size()));
   graphicsPipeline.create(device, physicalDevice, swapchain.imageFormat);
   graphicsPipeline.createCommandPool(device, findQueueFamilies(physicalDevice));
   graphicsPipeline.createDepthResources(device, physicalDevice, graphicsQueue, swapchain.extent.width, swapchain.extent.height);

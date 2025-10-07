@@ -318,11 +318,11 @@ void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevic
   buffers.createUniformBuffers(device, physicalDevice);
   buffers.createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
   buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
-  createDescriptorPool(device, static_cast<uint32_t>(textures.size()), static_cast<uint32_t>(pointLights.size()));
+  createDescriptorPool(device, static_cast<uint32_t>(textures.size()));
   createDescriptorSets(device, quad, textures, pointLights);
 }
 
-void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount, uint32_t pointLightCount) {
+void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount) {
   vk::DescriptorSetLayoutBinding uboLayoutBinding{};
   uboLayoutBinding.binding = 0;
   uboLayoutBinding.descriptorType = vk::DescriptorType::eUniformBuffer;
@@ -362,7 +362,7 @@ void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t
   ssboDescriptorSetLayout = device.createDescriptorSetLayout(ssboLayoutInfo);
 }
 
-void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t textureCount, uint32_t pointLightCount) {
+void BulkinGraphicsPipeline::createDescriptorPool(vk::Device &device, uint32_t textureCount) {
   std::array<vk::DescriptorPoolSize, 3> poolSizes;
   poolSizes[0].type = vk::DescriptorType::eUniformBuffer;
   poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
