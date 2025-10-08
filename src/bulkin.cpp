@@ -159,7 +159,7 @@ void Bulkin::update() {
   camera.update(deltaTime, mouseState.pos);
   updatePushConstants();
 
-  device.graphicsPipeline.buffers.updateUniformBuffer(
+  device.graphicsPipeline.quadBuffers.updateUniformBuffer(
       currentFrame, static_cast<float>(device.swapchain.extent.width),
       static_cast<float>(device.swapchain.extent.height), camera);
 }

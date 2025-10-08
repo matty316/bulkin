@@ -2,6 +2,8 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
 
+#include <glm/gtc/quaternion.hpp>
+
 void BulkinModel::loadModel() {
   tinyobj::attrib_t attrib;
   std::vector<tinyobj::shape_t> shapes;
@@ -37,7 +39,7 @@ void BulkinModel::loadModel() {
 
 glm::mat4 BulkinModel::modelMatrix() {
   auto model = glm::mat4(1.0f);
-  model = glm::translate(model, position);
+  model = glm::translate(model, pos);
   glm::quat rot = glm::angleAxis(glm::radians(angle), rotation);
   model = model * glm::mat4_cast(rot);
   model = glm::scale(model, glm::vec3(scale));

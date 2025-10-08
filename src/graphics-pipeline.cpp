@@ -179,7 +179,7 @@ vk::ShaderModule BulkinGraphicsPipeline::createShaderModule(const std::vector<ch
 }
 
 void BulkinGraphicsPipeline::cleanup(vk::Device &device) {
-  buffers.cleanup(device);
+  quadBuffers.cleanup(device);
   device.destroy(descriptorPool);
   device.destroy(descriptorSetLayout);
   device.destroy(ssboDescriptorSetLayout);
@@ -254,10 +254,10 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   commandBuffer.setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(swapchain.extent.width), static_cast<float>(swapchain.extent.height), 0.0f, 1.0f));
   commandBuffer.setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), swapchain.extent));
   
-  vk::Buffer vertexBuffers[] = {buffers.vertexBuffer};
+  vk::Buffer vertexBuffers[] = {quadBuffers.vertexBuffer};
   vk::DeviceSize offsets[] = {0};
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-  commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint32);
+  commandBuffer.bindIndexBuffer(quadBuffers.indexBuffer, 0, vk::IndexType::eUint32);
   
   vk::DescriptorSet descriptorSet[] = {descriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
   commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSet, 0, nullptr);
@@ -312,14 +312,18 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
-  buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
-  buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
-  buffers.createUniformBuffers(device, physicalDevice);
-  buffers.createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
-  buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights, std::vector<BulkinModel>& models) {
+  quadBuffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
+  quadBuffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
+  quadBuffers.createUniformBuffers(device, physicalDevice);
+  quadBuffers.createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
+  quadBuffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
   createDescriptorPool(device, static_cast<uint32_t>(textures.size()));
   createDescriptorSets(device, quad, textures, pointLights);
+  
+  for (auto& model : models) {
+    
+  }
 }
 
 void BulkinGraphicsPipeline::createDescriptorLayout(vk::Device& device, uint32_t textureCount) {
@@ -411,7 +415,7 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
   
   for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
     vk::DescriptorBufferInfo uniformBufferInfo{};
-    uniformBufferInfo.buffer = buffers.uniformBuffers[i];
+    uniformBufferInfo.buffer = quadBuffers.uniformBuffers[i];
     uniformBufferInfo.offset = 0;
     uniformBufferInfo.range = sizeof(UniformBufferObject);
     
@@ -426,12 +430,12 @@ void BulkinGraphicsPipeline::createDescriptorSets(vk::Device &device, BulkinQuad
     }
     
     vk::DescriptorBufferInfo pointLightBufferInfo{};
-    pointLightBufferInfo.buffer = buffers.pointLightBuffer;
+    pointLightBufferInfo.buffer = quadBuffers.pointLightBuffer;
     pointLightBufferInfo.offset = 0;
     pointLightBufferInfo.range = sizeof(pointLights[0]) * pointLights.size();
     
     vk::DescriptorBufferInfo ssboBufferInfo{};
-    ssboBufferInfo.buffer = buffers.ssboBuffer;
+    ssboBufferInfo.buffer = quadBuffers.ssboBuffer;
     ssboBufferInfo.offset = 0;
     ssboBufferInfo.range = sizeof(PerInstanceData) * quad.getInstanceCount();
     

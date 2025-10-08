@@ -7,6 +7,7 @@
 #include "vertex.h"
 #include "texture.h"
 #include "light.h"
+#include "model.h"
 
 #include <vulkan/vulkan.hpp>
 #include <string>
@@ -14,7 +15,7 @@
 
 class BulkinGraphicsPipeline {
 public:
-  BulkinBuffer buffers;
+  BulkinBuffer quadBuffers;
   std::vector<BulkinBuffer> modelBuffers;
   vk::CommandPool commandPool;
   std::vector<vk::CommandBuffer> commandBuffers;

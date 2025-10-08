@@ -13,11 +13,11 @@ public:
   glm::mat4 modelMatrix();
 private:
   std::string modelPath;
+  uint32_t textureId;
   glm::vec3 pos;
   float angle;
   glm::vec3 rotation;
   float scale;
-  uint32_t textureId;
   
   std::vector<Vertex> vertices;
   std::vector<uint32_t> indices;
