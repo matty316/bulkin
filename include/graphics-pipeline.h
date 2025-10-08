@@ -15,6 +15,7 @@
 class BulkinGraphicsPipeline {
 public:
   BulkinBuffer buffers;
+  std::vector<BulkinBuffer> modelBuffers;
   vk::CommandPool commandPool;
   std::vector<vk::CommandBuffer> commandBuffers;
   

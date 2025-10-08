@@ -404,3 +404,9 @@ bool Bulkin::tick(float deltaTime, bool frameRendered) {
   }
   return false;
 }
+
+void Bulkin::addModel(std::string modelPath, uint32_t texture) {
+  BulkinModel model(modelPath, texture, glm::vec3{0.0f, 0.0f, 0.0f}, 0.0f, glm::vec3{1.0f, 1.0f, 1.0f}, 1.0f);
+  model.loadModel();
+  models.push_back(model);
+}
