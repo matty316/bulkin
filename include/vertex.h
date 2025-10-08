@@ -4,6 +4,8 @@
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <vulkan/vulkan.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 
 struct UniformBufferObject {
   glm::mat4 view;
@@ -22,6 +24,7 @@ struct Vertex {
   glm::vec3 pos;
   glm::vec2 texCoord;
   glm::vec3 color = {1.f, 1.f, 1.f};
+  glm::vec3 normal = {0.0f, 0.0f, 1.0f};
   
   static vk::VertexInputBindingDescription bindingDesc() {
     vk::VertexInputBindingDescription bindingDescription{};
@@ -33,8 +36,8 @@ struct Vertex {
     return bindingDescription;
   }
   
-  static std::array<vk::VertexInputAttributeDescription, 3> attrDesc() {
-    std::array<vk::VertexInputAttributeDescription, 3> attributeDescriptions;
+  static std::array<vk::VertexInputAttributeDescription, 4> attrDesc() {
+    std::array<vk::VertexInputAttributeDescription, 4> attributeDescriptions;
     
     attributeDescriptions[0].binding = 0;
     attributeDescriptions[0].location = 0;
@@ -51,7 +54,16 @@ struct Vertex {
     attributeDescriptions[2].format = vk::Format::eR32G32B32Sfloat;
     attributeDescriptions[2].offset = offsetof(Vertex, color);
     
+    attributeDescriptions[3].binding = 0;
+    attributeDescriptions[3].location = 3;
+    attributeDescriptions[3].format = vk::Format::eR32G32B32Sfloat;
+    attributeDescriptions[3].offset = offsetof(Vertex, normal);
+    
     return attributeDescriptions;
+  }
+  
+  bool operator==(const Vertex& other) const {
+      return pos == other.pos && color == other.color && texCoord == other.texCoord && normal == other.normal;
   }
 };
 
@@ -65,3 +77,14 @@ const std::vector<Vertex> quadVertices = {
 const std::vector<uint32_t> quadIndices = {
     0, 1, 2, 2, 3, 0
 };
+
+namespace std {
+    template<> struct hash<Vertex> {
+        size_t operator()(Vertex const& vertex) const {
+            return ((hash<glm::vec3>()(vertex.pos) ^
+                   (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^
+                   (hash<glm::vec2>()(vertex.texCoord) << 1) >> 1  ^
+                   (hash<glm::vec3>()(vertex.normal) << 1);
+        }
+    };
+}

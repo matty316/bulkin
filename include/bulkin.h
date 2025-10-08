@@ -24,7 +24,7 @@ public:
   void addPointLight(PointLight &light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);
-  void addModel(std::string modelPath, uint32_t texture);
+  void addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale);
 
   static vk::ImageView createImageView(vk::Device &device, vk::Image image,
                                        vk::Format format,
