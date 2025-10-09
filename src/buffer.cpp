@@ -60,29 +60,48 @@ void BulkinBuffer::createBuffer(vk::Device &device,
   device.bindBufferMemory(buffer, bufferMemory, 0);
 }
 
-void BulkinBuffer::createBuffers(vk::Device &device, vk::PhysicalDevice &physicalDevice, vk::CommandPool &commandPool, vk::Queue &graphicsQueue, BulkinQuad quad, std::vector<PointLight>& pointLights, std::vector<BulkinModel>& models) {
-  createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue, sizeof(quadVertices[0]) * quadVertices.size(), quadVertices, quadVertexBuffer, vertexBufferMemory);
-  createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue, sizeof(quadIndices[0]) * quadIndices.size(), quadIndices, quadIndexBuffer, indexBufferMemory);
+void BulkinBuffer::createBuffers(vk::Device &device,
+                                 vk::PhysicalDevice &physicalDevice,
+                                 vk::CommandPool &commandPool,
+                                 vk::Queue &graphicsQueue, BulkinQuad quad,
+                                 std::vector<PointLight> &pointLights,
+                                 std::vector<BulkinModel> &models) {
+  if (quad.getInstanceCount() > 0) {
+    createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue,
+                       sizeof(quadVertices[0]) * quadVertices.size(),
+                       quadVertices, quadVertexBuffer, vertexBufferMemory);
+    createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue,
+                      sizeof(quadIndices[0]) * quadIndices.size(), quadIndices,
+                      quadIndexBuffer, indexBufferMemory);
+
+    createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue,
+                           pointLights);
+  }
+  createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad,
+                   models);
   createUniformBuffers(device, physicalDevice);
-  createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
-  createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad, models);
-  
+
   modelVertexBuffers.resize(models.size());
   modelVertexBuffersMemory.resize(models.size());
   modelIndexBuffers.resize(models.size());
   modelIndexBuffersMemory.resize(models.size());
   for (size_t i = 0; i < models.size(); i++) {
-    createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue, sizeof(Vertex) * models[i].getVerticesSize(), models[i].getVertices(), modelVertexBuffers[i], modelVertexBuffersMemory[i]);
-    createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue, sizeof(uint32_t) * models[i].getIndicesSize(), models[i].getIndices(), modelIndexBuffers[i], modelIndexBuffersMemory[i]);
+    createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue,
+                       sizeof(Vertex) * models[i].getVerticesSize(),
+                       models[i].getVertices(), modelVertexBuffers[i],
+                       modelVertexBuffersMemory[i]);
+    createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue,
+                      sizeof(uint32_t) * models[i].getIndicesSize(),
+                      models[i].getIndices(), modelIndexBuffers[i],
+                      modelIndexBuffersMemory[i]);
   }
 }
 
-void BulkinBuffer::createVertexBuffer(vk::Device &device,
-                                      vk::PhysicalDevice &physicalDevice,
-                                      vk::CommandPool &commandPool,
-                                      vk::Queue &graphicsQueue,
-                                      vk::DeviceSize size,
-                                      std::vector<Vertex> vertices, vk::Buffer &buffer, vk::DeviceMemory& bufferMemory) {
+void BulkinBuffer::createVertexBuffer(
+    vk::Device &device, vk::PhysicalDevice &physicalDevice,
+    vk::CommandPool &commandPool, vk::Queue &graphicsQueue, vk::DeviceSize size,
+    std::vector<Vertex> vertices, vk::Buffer &buffer,
+    vk::DeviceMemory &bufferMemory) {
   vk::Buffer stagingBuffer;
   vk::DeviceMemory stagingBufferMemory;
 
@@ -99,21 +118,18 @@ void BulkinBuffer::createVertexBuffer(vk::Device &device,
   createBuffer(device, physicalDevice, size,
                vk::BufferUsageFlagBits::eTransferDst |
                    vk::BufferUsageFlagBits::eVertexBuffer,
-               vk::MemoryPropertyFlagBits::eDeviceLocal, buffer,
-               bufferMemory);
+               vk::MemoryPropertyFlagBits::eDeviceLocal, buffer, bufferMemory);
 
-  copyBuffer(stagingBuffer, buffer, size, commandPool, device,
-             graphicsQueue);
+  copyBuffer(stagingBuffer, buffer, size, commandPool, device, graphicsQueue);
   device.destroy(stagingBuffer);
   device.free(stagingBufferMemory);
 }
 
-void BulkinBuffer::createIndexBuffer(vk::Device &device,
-                                     vk::PhysicalDevice &physicalDevice,
-                                     vk::CommandPool &commandPool,
-                                     vk::Queue &graphicsQueue,
-                                     vk::DeviceSize size,
-                                     std::vector<uint32_t> indices, vk::Buffer &buffer, vk::DeviceMemory& bufferMemory) {
+void BulkinBuffer::createIndexBuffer(
+    vk::Device &device, vk::PhysicalDevice &physicalDevice,
+    vk::CommandPool &commandPool, vk::Queue &graphicsQueue, vk::DeviceSize size,
+    std::vector<uint32_t> indices, vk::Buffer &buffer,
+    vk::DeviceMemory &bufferMemory) {
   vk::Buffer stagingBuffer;
   vk::DeviceMemory stagingBufferMemory;
 
@@ -130,11 +146,9 @@ void BulkinBuffer::createIndexBuffer(vk::Device &device,
   createBuffer(device, physicalDevice, size,
                vk::BufferUsageFlagBits::eTransferDst |
                    vk::BufferUsageFlagBits::eIndexBuffer,
-               vk::MemoryPropertyFlagBits::eDeviceLocal, buffer,
-               bufferMemory);
+               vk::MemoryPropertyFlagBits::eDeviceLocal, buffer, bufferMemory);
 
-  copyBuffer(stagingBuffer, buffer, size, commandPool, device,
-             graphicsQueue);
+  copyBuffer(stagingBuffer, buffer, size, commandPool, device, graphicsQueue);
   device.destroy(stagingBuffer);
   device.free(stagingBufferMemory);
 }
@@ -192,12 +206,13 @@ void BulkinBuffer::createSSBOBuffer(vk::Device &device,
                                     vk::PhysicalDevice &physicalDevice,
                                     vk::CommandPool &commandPool,
                                     vk::Queue &graphicsQueue, BulkinQuad quad,
-                                    std::vector<BulkinModel>& models) {
+                                    std::vector<BulkinModel> &models) {
   if (quad.getInstanceCount() == 0)
     std::runtime_error("no quads drawn");
   vk::Buffer stagingBuffer;
   vk::DeviceMemory stagingBufferMemory;
-  vk::DeviceSize size = sizeof(PerInstanceData) * (quad.getInstanceCount() + models.size());
+  vk::DeviceSize size =
+      sizeof(PerInstanceData) * (quad.getInstanceCount() + models.size());
 
   createBuffer(device, physicalDevice, size,
                vk::BufferUsageFlagBits::eTransferSrc,
@@ -210,12 +225,12 @@ void BulkinBuffer::createSSBOBuffer(vk::Device &device,
   for (size_t i = 0; i < quad.getInstanceCount(); i++) {
     perInstanceData[i] = quad.getInstanceData(i);
   }
-  for (size_t i = quad.getInstanceCount(); i < quad.getInstanceCount() + models.size(); i++) {
+  for (size_t i = quad.getInstanceCount();
+       i < quad.getInstanceCount() + models.size(); i++) {
     perInstanceData[i] = PerInstanceData{
-      .model = models[i - quad.getInstanceCount()].modelMatrix(),
-      .faceId = 0,
-      .textureIndex = models[i - quad.getInstanceCount()].getTextureId()
-    };
+        .model = models[i - quad.getInstanceCount()].modelMatrix(),
+        .faceId = 0,
+        .textureIndex = models[i - quad.getInstanceCount()].getTextureId()};
   }
 
   void *data = device.mapMemory(stagingBufferMemory, 0, size);

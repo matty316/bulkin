@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 23)
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
-add_library(bulkin "${MY_SOURCES}" "${MY_HEADERS}" "${MY_SHADERS}")
+add_library(bulkin "${MY_SOURCES}" "${MY_HEADERS}")
 target_include_directories(bulkin PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
 find_package(ZLIB REQUIRED)
