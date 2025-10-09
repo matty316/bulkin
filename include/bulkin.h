@@ -14,6 +14,7 @@
 #include "light.h"
 #include "quad.h"
 #include "vertex.h"
+#include "model.h"
 
 class Bulkin {
 public:
@@ -23,6 +24,7 @@ public:
   void addPointLight(PointLight &light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);
+  void addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale);
 
   static vk::ImageView createImageView(vk::Device &device, vk::Image image,
                                        vk::Format format,
@@ -51,6 +53,7 @@ private:
   bool framebufferResized = false;
   bool fullsize = false;
   BulkinQuad quad;
+  std::vector<BulkinModel> models;
 
   bool showFrametime = false;
   double currentTime = 0.0;

@@ -10,6 +10,8 @@ file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/incl
 add_library(bulkin "${MY_SOURCES}" "${MY_HEADERS}" "${MY_SHADERS}")
 target_include_directories(bulkin PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
+find_package(ZLIB REQUIRED)
+
 if(APPLE)
   find_library(Cocoa Cocoa REQUIRED)
   find_library(IOKit IOKit REQUIRED)
@@ -19,5 +21,7 @@ endif()
 
 target_link_libraries(bulkin PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/libglfw3.a)
 target_link_libraries(bulkin PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/libtmxlite.a)
-target_link_libraries(bulkin PRIVATE Vulkan::Vulkan)
+target_link_libraries(bulkin PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/thirdParty/libassimp.a)
+
+target_link_libraries(bulkin PRIVATE Vulkan::Vulkan ZLIB::ZLIB)
 target_compile_options(bulkin PRIVATE -Wall -Wextra -g)

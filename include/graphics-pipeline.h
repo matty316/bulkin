@@ -7,6 +7,7 @@
 #include "vertex.h"
 #include "texture.h"
 #include "light.h"
+#include "model.h"
 
 #include <vulkan/vulkan.hpp>
 #include <string>
@@ -19,10 +20,10 @@ public:
   std::vector<vk::CommandBuffer> commandBuffers;
   
   void create(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Format& swapchainFormat);
-  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad);
+  void recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad, std::vector<BulkinModel>& models);
   void createCommandPool(vk::Device& device, QueueFamilyIndices indices);
   void createCommandBuffers(vk::Device& device);
-  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights);
+  void createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights, std::vector<BulkinModel>& models);
   void createDescriptorLayout(vk::Device& device, uint32_t textureCount);
   void createDescriptorPool(vk::Device& device, uint32_t textureCount);
   void createDescriptorSets(vk::Device& device, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights);

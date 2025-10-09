@@ -210,7 +210,7 @@ void BulkinGraphicsPipeline::createCommandBuffers(vk::Device &device) {
   commandBuffers = device.allocateCommandBuffers(allocInfo);
 }
 
-void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad) {
+void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer, uint32_t imageIndex, BulkinSwapchain& swapchain, uint32_t currentFrame, BulkinQuad quad, std::vector<BulkinModel>& models) {
   vk::CommandBufferBeginInfo beginInfo{};
   commandBuffer.begin(beginInfo);
   
@@ -254,15 +254,22 @@ void BulkinGraphicsPipeline::recordCommandBuffer(vk::CommandBuffer commandBuffer
   commandBuffer.setViewport(0, vk::Viewport(0.0f, 0.0f, static_cast<float>(swapchain.extent.width), static_cast<float>(swapchain.extent.height), 0.0f, 1.0f));
   commandBuffer.setScissor(0, vk::Rect2D(vk::Offset2D(0, 0), swapchain.extent));
   
-  vk::Buffer vertexBuffers[] = {buffers.vertexBuffer};
+  vk::Buffer vertexBuffers[] = {buffers.quadVertexBuffer};
   vk::DeviceSize offsets[] = {0};
   commandBuffer.bindVertexBuffers(0, 1, vertexBuffers, offsets);
-  commandBuffer.bindIndexBuffer(buffers.indexBuffer, 0, vk::IndexType::eUint32);
+  commandBuffer.bindIndexBuffer(buffers.quadIndexBuffer, 0, vk::IndexType::eUint32);
   
   vk::DescriptorSet descriptorSet[] = {descriptorSets[currentFrame], ssboDescriptorSets[currentFrame]};
   commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipelineLayout, 0, 2, descriptorSet, 0, nullptr);
 
   commandBuffer.drawIndexed(static_cast<uint32_t>(quadIndices.size()), quad.getInstanceCount(), 0, 0, 0);
+  
+  for (size_t i = 0; i < models.size(); i++) {
+    vk::Buffer modelVertexBuffers[] = {buffers.modelVertexBuffers[i]};
+    commandBuffer.bindVertexBuffers(0, 1, modelVertexBuffers, offsets);
+    commandBuffer.bindIndexBuffer(buffers.modelIndexBuffers[i], 0, vk::IndexType::eUint32);
+    commandBuffer.drawIndexed(models[i].getIndicesSize(), 1, 0, 0, quad.getInstanceCount());
+  }
   
   commandBuffer.endRendering();
   
@@ -312,12 +319,8 @@ void BulkinGraphicsPipeline::transitionImageLayout(uint32_t imageIndex,
   commandBuffer.pipelineBarrier2(dependencyInfo);
 }
 
-void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights) {
-  buffers.createVertexBuffer(device, physicalDevice, commandPool, graphicsQueue);
-  buffers.createIndexBuffer(device, physicalDevice, commandPool, graphicsQueue);
-  buffers.createUniformBuffers(device, physicalDevice);
-  buffers.createPointLightBuffer(device, physicalDevice, commandPool, graphicsQueue, pointLights);
-  buffers.createSSBOBuffer(device, physicalDevice, commandPool, graphicsQueue, quad);
+void BulkinGraphicsPipeline::createBuffers(vk::Device& device, vk::PhysicalDevice& physicalDevice, vk::Queue& graphicsQueue, BulkinQuad quad, std::vector<BulkinTexture>& textures, std::vector<PointLight>& pointLights, std::vector<BulkinModel>& models) {
+  buffers.createBuffers(device, physicalDevice, commandPool, graphicsQueue, quad, pointLights, models);
   createDescriptorPool(device, static_cast<uint32_t>(textures.size()));
   createDescriptorSets(device, quad, textures, pointLights);
 }

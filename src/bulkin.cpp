@@ -62,7 +62,7 @@ void Bulkin::initVulkan() {
   device.pickPhysicalDevice(instance);
   device.createLogicalDevice();
   device.createSwapchain(window);
-  device.createGraphicsPipeline(quad, textures, pointLights);
+  device.createGraphicsPipeline(quad, textures, pointLights, models);
   createSyncObjects();
 }
 
@@ -106,7 +106,7 @@ void Bulkin::drawFrame() {
   device.graphicsPipeline.commandBuffers[currentFrame].reset();
   device.graphicsPipeline.recordCommandBuffer(
       device.graphicsPipeline.commandBuffers[currentFrame], imageIndex,
-      device.swapchain, currentFrame, quad);
+      device.swapchain, currentFrame, quad, models);
 
   vk::SubmitInfo submitInfo{};
 
@@ -403,4 +403,13 @@ bool Bulkin::tick(float deltaTime, bool frameRendered) {
     return true;
   }
   return false;
+}
+
+void Bulkin::addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale) {
+  BulkinModel model(modelPath, pos, angle, rotation, scale);
+  model.loadModel();
+  auto diffusePath = model.getDiffusePath();
+  auto diffuse = addTexture(diffusePath);
+  model.setDiffuse(diffuse);
+  models.push_back(model);
 }
