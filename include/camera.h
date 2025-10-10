@@ -36,7 +36,7 @@ private:
   float fastCoef = 2.0f;
   float yaw = -90.0f;
   float pitch = 0.0f;
-  float playerHeight = 0.5f;
+  float playerHeight = 0.75f;
   glm::vec2 mousePosition = glm::vec2(0.0f);
   glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 0.0f);
   glm::quat cameraOrientation = glm::quat(glm::vec3(0.0f));

@@ -258,14 +258,15 @@ void Bulkin::setPlayerPos(glm::vec2 pos) { camera.setPlayerPos(pos); }
 
 vk::ImageView Bulkin::createImageView(vk::Device &device, vk::Image image,
                                       vk::Format format,
-                                      vk::ImageAspectFlags aspectFlags) {
+                                      vk::ImageAspectFlags aspectFlags,
+                                      uint32_t mipLevels) {
   vk::ImageViewCreateInfo viewInfo{};
   viewInfo.image = image;
   viewInfo.viewType = vk::ImageViewType::e2D;
   viewInfo.format = format;
   viewInfo.subresourceRange.aspectMask = aspectFlags;
   viewInfo.subresourceRange.baseMipLevel = 0;
-  viewInfo.subresourceRange.levelCount = 1;
+  viewInfo.subresourceRange.levelCount = mipLevels;
   viewInfo.subresourceRange.baseArrayLayer = 0;
   viewInfo.subresourceRange.layerCount = 1;
 
@@ -276,13 +277,13 @@ void Bulkin::createImage(uint32_t width, uint32_t height, vk::Format format,
                          vk::ImageTiling tiling, vk::ImageUsageFlags usage,
                          vk::MemoryPropertyFlags properties, vk::Device &device,
                          vk::PhysicalDevice &physicalDevice, vk::Image &image,
-                         vk::DeviceMemory &imageMemory) {
+                         vk::DeviceMemory &imageMemory, uint32_t mipLevels) {
   vk::ImageCreateInfo imageInfo{};
   imageInfo.imageType = vk::ImageType::e2D;
   imageInfo.extent.width = static_cast<uint32_t>(width);
   imageInfo.extent.height = static_cast<uint32_t>(height);
   imageInfo.extent.depth = 1;
-  imageInfo.mipLevels = 1;
+  imageInfo.mipLevels = mipLevels;
   imageInfo.arrayLayers = 1;
   imageInfo.format = format;
   imageInfo.tiling = tiling;
@@ -310,7 +311,7 @@ void Bulkin::transitionImageLayout(vk::Device device,
                                    vk::Queue graphicsQueue, vk::Format format,
                                    vk::ImageLayout oldLayout,
                                    vk::ImageLayout newLayout,
-                                   vk::Image &image) {
+                                   vk::Image &image, uint32_t mipLevels) {
   auto commandBuffer =
       BulkinBuffer::beginSingleTimeCommands(device, commandPool);
 
@@ -330,7 +331,7 @@ void Bulkin::transitionImageLayout(vk::Device device,
     barrier.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
   }
   barrier.subresourceRange.baseMipLevel = 0;
-  barrier.subresourceRange.levelCount = 1;
+  barrier.subresourceRange.levelCount = mipLevels;
   barrier.subresourceRange.baseArrayLayer = 0;
   barrier.subresourceRange.layerCount = 1;
 

@@ -26,21 +26,30 @@ public:
   uint32_t addTexture(std::string filename);
   void addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale);
 
-  static vk::ImageView createImageView(vk::Device &device, vk::Image image,
+  static vk::ImageView createImageView(vk::Device &device,
+                                       vk::Image image,
                                        vk::Format format,
-                                       vk::ImageAspectFlags aspectFlags);
-  static void createImage(uint32_t width, uint32_t height, vk::Format format,
-                          vk::ImageTiling tiling, vk::ImageUsageFlags usage,
+                                       vk::ImageAspectFlags aspectFlags,
+                                       uint32_t mipLevels);
+  static void createImage(uint32_t width,
+                          uint32_t height,
+                          vk::Format format,
+                          vk::ImageTiling tiling,
+                          vk::ImageUsageFlags usage,
                           vk::MemoryPropertyFlags properties,
                           vk::Device &device,
-                          vk::PhysicalDevice &physicalDevice, vk::Image &image,
-                          vk::DeviceMemory &imageMemory);
+                          vk::PhysicalDevice &physicalDevice,
+                          vk::Image &image,
+                          vk::DeviceMemory &imageMemory,
+                          uint32_t mipLevels);
   static void transitionImageLayout(vk::Device device,
                                     vk::CommandPool commandPool,
-                                    vk::Queue graphicsQueue, vk::Format format,
+                                    vk::Queue graphicsQueue,
+                                    vk::Format format,
                                     vk::ImageLayout oldLayout,
                                     vk::ImageLayout newLayout,
-                                    vk::Image &image);
+                                    vk::Image &image,
+                                    uint32_t mipLevels);
 
 private:
   GLFWwindow *window;

@@ -91,7 +91,7 @@ void BulkinSwapchain::createImageViews(vk::Device& device) {
   imageViews.resize(images.size());
   
   for (size_t i = 0; i < images.size(); i++) {
-    imageViews[i] = Bulkin::createImageView(device, images[i], imageFormat, vk::ImageAspectFlagBits::eColor);
+    imageViews[i] = Bulkin::createImageView(device, images[i], imageFormat, vk::ImageAspectFlagBits::eColor, 1);
   }
 }
 
