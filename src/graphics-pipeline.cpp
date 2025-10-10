@@ -484,9 +484,9 @@ void BulkinGraphicsPipeline::createDepthResources(vk::Device& device, vk::Physic
                       device,
                       physicalDevice,
                       depthImage,
-                      depthImageMemory);
-  depthImageView = Bulkin::createImageView(device, depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth);
-  Bulkin::transitionImageLayout(device, commandPool, graphicsQueue, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal, depthImage);
+                      depthImageMemory, 1);
+  depthImageView = Bulkin::createImageView(device, depthImage, depthFormat, vk::ImageAspectFlagBits::eDepth, 1);
+  Bulkin::transitionImageLayout(device, commandPool, graphicsQueue, depthFormat, vk::ImageLayout::eUndefined, vk::ImageLayout::eDepthStencilAttachmentOptimal, depthImage, 1);
 }
 
 vk::Format BulkinGraphicsPipeline::findSupportedFormat(const std::vector<vk::Format> &candidates, vk::ImageTiling tiling, vk::FormatFeatureFlags features, vk::PhysicalDevice& physicalDevice) {

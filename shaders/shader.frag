@@ -68,5 +68,5 @@ vec3 BlinnPhong(vec3 normal, vec3 fragPos, vec3 lightPos, vec3 lightColor)
     specular *= attenuation;
     ambient *= attenuation;
     
-    return diffuse;
+    return diffuse + ambient;
 }
