@@ -1,20 +1,21 @@
 #pragma once
 
+#include "level.h"
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
+#include <print>
 #include <unordered_map>
 #include <vulkan/vulkan.hpp>
-#include <print>
 
 #include "camera.h"
 #include "constants.h"
 #include "device.h"
 #include "light.h"
+#include "model.h"
 #include "quad.h"
 #include "vertex.h"
-#include "model.h"
 
 class Bulkin {
 public:
@@ -24,31 +25,27 @@ public:
   void addPointLight(PointLight &light);
   void setPlayerPos(glm::vec2 pos);
   uint32_t addTexture(std::string filename);
-  void addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale);
+  void addModel(std::string modelPath, glm::vec3 pos, float angle,
+                glm::vec3 rotation, float scale);
+  void loadLevel(const std::string &path, uint32_t wallTexture,
+                 uint32_t floorTexture, uint32_t ceilingTexture,
+                 size_t maxHeight = 2);
 
-  static vk::ImageView createImageView(vk::Device &device,
-                                       vk::Image image,
+  static vk::ImageView createImageView(vk::Device &device, vk::Image image,
                                        vk::Format format,
                                        vk::ImageAspectFlags aspectFlags,
                                        uint32_t mipLevels);
-  static void createImage(uint32_t width,
-                          uint32_t height,
-                          vk::Format format,
-                          vk::ImageTiling tiling,
-                          vk::ImageUsageFlags usage,
+  static void createImage(uint32_t width, uint32_t height, vk::Format format,
+                          vk::ImageTiling tiling, vk::ImageUsageFlags usage,
                           vk::MemoryPropertyFlags properties,
                           vk::Device &device,
-                          vk::PhysicalDevice &physicalDevice,
-                          vk::Image &image,
-                          vk::DeviceMemory &imageMemory,
-                          uint32_t mipLevels);
+                          vk::PhysicalDevice &physicalDevice, vk::Image &image,
+                          vk::DeviceMemory &imageMemory, uint32_t mipLevels);
   static void transitionImageLayout(vk::Device device,
                                     vk::CommandPool commandPool,
-                                    vk::Queue graphicsQueue,
-                                    vk::Format format,
+                                    vk::Queue graphicsQueue, vk::Format format,
                                     vk::ImageLayout oldLayout,
-                                    vk::ImageLayout newLayout,
-                                    vk::Image &image,
+                                    vk::ImageLayout newLayout, vk::Image &image,
                                     uint32_t mipLevels);
 
 private:
@@ -106,10 +103,11 @@ private:
                                         int height);
 
   bool tick(float deltaTime, bool frameRendered = true);
-  
+
   float avgInterval = 0.5f;
   uint32_t numFrames = 0;
   double accumTime = 0.0;
   float currentFPS = 0.0f;
   bool printFPS = true;
+  BulkinLevel *currentLevel = nullptr;
 };
