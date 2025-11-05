@@ -1,4 +1,5 @@
 #include "bulkin.h"
+#include "level.h"
 
 #include <GLFW/glfw3.h>
 #include <print>
@@ -310,8 +311,8 @@ void Bulkin::transitionImageLayout(vk::Device device,
                                    vk::CommandPool commandPool,
                                    vk::Queue graphicsQueue, vk::Format format,
                                    vk::ImageLayout oldLayout,
-                                   vk::ImageLayout newLayout,
-                                   vk::Image &image, uint32_t mipLevels) {
+                                   vk::ImageLayout newLayout, vk::Image &image,
+                                   uint32_t mipLevels) {
   auto commandBuffer =
       BulkinBuffer::beginSingleTimeCommands(device, commandPool);
 
@@ -391,14 +392,15 @@ uint32_t Bulkin::addTexture(std::string filename) {
 void Bulkin::addPointLight(PointLight &light) { pointLights.push_back(light); }
 
 bool Bulkin::tick(float deltaTime, bool frameRendered) {
-  if (frameRendered) numFrames++;
+  if (frameRendered)
+    numFrames++;
   accumTime += deltaTime;
   if (accumTime > avgInterval) {
     currentFPS = static_cast<float>(numFrames / accumTime);
-    
+
     if (printFPS)
       glfwSetWindowTitle(window, std::format("FPS {}", currentFPS).c_str());
-    
+
     numFrames = 0;
     accumTime = 0;
     return true;
@@ -406,11 +408,35 @@ bool Bulkin::tick(float deltaTime, bool frameRendered) {
   return false;
 }
 
-void Bulkin::addModel(std::string modelPath, glm::vec3 pos, float angle, glm::vec3 rotation, float scale) {
+void Bulkin::addModel(std::string modelPath, glm::vec3 pos, float angle,
+                      glm::vec3 rotation, float scale) {
   BulkinModel model(modelPath, pos, angle, rotation, scale);
   model.loadModel();
   auto diffusePath = model.getDiffusePath();
   auto diffuse = addTexture(diffusePath);
   model.setDiffuse(diffuse);
   models.push_back(model);
+}
+
+void Bulkin::loadLevel(std::string path, uint32_t wallTexture,
+                       uint32_t floorTexture, uint32_t ceilingTexture,
+                       size_t maxHeight) {
+  auto newLevel = std::make_unique<BulkinLevel>(
+      BulkinLevel(path, wallTexture, floorTexture, ceilingTexture, maxHeight));
+  currentLevel = std::move(newLevel);
+  currentLevel->loadLevel(*this);
+}
+void Bulkin::addCube(size_t x, size_t z, size_t texture) {
+  addQuad(glm::vec3(0.0f + x, 0.0f, 0.0f + z), 0.0f, glm::vec3(1.0f), 1.0f, 0,
+          texture);
+  addQuad(glm::vec3(0.5f + x, 0.0f, -0.5f + z), 90.0f,
+          glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 0, texture);
+  addQuad(glm::vec3(-0.5f + x, 0.0f, -0.5f + z), 270.0f,
+          glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 0, texture);
+  addQuad(glm::vec3(0.0f + x, 0.0f, -1.0f + z), 180.0f,
+          glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, 0, texture);
+  addQuad(glm::vec3(x, 0.0f, -1.0f + z), 90.0f, glm::vec3(1.0f, 0.0f, 0.0f),
+          1.0f, 0, texture);
+  addQuad(glm::vec3(x, 1.0f, z), 270.0f, glm::vec3(1.0f, 0.0f, 0.0f), 1.0f, 0,
+          texture);
 }

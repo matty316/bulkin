@@ -1,15 +1,18 @@
 #pragma once
 
-#include "bulkin.h"
+class Bulkin;
 #include "light.h"
 #include <glm/glm.hpp>
 
+#include <string>
 #include <vector>
 
 class BulkinLevel {
 public:
-  BulkinLevel(std::string path, uint32_t wallTexture, uint32_t floorTexture, uint32_t ceilingTexture, size_t maxHeight = 2);
-  void renderLevel(Bulkin& app);
+  BulkinLevel(std::string path, uint32_t wallTexture, uint32_t floorTexture,
+              uint32_t ceilingTexture, size_t maxHeight = 2);
+  void loadLevel(Bulkin &app);
+
 private:
   std::vector<std::vector<uint32_t>> walls;
   std::vector<std::vector<uint32_t>> floors;
