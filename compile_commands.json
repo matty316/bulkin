@@ -1,0 +1,74 @@
+[
+{
+  "directory": "/home/matty/projects/boba/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/include -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/boba.dir/src/main.cpp.o -c /home/matty/projects/boba/src/main.cpp",
+  "file": "/home/matty/projects/boba/src/main.cpp",
+  "output": "CMakeFiles/boba.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/buffer.cpp.o -c /home/matty/projects/boba/bulkin/src/buffer.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/buffer.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/buffer.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/bulkin.cpp.o -c /home/matty/projects/boba/bulkin/src/bulkin.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/bulkin.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/bulkin.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/camera.cpp.o -c /home/matty/projects/boba/bulkin/src/camera.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/camera.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/camera.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/device.cpp.o -c /home/matty/projects/boba/bulkin/src/device.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/device.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/device.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/graphics-pipeline.cpp.o -c /home/matty/projects/boba/bulkin/src/graphics-pipeline.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/graphics-pipeline.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/graphics-pipeline.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/level.cpp.o -c /home/matty/projects/boba/bulkin/src/level.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/level.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/level.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/light.cpp.o -c /home/matty/projects/boba/bulkin/src/light.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/light.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/light.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/model.cpp.o -c /home/matty/projects/boba/bulkin/src/model.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/model.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/model.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/quad.cpp.o -c /home/matty/projects/boba/bulkin/src/quad.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/quad.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/quad.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/swapchain.cpp.o -c /home/matty/projects/boba/bulkin/src/swapchain.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/swapchain.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/swapchain.cpp.o"
+},
+{
+  "directory": "/home/matty/projects/boba/bulkin/bulkin",
+  "command": "/usr/bin/c++  -I/home/matty/projects/boba/bulkin/include -isystem /home/matty/vulkan-sdk/1.4.321.1/x86_64/include -std=gnu++23 -Wall -Wextra -g -o CMakeFiles/bulkin.dir/src/texture.cpp.o -c /home/matty/projects/boba/bulkin/src/texture.cpp",
+  "file": "/home/matty/projects/boba/bulkin/src/texture.cpp",
+  "output": "bulkin/CMakeFiles/bulkin.dir/src/texture.cpp.o"
+}
+]

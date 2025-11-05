@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/boba.dir/link.d CMakeFiles/boba.dir/src/main.cpp.o -o boba  -Wl,-rpath,/home/matty/vulkan-sdk/1.4.321.1/x86_64/lib bulkin/libbulkin.a /home/matty/vulkan-sdk/1.4.321.1/x86_64/lib/libvulkan.so thirdParty/libglfw3.a thirdParty/libtmxlite.a thirdParty/libassimp.a /usr/lib/libz.so

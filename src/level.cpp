@@ -2,12 +2,11 @@
 
 #include "bulkin.h"
 
-#include <iostream>
 #include <tmxlite/Map.hpp>
 #include <tmxlite/ObjectGroup.hpp>
 #include <tmxlite/TileLayer.hpp>
 
-BulkinLevel::BulkinLevel(std::string path, uint32_t wallTexture,
+BulkinLevel::BulkinLevel(const std::string &path, uint32_t wallTexture,
                          uint32_t floorTexture, uint32_t ceilingTexture,
                          size_t maxHeight)
     : wallTexture(wallTexture), floorTexture(floorTexture),

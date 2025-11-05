@@ -1,5 +1,4 @@
 #include "bulkin.h"
-#include "level.h"
 
 #include <GLFW/glfw3.h>
 #include <print>
@@ -418,7 +417,7 @@ void Bulkin::addModel(std::string modelPath, glm::vec3 pos, float angle,
   models.push_back(model);
 }
 
-void Bulkin::loadLevel(std::string path, uint32_t wallTexture,
+void Bulkin::loadLevel(const std::string &path, uint32_t wallTexture,
                        uint32_t floorTexture, uint32_t ceilingTexture,
                        size_t maxHeight) {
   auto newLevel = std::make_unique<BulkinLevel>(

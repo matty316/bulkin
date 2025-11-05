@@ -1,13 +1,12 @@
 #pragma once
 
 #include "level.h"
-#include <cstddef>
+
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 #include <memory>
-#include <print>
 #include <unordered_map>
 #include <vulkan/vulkan.hpp>
 
@@ -17,7 +16,6 @@
 #include "light.h"
 #include "model.h"
 #include "quad.h"
-#include "vertex.h"
 
 class Bulkin {
 public:
@@ -29,6 +27,9 @@ public:
   uint32_t addTexture(std::string filename);
   void addModel(std::string modelPath, glm::vec3 pos, float angle,
                 glm::vec3 rotation, float scale);
+  void loadLevel(const std::string &path, uint32_t wallTexture,
+                 uint32_t floorTexture, uint32_t ceilingTexture,
+                 size_t maxHeight = 2);
 
   static vk::ImageView createImageView(vk::Device &device, vk::Image image,
                                        vk::Format format,
@@ -47,8 +48,6 @@ public:
                                     vk::ImageLayout newLayout, vk::Image &image,
                                     uint32_t mipLevels);
   void addCube(size_t x, size_t z, size_t texture);
-  void loadLevel(std::string path, uint32_t wallTexture, uint32_t floorTexture,
-                 uint32_t ceilingTexture, size_t maxHeight = 2);
 
 private:
   GLFWwindow *window;

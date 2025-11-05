@@ -1,0 +1,6 @@
+/home/matty/projects/boba/bulkin/CMakeFiles/boba.dir
+/home/matty/projects/boba/bulkin/CMakeFiles/edit_cache.dir
+/home/matty/projects/boba/bulkin/CMakeFiles/rebuild_cache.dir
+/home/matty/projects/boba/bulkin/bulkin/CMakeFiles/bulkin.dir
+/home/matty/projects/boba/bulkin/bulkin/CMakeFiles/edit_cache.dir
+/home/matty/projects/boba/bulkin/bulkin/CMakeFiles/rebuild_cache.dir
