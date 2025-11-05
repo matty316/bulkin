@@ -1,5 +1,4 @@
 build
-thirdParty
 .DS_Store
 .cache/clangd/index
 build-xcode/VulkanTutorial.xcodeproj/project.xcworkspace/xcuserdata/*
