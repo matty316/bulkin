@@ -1,0 +1,13 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/matty/projects/bulkin/build/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/glm/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/glm/glm/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/SDL/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/vk-bootstrap/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/vma/cmake_install.cmake",
+		"/home/matty/projects/bulkin/build/third-party/volk/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

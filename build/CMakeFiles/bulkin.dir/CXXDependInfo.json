@@ -1,0 +1,52 @@
+{
+	"bmi-installation" : null,
+	"compiler-frontend-variant" : "GNU",
+	"compiler-id" : "Clang",
+	"compiler-simulate-id" : "",
+	"config" : "",
+	"cxx-modules" : {},
+	"database-info" : null,
+	"dir-cur-bld" : "/home/matty/projects/bulkin/build",
+	"dir-cur-src" : "/home/matty/projects/bulkin",
+	"dir-top-bld" : "/home/matty/projects/bulkin/build",
+	"dir-top-src" : "/home/matty/projects/bulkin",
+	"exports" : [],
+	"forward-modules-from-target-dirs" : [],
+	"include-dirs" : 
+	[
+		"/home/matty/projects/bulkin/include",
+		"third-party/SDL/include-revision",
+		"/home/matty/projects/bulkin/third-party/SDL/include",
+		"/home/matty/projects/bulkin/third-party/glm",
+		"/home/matty/projects/bulkin/third-party/vk-bootstrap/src",
+		"/home/matty/projects/bulkin/third-party/vma/include",
+		"/home/matty/projects/bulkin/third-party/volk",
+		"/home/matty/vulkansdk/1.4.328.1/x86_64/include"
+	],
+	"language" : "CXX",
+	"linked-target-dirs" : [],
+	"module-dir" : "/home/matty/projects/bulkin/build/CMakeFiles/bulkin.dir",
+	"sources" : 
+	{
+		"CMakeFiles/bulkin.dir/src/bulkin.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/matty/projects/bulkin/src/bulkin.cpp"
+		},
+		"CMakeFiles/bulkin.dir/src/main.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/matty/projects/bulkin/src/main.cpp"
+		},
+		"CMakeFiles/bulkin.dir/src/vk_images.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/matty/projects/bulkin/src/vk_images.cpp"
+		},
+		"CMakeFiles/bulkin.dir/src/vk_initializers.cpp.o" : 
+		{
+			"language" : "CXX",
+			"source" : "/home/matty/projects/bulkin/src/vk_initializers.cpp"
+		}
+	}
+}
