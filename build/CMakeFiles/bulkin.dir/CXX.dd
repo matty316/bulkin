@@ -1,9 +1,0 @@
-ninja_dyndep_version = 1.0
-build CMakeFiles/bulkin.dir/src/bulkin.cpp.o: dyndep
-
-build CMakeFiles/bulkin.dir/src/main.cpp.o: dyndep
-
-build CMakeFiles/bulkin.dir/src/vk_images.cpp.o: dyndep
-
-build CMakeFiles/bulkin.dir/src/vk_initializers.cpp.o: dyndep
-

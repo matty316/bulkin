@@ -152,9 +152,8 @@ void Bulkin::run() {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       continue;
     }
+    draw();
   }
-
-  draw();
 }
 
 void Bulkin::draw() {
