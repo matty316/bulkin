@@ -11,6 +11,9 @@
 #include <chrono>
 #include <vulkan/vk_enum_string_helper.h>
 
+#define VMA_IMPLEMENTATION
+#include <vk_mem_alloc.h>
+
 Bulkin *loadedEngine = nullptr;
 
 #ifdef NDEBUG
@@ -35,6 +38,8 @@ void Bulkin::init() {
   init_swapchain();
   init_commands();
   init_sync_structures();
+
+  isInitialized = true;
 }
 
 void Bulkin::init_vulkan() {
@@ -78,6 +83,17 @@ void Bulkin::init_vulkan() {
 
 	graphics_queue = vkbDevice.get_queue(vkb::QueueType::graphics).value();
 	graphics_queue_family = vkbDevice.get_queue_index(vkb::QueueType::graphics).value();
+
+	VmaAllocatorCreateInfo allocator_info{};
+	allocator_info.physicalDevice = chosen_gpu;
+	allocator_info.device = device;
+	allocator_info.instance = instance;
+	allocator_info.flags = VMA_ALLOCATOR_CREATE_BUFFER_DEVICE_ADDRESS_BIT;
+	vmaCreateAllocator(&allocator_info, &allocator);
+
+	deletion_queue.push_function([&](){
+    vmaDestroyAllocator(allocator);
+	});
 }
 
 void Bulkin::create_swapchain(uint32_t width, uint32_t height) {
@@ -107,6 +123,17 @@ void Bulkin::destroy_swapchain() {
 
 void Bulkin::init_swapchain() {
   create_swapchain(window_extent.width, window_extent.height);
+  
+  VkExtent3D draw_image_extent = {
+    window_extent.width,
+    window_extent.height,
+    1
+  };
+  
+  draw_image.image_format = VK_FORMAT_R16G16B16A16_SFLOAT;
+  draw_image.image_extent = draw_image_extent;
+  
+  
 }
 
 void Bulkin::init_commands() {
@@ -159,6 +186,9 @@ void Bulkin::run() {
 void Bulkin::draw() {
   int timeout = 1000000000;
   VK_CHECK(vkWaitForFences(device, 1, &get_current_frame().render_fence, true, timeout));
+
+  get_current_frame().deletion_queue.flush();
+
   VK_CHECK(vkResetFences(device, 1, &get_current_frame().render_fence));
 
   uint32_t swapchain_image_index;
@@ -200,6 +230,8 @@ void Bulkin::draw() {
   VK_CHECK(vkQueuePresentKHR(graphics_queue, &present_info));
 
   frame_number++;
+
+  vkQueueWaitIdle(graphics_queue);
 }
 
 void Bulkin::cleanup() {
@@ -212,7 +244,13 @@ void Bulkin::cleanup() {
       vkDestroyFence(device, frames[i].render_fence, nullptr);
       vkDestroySemaphore(device, frames[i].swapchain_semaphore, nullptr);
       vkDestroySemaphore(device, frames[i].render_semaphore, nullptr);
+
+      frames[i].deletion_queue.flush();
     }
+
+    deletion_queue.flush();
+
+    destroy_swapchain();
 
     vkDestroySurfaceKHR(instance, surface, nullptr);
     vkDestroyDevice(device, nullptr);

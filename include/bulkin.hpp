@@ -3,8 +3,11 @@
 #include <SDL3/SDL.h>
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <vk_types.h>
 
 #include "bulkin-framedata.hpp"
+#include "bulkin-deletion.hpp"
+#include "bulkin-image.hpp"
 
 class Bulkin {
 public:
@@ -35,8 +38,15 @@ private:
   bool isInitialized = false;
   bool stop_rendering = false;
 
-  FrameData frames[FRAME_OVERLAP];
-  FrameData &get_current_frame() { return frames[frame_number % FRAME_OVERLAP]; }
+  BulkinFrameData frames[FRAME_OVERLAP];
+  BulkinFrameData &get_current_frame() { return frames[frame_number % FRAME_OVERLAP]; }
+
+  BulkinDeletionQueue deletion_queue;
+
+  VmaAllocator allocator;
+
+  BulkinImage draw_image;
+  VkExtent2D draw_extent;
 
   void init_vulkan();
   void init_swapchain();
