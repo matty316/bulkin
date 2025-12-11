@@ -123,17 +123,35 @@ void Bulkin::destroy_swapchain() {
 
 void Bulkin::init_swapchain() {
   create_swapchain(window_extent.width, window_extent.height);
-  
+
   VkExtent3D draw_image_extent = {
     window_extent.width,
     window_extent.height,
     1
   };
-  
+
   draw_image.image_format = VK_FORMAT_R16G16B16A16_SFLOAT;
   draw_image.image_extent = draw_image_extent;
-  
-  
+
+  VkImageUsageFlags draw_image_usages{};
+  draw_image_usages |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+  draw_image_usages |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+  draw_image_usages |= VK_IMAGE_USAGE_STORAGE_BIT;
+  draw_image_usages |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+  VkImageCreateInfo rimg_info = vkinit::image_create_info(draw_image.image_format, draw_image_usages, draw_image_extent);
+
+  VmaAllocationCreateInfo rimg_alloc_info{};
+  rimg_alloc_info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+  rimg_alloc_info.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+  vmaCreateImage(allocator, &rimg_info, &rimg_alloc_info, &draw_image.image, &draw_image.allocation, nullptr);
+  VkImageViewCreateInfo rview_info = vkinit::imageview_create_info(draw_image.image_format, draw_image.image, VK_IMAGE_ASPECT_COLOR_BIT);
+  VK_CHECK(vkCreateImageView(device, &rview_info, nullptr, &draw_image.image_view));
+
+  deletion_queue.push_function([=, this]() {
+    vkDestroyImageView(device, draw_image.image_view, nullptr);
+    vmaDestroyImage(allocator, draw_image.image, draw_image.allocation);
+  });
 }
 
 void Bulkin::init_commands() {
@@ -197,16 +215,23 @@ void Bulkin::draw() {
   VkCommandBuffer cmd = get_current_frame().command_buffer;
   VK_CHECK(vkResetCommandBuffer(cmd, 0));
   VkCommandBufferBeginInfo cmd_begin_info = vkinit::command_buffer_begin_info(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
+  draw_extent.width = draw_image.image_extent.width;
+  draw_extent.height = draw_image.image_extent.height;
+
   VK_CHECK(vkBeginCommandBuffer(cmd, &cmd_begin_info));
 
-  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
-  VkClearColorValue clear_value;
-  float flash = std::abs(std::sin(frame_number / 120.0f));
-  clear_value = {{0.0f, 0.0f, flash, 1.0f}};
+  vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_GENERAL);
 
-  VkImageSubresourceRange clear_range = vkinit::image_subresource_range(VK_IMAGE_ASPECT_COLOR_BIT);
-  vkCmdClearColorImage(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_GENERAL, &clear_value, 1, &clear_range);
-  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+  draw_background(cmd);
+
+  vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+  vkutil::copy_image_to_image(cmd, draw_image.image, swapchain_images[swapchain_image_index], draw_extent, swapchain_extent);
+
+  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+
   VK_CHECK(vkEndCommandBuffer(cmd));
 
   VkCommandBufferSubmitInfo cmd_info = vkinit::command_buffer_submit_info(cmd);
@@ -261,4 +286,12 @@ void Bulkin::cleanup() {
     SDL_DestroyWindow(window);
   }
   loadedEngine = nullptr;
+}
+
+void Bulkin::draw_background(VkCommandBuffer cmd) {
+  VkClearColorValue clear_value;
+  float flash = std::abs(std::sin(frame_number / 120.0f));
+  clear_value = {{0.0f, 0.0f, flash, 1.0f}};
+  VkImageSubresourceRange clear_range = vkinit::image_subresource_range(VK_IMAGE_ASPECT_COLOR_BIT);
+  vkCmdClearColorImage(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, &clear_value, 1, &clear_range);
 }
