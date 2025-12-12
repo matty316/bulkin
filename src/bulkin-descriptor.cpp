@@ -31,3 +31,34 @@ VkDescriptorSetLayout BulkinDescriptorLayout::build(VkDevice device, VkShaderSta
 
   return set;
 }
+
+void BulkinDescriptorAllocator::init_pool(VkDevice device, uint32_t max_sets, std::span<PoolSizeRatio> pool_ratios) {
+  std::vector<VkDescriptorPoolSize> pool_sizes;
+  for (auto &ratio : pool_ratios) {
+    pool_sizes.push_back(VkDescriptorPoolSize{
+      .type = ratio.type,
+      .descriptorCount = static_cast<uint32_t>(ratio.ratio * max_sets)
+    });
+  }
+
+  VkDescriptorPoolCreateInfo pool_info{};
+  pool_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+  pool_info.flags = 0;
+  pool_info.maxSets = max_sets;
+  pool_info.poolSizeCount = static_cast<uint32_t>(pool_sizes.size());
+  pool_info.pPoolSizes = pool_sizes.data();
+
+  vkCreateDescriptorPool(device, &pool_info, nullptr, &pool);
+}
+
+void BulkinDescriptorAllocator::clear_descriptors(VkDevice device) {
+
+}
+
+void BulkinDescriptorAllocator::destroy_pool(VkDevice device) {
+
+}
+
+VkDescriptorSet BulkinDescriptorAllocator::allocate(VkDevice device, VkDescriptorSetLayout layout) {
+
+}
