@@ -25,5 +25,23 @@ if(APPLE)
   target_link_libraries(bulkin PRIVATE ${Cocoa} ${IOKit} ${CoreVideo})
 endif()
 
-target_link_libraries(bulkin PRIVATE Vulkan::Vulkan SDL3::SDL3 glm vk-bootstrap::vk-bootstrap VulkanMemoryAllocator volk_headers)
+add_library(imgui STATIC)
+
+target_include_directories(imgui PUBLIC "third-party/imgui")
+
+target_sources(imgui PRIVATE
+  "third-party/imgui/imgui.h"
+  "third-party/imgui/imgui.cpp"
+
+  "third-party/imgui/imgui_demo.cpp"
+  "third-party/imgui/imgui_draw.cpp"
+  "third-party/imgui/imgui_widgets.cpp"
+  "third-party/imgui/imgui_tables.cpp"
+  "third-party/imgui/backends/imgui_impl_vulkan.cpp"
+  "third-party/imgui/backends/imgui_impl_sdl3.cpp"
+)
+
+target_link_libraries(imgui PUBLIC Vulkan::Vulkan SDL3::SDL3)
+
+target_link_libraries(bulkin PRIVATE Vulkan::Vulkan SDL3::SDL3 glm vk-bootstrap::vk-bootstrap VulkanMemoryAllocator volk_headers imgui)
 target_compile_options(bulkin PRIVATE -Wall -Wextra -g)

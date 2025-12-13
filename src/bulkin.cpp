@@ -16,6 +16,10 @@
 
 #include "bulkin-pipelines.hpp"
 
+#include <imgui.h>
+#include <backends/imgui_impl_vulkan.h>
+#include <backends/imgui_impl_sdl3.h>
+
 Bulkin *loadedEngine = nullptr;
 
 #ifdef NDEBUG
@@ -168,6 +172,14 @@ void Bulkin::init_commands() {
 
     VK_CHECK(vkAllocateCommandBuffers(device, &cmdAllocInfo, &frames[i].command_buffer));
   }
+
+  VK_CHECK(vkCreateCommandPool(device, &commandPoolInfo, nullptr, &imm_cmd_pool));
+  VkCommandBufferAllocateInfo cmd_alloc = vkinit::command_buffer_allocate_info(imm_cmd_pool, 1);
+  VK_CHECK(vkAllocateCommandBuffers(device, &cmd_alloc, &imm_cmd));
+
+  deletion_queue.push_function([=, this]() {
+    vkDestroyCommandPool(device, imm_cmd_pool, nullptr);
+  });
 }
 
 void Bulkin::init_sync_structures() {
@@ -180,6 +192,11 @@ void Bulkin::init_sync_structures() {
     VK_CHECK(vkCreateSemaphore(device, &semaphore_create_info, nullptr, &frames[i].swapchain_semaphore));
     VK_CHECK(vkCreateSemaphore(device, &semaphore_create_info, nullptr, &frames[i].render_semaphore));
   }
+
+  VK_CHECK(vkCreateFence(device, &fence_create_info, nullptr, &imm_fence));
+  deletion_queue.push_function([=, this]() {
+    vkDestroyFence(device, imm_fence, nullptr);
+  });
 }
 
 void Bulkin::init_descriptors() {
@@ -374,3 +391,20 @@ void Bulkin::draw_background(VkCommandBuffer cmd) {
   vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, gradient_pipeline_layout, 0, 1, &draw_image_descriptors, 0, nullptr);
   vkCmdDispatch(cmd, std::ceil(draw_extent.width / 16.0), std::ceil(draw_extent.height / 16.0), 1);
 }
+void Bulkin::imm_submit(std::function<void(VkCommandBuffer cmd)>&& function) {
+  VK_CHECK(vkResetFences(device, 1, &imm_fence));
+  VK_CHECK(vkResetCommandBuffer(imm_cmd, 0));
+
+  VkCommandBuffer cmd = imm_cmd;
+  VkCommandBufferBeginInfo begin_info = vkinit::command_buffer_begin_info(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+  VK_CHECK(vkBeginCommandBuffer(cmd, &begin_info));
+  function(cmd);
+  VK_CHECK(vkEndCommandBuffer(cmd));
+
+  VkCommandBufferSubmitInfo cmd_info = vkinit::command_buffer_submit_info(cmd);
+  VkSubmitInfo2 submit = vkinit::submit_info(&cmd_info, nullptr, nullptr);
+
+  VK_CHECK(vkQueueSubmit2(graphics_queue, 1, &submit, imm_fence));
+  VK_CHECK(vkWaitForFences(device, 1, &imm_fence, true, 999999999999));
+}
+

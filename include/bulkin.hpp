@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 #include <SDL3/SDL.h>
 #include <vulkan/vulkan.h>
@@ -56,6 +56,10 @@ private:
   VkPipeline gradient_pipeline;
   VkPipelineLayout gradient_pipeline_layout;
 
+  VkFence imm_fence;
+  VkCommandBuffer imm_cmd;
+  VkCommandPool imm_cmd_pool;
+
   void init_vulkan();
   void init_swapchain();
   void init_commands();
@@ -65,6 +69,8 @@ private:
   void init_descriptors();
   void init_pipelines();
   void init_background_pipelines();
+  void init_imgui();
+  void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
   void draw();
   void draw_background(VkCommandBuffer cmd);
 };
