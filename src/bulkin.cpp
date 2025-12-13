@@ -14,6 +14,8 @@
 #define VMA_IMPLEMENTATION
 #include <vk_mem_alloc.h>
 
+#include "bulkin-pipelines.hpp"
+
 Bulkin *loadedEngine = nullptr;
 
 #ifdef NDEBUG
@@ -38,6 +40,8 @@ void Bulkin::init() {
   init_swapchain();
   init_commands();
   init_sync_structures();
+  init_descriptors();
+  init_pipelines();
 
   isInitialized = true;
 }
@@ -178,6 +182,83 @@ void Bulkin::init_sync_structures() {
   }
 }
 
+void Bulkin::init_descriptors() {
+  std::vector<BulkinDescriptorAllocator::PoolSizeRatio> sizes = {
+    {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1}
+  };
+
+  descriptor_allocator.init_pool(device, 10, sizes);
+
+  {
+    BulkinDescriptorLayout layout_builder;
+    layout_builder.add_binding(0, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE);
+    draw_image_descriptor_layout = layout_builder.build(device, VK_SHADER_STAGE_COMPUTE_BIT);
+
+    draw_image_descriptors = descriptor_allocator.allocate(device, draw_image_descriptor_layout);
+    VkDescriptorImageInfo img_info{};
+    img_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
+    img_info.imageView = draw_image.image_view;
+
+    VkWriteDescriptorSet draw_image_write{};
+    draw_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    draw_image_write.pNext = nullptr;
+    draw_image_write.dstBinding = 0;
+    draw_image_write.dstSet = draw_image_descriptors;
+    draw_image_write.descriptorCount = 1;
+    draw_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
+    draw_image_write.pImageInfo = &img_info;
+
+    vkUpdateDescriptorSets(device, 1, &draw_image_write, 0, nullptr);
+
+    deletion_queue.push_function([&]() {
+      descriptor_allocator.destroy_pool(device);
+      vkDestroyDescriptorSetLayout(device, draw_image_descriptor_layout, nullptr);
+    });
+  }
+}
+
+void Bulkin::init_pipelines() {
+  init_background_pipelines();
+}
+
+void Bulkin::init_background_pipelines() {
+  VkPipelineLayoutCreateInfo compute_layout{};
+  compute_layout.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+  compute_layout.pNext = nullptr;
+  compute_layout.pSetLayouts = &draw_image_descriptor_layout;
+  compute_layout.setLayoutCount = 1;
+
+  VK_CHECK(vkCreatePipelineLayout(device, &compute_layout, nullptr, &gradient_pipeline_layout));
+
+  VkShaderModule compute_draw_shader;
+  if (!vkutil::load_shader_module("shaders/gradient.comp.spv", device, &compute_draw_shader)) {
+    std::println("Error when building compute shader");
+    exit(EXIT_FAILURE);
+  }
+
+  VkPipelineShaderStageCreateInfo stage_info{};
+  stage_info.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+  stage_info.pNext = nullptr;
+  stage_info.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+  stage_info.module = compute_draw_shader;
+  stage_info.pName = "main";
+
+  VkComputePipelineCreateInfo compute_pipeline_create_info{};
+  compute_pipeline_create_info.sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO;
+  compute_pipeline_create_info.pNext = nullptr;
+  compute_pipeline_create_info.layout = gradient_pipeline_layout;
+  compute_pipeline_create_info.stage = stage_info;
+
+  VK_CHECK(vkCreateComputePipelines(device, VK_NULL_HANDLE, 1, &compute_pipeline_create_info, nullptr, &gradient_pipeline));
+
+  vkDestroyShaderModule(device, compute_draw_shader, nullptr);
+
+  deletion_queue.push_function([&]() {
+    vkDestroyPipelineLayout(device, gradient_pipeline_layout, nullptr);
+    vkDestroyPipeline(device, gradient_pipeline, nullptr);
+  });
+}
+
 void Bulkin::run() {
   SDL_Event e;
   bool shouldQuit = false;
@@ -289,9 +370,7 @@ void Bulkin::cleanup() {
 }
 
 void Bulkin::draw_background(VkCommandBuffer cmd) {
-  VkClearColorValue clear_value;
-  float flash = std::abs(std::sin(frame_number / 120.0f));
-  clear_value = {{0.0f, 0.0f, flash, 1.0f}};
-  VkImageSubresourceRange clear_range = vkinit::image_subresource_range(VK_IMAGE_ASPECT_COLOR_BIT);
-  vkCmdClearColorImage(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, &clear_value, 1, &clear_range);
+  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, gradient_pipeline);
+  vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_COMPUTE, gradient_pipeline_layout, 0, 1, &draw_image_descriptors, 0, nullptr);
+  vkCmdDispatch(cmd, std::ceil(draw_extent.width / 16.0), std::ceil(draw_extent.height / 16.0), 1);
 }

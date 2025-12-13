@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 
 #include <SDL3/SDL.h>
 #include <vulkan/vulkan.h>
@@ -8,6 +8,7 @@
 #include "bulkin-framedata.hpp"
 #include "bulkin-deletion.hpp"
 #include "bulkin-image.hpp"
+#include "bulkin-descriptor.hpp"
 
 class Bulkin {
 public:
@@ -48,12 +49,22 @@ private:
   BulkinImage draw_image;
   VkExtent2D draw_extent;
 
+  BulkinDescriptorAllocator descriptor_allocator;
+  VkDescriptorSet draw_image_descriptors;
+  VkDescriptorSetLayout draw_image_descriptor_layout;
+
+  VkPipeline gradient_pipeline;
+  VkPipelineLayout gradient_pipeline_layout;
+
   void init_vulkan();
   void init_swapchain();
   void init_commands();
   void init_sync_structures();
   void create_swapchain(uint32_t width, uint32_t height);
   void destroy_swapchain();
+  void init_descriptors();
+  void init_pipelines();
+  void init_background_pipelines();
   void draw();
   void draw_background(VkCommandBuffer cmd);
 };

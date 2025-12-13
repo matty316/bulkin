@@ -52,13 +52,23 @@ void BulkinDescriptorAllocator::init_pool(VkDevice device, uint32_t max_sets, st
 }
 
 void BulkinDescriptorAllocator::clear_descriptors(VkDevice device) {
-
+  vkResetDescriptorPool(device, pool, 0);
 }
 
 void BulkinDescriptorAllocator::destroy_pool(VkDevice device) {
-
+  vkDestroyDescriptorPool(device, pool, nullptr);
 }
 
 VkDescriptorSet BulkinDescriptorAllocator::allocate(VkDevice device, VkDescriptorSetLayout layout) {
+  VkDescriptorSetAllocateInfo alloc_info{};
+  alloc_info.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+  alloc_info.pNext = nullptr;
+  alloc_info.descriptorPool = pool;
+  alloc_info.descriptorSetCount = 1;
+  alloc_info.pSetLayouts = &layout;
 
+  VkDescriptorSet ds;
+  VK_CHECK(vkAllocateDescriptorSets(device, &alloc_info, &ds));
+
+  return ds;
 }
