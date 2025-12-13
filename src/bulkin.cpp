@@ -389,9 +389,11 @@ void Bulkin::draw() {
 
   vkutil::copy_image_to_image(cmd, draw_image.image, swapchain_images[swapchain_image_index], draw_extent, swapchain_extent);
 
-  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
+  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
 
   draw_imgui(cmd, swapchain_imageviews[swapchain_image_index]);
+
+  vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_PRESENT_SRC_KHR);
 
   VK_CHECK(vkEndCommandBuffer(cmd));
 
@@ -467,6 +469,7 @@ void Bulkin::draw_background(VkCommandBuffer cmd) {
 
   vkCmdDispatch(cmd, std::ceil(draw_extent.width / 16.0), std::ceil(draw_extent.height / 16.0), 1);
 }
+
 void Bulkin::imm_submit(std::function<void(VkCommandBuffer cmd)>&& function) {
   VK_CHECK(vkResetFences(device, 1, &imm_fence));
   VK_CHECK(vkResetCommandBuffer(imm_cmd, 0));

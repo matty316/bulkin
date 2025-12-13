@@ -6,10 +6,10 @@
   {
     "label": "debug",
     "build": {
-      "command": "./clean.sh && ./build.sh",
+      "command": "./clean.sh && ./compile.sh && ./build.sh && ./copy-shaders.sh",
       "args": []
     },
-    "program": "build/app",
+    "program": "build/bulkin",
     "args": [],
     "request": "launch",
     "adapter": "GDB"
