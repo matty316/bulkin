@@ -9,6 +9,7 @@
 #include "bulkin-deletion.hpp"
 #include "bulkin-image.hpp"
 #include "bulkin-descriptor.hpp"
+#include "bulkin-compute-effects.hpp"
 
 class Bulkin {
 public:
@@ -53,12 +54,14 @@ private:
   VkDescriptorSet draw_image_descriptors;
   VkDescriptorSetLayout draw_image_descriptor_layout;
 
-  VkPipeline gradient_pipeline;
   VkPipelineLayout gradient_pipeline_layout;
 
   VkFence imm_fence;
   VkCommandBuffer imm_cmd;
   VkCommandPool imm_cmd_pool;
+
+  std::vector<BulkinComputeEffect> background_effects;
+  int current_background_effect = 0;
 
   void init_vulkan();
   void init_swapchain();
@@ -73,4 +76,5 @@ private:
   void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
   void draw();
   void draw_background(VkCommandBuffer cmd);
+  void draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view);
 };
