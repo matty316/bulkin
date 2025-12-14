@@ -10,6 +10,7 @@
 #include "bulkin-image.hpp"
 #include "bulkin-descriptor.hpp"
 #include "bulkin-compute-effects.hpp"
+#include "bulkin-buffer.hpp"
 
 class Bulkin {
 public:
@@ -61,7 +62,10 @@ private:
   VkCommandPool imm_cmd_pool;
 
   std::vector<BulkinComputeEffect> background_effects;
-  int current_background_effect = 1;
+  int current_background_effect = 0;
+
+  VkPipelineLayout triangle_pipeline_layout;
+  VkPipeline triangle_pipeline;
 
   void init_vulkan();
   void init_swapchain();
@@ -73,8 +77,11 @@ private:
   void init_pipelines();
   void init_background_pipelines();
   void init_imgui();
+  void init_triangle_pipeline();
   void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
   void draw();
   void draw_background(VkCommandBuffer cmd);
+  void draw_geometry(VkCommandBuffer cmd);
   void draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view);
+  BulkinBuffer create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage);
 };

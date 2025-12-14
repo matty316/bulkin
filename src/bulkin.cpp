@@ -238,6 +238,7 @@ void Bulkin::init_descriptors() {
 
 void Bulkin::init_pipelines() {
   init_background_pipelines();
+  init_triangle_pipeline();
 }
 
 void Bulkin::init_background_pipelines() {
@@ -384,7 +385,11 @@ void Bulkin::draw() {
 
   draw_background(cmd);
 
-  vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+  vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+
+  draw_geometry(cmd);
+
+  vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
   vkutil::transition_image(cmd, swapchain_images[swapchain_image_index], VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 
   vkutil::copy_image_to_image(cmd, draw_image.image, swapchain_images[swapchain_image_index], draw_extent, swapchain_extent);
@@ -537,4 +542,83 @@ void Bulkin::init_imgui() {
     ImGui_ImplVulkan_Shutdown();
     vkDestroyDescriptorPool(device, imgui_pool, nullptr);
   });
+}
+
+void Bulkin::init_triangle_pipeline() {
+  VkShaderModule triangle_vertex_shader, triangle_fragment_shader;
+  if (!vkutil::load_shader_module("shaders/colored-triangle.vert.spv", device, &triangle_vertex_shader) ||
+    !vkutil::load_shader_module("shaders/colored-triangle.frag.spv", device, &triangle_fragment_shader)) {
+    std::println("unable to load shaders");
+    exit(EXIT_FAILURE);
+  }
+
+  VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
+  VK_CHECK(vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &triangle_pipeline_layout));
+
+  BulkinPipeline pipeline_builder;
+  pipeline_builder.pipeline_layout = triangle_pipeline_layout;
+  pipeline_builder.set_shaders(triangle_vertex_shader, triangle_fragment_shader);
+  pipeline_builder.set_input_topology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+  pipeline_builder.set_polygon_mode(VK_POLYGON_MODE_FILL);
+  pipeline_builder.set_cull_mode(VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
+  pipeline_builder.set_multisampling_none();
+  pipeline_builder.disable_blending();
+  pipeline_builder.disable_depthtest();
+  pipeline_builder.set_color_attachment_format(draw_image.image_format);
+  pipeline_builder.set_depth_format(VK_FORMAT_UNDEFINED);
+  triangle_pipeline = pipeline_builder.build_pipeline(device);
+  vkDestroyShaderModule(device, triangle_vertex_shader, nullptr);
+  vkDestroyShaderModule(device, triangle_fragment_shader, nullptr);
+
+  deletion_queue.push_function([=, this]() {
+    vkDestroyPipelineLayout(device, triangle_pipeline_layout, nullptr);
+    vkDestroyPipeline(device, triangle_pipeline, nullptr);
+  });
+}
+
+void Bulkin::draw_geometry(VkCommandBuffer cmd) {
+  VkRenderingAttachmentInfo color_attachment = vkinit::attachment_info(draw_image.image_view, nullptr, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+  VkRenderingInfo render_info = vkinit::rendering_info(draw_extent, &color_attachment, nullptr);
+  vkCmdBeginRendering(cmd, &render_info);
+  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, triangle_pipeline);
+
+  VkViewport viewport = {};
+  viewport.x = 0;
+  viewport.y = 0;
+  viewport.width = draw_extent.width;
+  viewport.height = draw_extent.height;
+  viewport.minDepth = 0.0f;
+  viewport.maxDepth = 1.0f;
+
+  vkCmdSetViewport(cmd, 0, 1, &viewport);
+
+  VkRect2D scissor = {};
+  scissor.offset.x = 0;
+  scissor.offset.y = 0;
+  scissor.extent.width = draw_extent.width;
+  scissor.extent.height = draw_extent.height;
+
+  vkCmdSetScissor(cmd, 0, 1, &scissor);
+
+  vkCmdDraw(cmd, 3, 1, 0, 0);
+
+  vkCmdEndRendering(cmd);
+}
+
+BulkinBuffer Bulkin::create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage) {
+  VkBufferCreateInfo buffer_info = {};
+  buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+  buffer_info.pNext = nullptr;
+  buffer_info.size = alloc_size;
+  buffer_info.usage = usage;
+
+  VmaAllocationCreateInfo vma_alloc_info = {};
+  vma_alloc_info.usage = memory_usage;
+  vma_alloc_info.flags = VMA_ALLOCATION_CREATE_MAPPED_BIT;
+
+  BulkinBuffer new_buffer;
+
+  VK_CHECK(vmaCreateBuffer(allocator, &buffer_info, &vma_alloc_info, &new_buffer.buffer, &new_buffer.allocation, &new_buffer.info));
+
+  return new_buffer;
 }
