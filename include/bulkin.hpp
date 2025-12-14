@@ -61,7 +61,7 @@ private:
   VkCommandPool imm_cmd_pool;
 
   std::vector<BulkinComputeEffect> background_effects;
-  int current_background_effect = 0;
+  int current_background_effect = 1;
 
   void init_vulkan();
   void init_swapchain();

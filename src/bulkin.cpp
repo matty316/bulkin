@@ -308,7 +308,7 @@ void Bulkin::init_background_pipelines() {
   vkDestroyShaderModule(device, gradient_shader, nullptr);
   vkDestroyShaderModule(device, sky_shader, nullptr);
 
-  deletion_queue.push_function([&]() {
+  deletion_queue.push_function([=, this]() {
     vkDestroyPipelineLayout(device, gradient_pipeline_layout, nullptr);
     vkDestroyPipeline(device, sky.pipeline, nullptr);
     vkDestroyPipeline(device, gradient.pipeline, nullptr);
