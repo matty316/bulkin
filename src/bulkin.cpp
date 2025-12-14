@@ -622,3 +622,47 @@ BulkinBuffer Bulkin::create_buffer(size_t alloc_size, VkBufferUsageFlags usage, 
 
   return new_buffer;
 }
+
+void Bulkin::destroy_buffer(const BulkinBuffer &buffer) {
+  vmaDestroyBuffer(allocator, buffer.buffer, buffer.allocation);
+}
+
+BulkinMeshBuffer Bulkin::upload_mesh(std::span<uint32_t> indices, std::span<BulkinVertex> vertices) {
+  const size_t vertex_buffer_size = vertices.size() * sizeof(BulkinVertex);
+  const size_t index_buffer_size = indices.size() * sizeof(uint32_t);
+
+  BulkinMeshBuffer new_surface;
+  new_surface.vertex_buffer = create_buffer(vertex_buffer_size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
+  VkBufferDeviceAddressInfo device_address_info = {};
+  device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
+  device_address_info.buffer = new_surface.vertex_buffer.buffer;
+  new_surface.vertex_buffer_address = vkGetBufferDeviceAddress(device, &device_address_info);
+
+  new_surface.index_buffer = create_buffer(index_buffer_size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
+
+  BulkinBuffer staging = create_buffer(vertex_buffer_size + index_buffer_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_ONLY);
+  void *data = staging.allocation->GetMappedData();
+  memcpy(data, vertices.data(), vertex_buffer_size);
+  memcpy((char*)data + vertex_buffer_size, indices.data(), index_buffer_size);
+
+  imm_submit([&](VkCommandBuffer cmd) {
+    VkBufferCopy vertex_copy{0};
+    vertex_copy.dstOffset = 0;
+    vertex_copy.srcOffset = 0;
+    vertex_copy.size = vertex_buffer_size;
+
+    vkCmdCopyBuffer(cmd, staging.buffer, new_surface.vertex_buffer.buffer, 1, &vertex_copy);
+
+    VkBufferCopy index_copy{0};
+    index_copy.dstOffset = 0;
+    index_copy.srcOffset = vertex_buffer_size;
+    index_copy.size = index_buffer_size;
+
+    vkCmdCopyBuffer(cmd, staging.buffer, new_surface.index_buffer.buffer, 1, &index_copy);
+  });
+
+  destroy_buffer(staging);
+
+  return new_surface;
+}

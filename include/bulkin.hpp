@@ -11,6 +11,7 @@
 #include "bulkin-descriptor.hpp"
 #include "bulkin-compute-effects.hpp"
 #include "bulkin-buffer.hpp"
+#include "bulkin-vertex.hpp"
 
 class Bulkin {
 public:
@@ -84,4 +85,6 @@ private:
   void draw_geometry(VkCommandBuffer cmd);
   void draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view);
   BulkinBuffer create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage);
+  void destroy_buffer(const BulkinBuffer &buffer);
+  BulkinMeshBuffer upload_mesh(std::span<uint32_t> indices, std::span<BulkinVertex> vertices);
 };
