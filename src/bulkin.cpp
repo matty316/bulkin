@@ -48,6 +48,7 @@ void Bulkin::init() {
   init_descriptors();
   init_pipelines();
   init_imgui();
+  init_default_data();
 
   isInitialized = true;
 }
@@ -239,6 +240,7 @@ void Bulkin::init_descriptors() {
 void Bulkin::init_pipelines() {
   init_background_pipelines();
   init_triangle_pipeline();
+  init_mesh_pipeline();
 }
 
 void Bulkin::init_background_pipelines() {
@@ -602,6 +604,17 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
 
   vkCmdDraw(cmd, 3, 1, 0, 0);
 
+  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline);
+
+  BulkinDrawPushConstants pc;
+  pc.world_matrix = glm::mat4{1.0f};
+  pc.vertex_buffer = rectangle.vertex_buffer_address;
+
+  vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
+  vkCmdBindIndexBuffer(cmd, rectangle.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
+
+  vkCmdDrawIndexed(cmd, 6, 1, 0, 0, 0);
+
   vkCmdEndRendering(cmd);
 }
 
@@ -634,9 +647,7 @@ BulkinMeshBuffer Bulkin::upload_mesh(std::span<uint32_t> indices, std::span<Bulk
   BulkinMeshBuffer new_surface;
   new_surface.vertex_buffer = create_buffer(vertex_buffer_size, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
 
-  VkBufferDeviceAddressInfo device_address_info = {};
-  device_address_info.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
-  device_address_info.buffer = new_surface.vertex_buffer.buffer;
+  VkBufferDeviceAddressInfo device_address_info = {.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO, .buffer = new_surface.vertex_buffer.buffer};
   new_surface.vertex_buffer_address = vkGetBufferDeviceAddress(device, &device_address_info);
 
   new_surface.index_buffer = create_buffer(index_buffer_size, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VMA_MEMORY_USAGE_GPU_ONLY);
@@ -665,4 +676,72 @@ BulkinMeshBuffer Bulkin::upload_mesh(std::span<uint32_t> indices, std::span<Bulk
   destroy_buffer(staging);
 
   return new_surface;
+}
+
+void Bulkin::init_mesh_pipeline() {
+  VkShaderModule triangle_vertex_shader, triangle_fragment_shader;
+  if (!vkutil::load_shader_module("shaders/colored-triangle-mesh.vert.spv", device, &triangle_vertex_shader) ||
+    !vkutil::load_shader_module("shaders/colored-triangle.frag.spv", device, &triangle_fragment_shader)) {
+    std::println("unable to load shaders");
+    exit(EXIT_FAILURE);
+  }
+
+  VkPushConstantRange buffer_range{};
+  buffer_range.offset = 0;
+  buffer_range.size = sizeof(BulkinDrawPushConstants);
+  buffer_range.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
+  VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
+  pipeline_layout_info.pPushConstantRanges = &buffer_range;
+  pipeline_layout_info.pushConstantRangeCount = 1;
+  VK_CHECK(vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &mesh_pipeline_layout));
+
+  BulkinPipeline pipeline_builder;
+  pipeline_builder.pipeline_layout = mesh_pipeline_layout;
+  pipeline_builder.set_shaders(triangle_vertex_shader, triangle_fragment_shader);
+  pipeline_builder.set_input_topology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+  pipeline_builder.set_polygon_mode(VK_POLYGON_MODE_FILL);
+  pipeline_builder.set_cull_mode(VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
+  pipeline_builder.set_multisampling_none();
+  pipeline_builder.disable_blending();
+  pipeline_builder.disable_depthtest();
+  pipeline_builder.set_color_attachment_format(draw_image.image_format);
+  pipeline_builder.set_depth_format(VK_FORMAT_UNDEFINED);
+  mesh_pipeline = pipeline_builder.build_pipeline(device);
+  vkDestroyShaderModule(device, triangle_vertex_shader, nullptr);
+  vkDestroyShaderModule(device, triangle_fragment_shader, nullptr);
+
+  deletion_queue.push_function([=, this]() {
+    vkDestroyPipelineLayout(device, mesh_pipeline_layout, nullptr);
+    vkDestroyPipeline(device, mesh_pipeline, nullptr);
+  });
+}
+
+void Bulkin::init_default_data() {
+  std::array<BulkinVertex, 4> rect_vertices;
+
+  rect_vertices[0].position = {0.5f, -0.5f, 0.0f};
+  rect_vertices[1].position = {0.5f, 0.5f, 0.0f};
+  rect_vertices[2].position = {-0.5f, -0.5f, 0.0f};
+  rect_vertices[3].position = {-0.5f, 0.5f, 0.0f};
+
+  rect_vertices[0].color = {0.0f, 0.0f, 0.0f, 1.0f};
+  rect_vertices[1].color = {0.5f, 0.5f, 0.5f, 1.0f};
+  rect_vertices[2].color = {1.0f, 0.0f, 0.0f, 1.0f};
+  rect_vertices[3].color = {0.0f, 1.0f, 0.0f, 1.0f};
+
+  std::array<uint32_t, 6> rect_indices;
+  rect_indices[0] = 0;
+  rect_indices[1] = 1;
+  rect_indices[2] = 2;
+  rect_indices[3] = 2;
+  rect_indices[4] = 1;
+  rect_indices[5] = 3;
+
+  rectangle = upload_mesh(rect_indices, rect_vertices);
+
+  deletion_queue.push_function([&]() {
+    destroy_buffer(rectangle.vertex_buffer);
+    destroy_buffer(rectangle.index_buffer);
+  });
 }

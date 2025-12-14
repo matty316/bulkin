@@ -67,6 +67,9 @@ private:
 
   VkPipelineLayout triangle_pipeline_layout;
   VkPipeline triangle_pipeline;
+  VkPipelineLayout mesh_pipeline_layout;
+  VkPipeline mesh_pipeline;
+  BulkinMeshBuffer rectangle;
 
   void init_vulkan();
   void init_swapchain();
@@ -79,6 +82,8 @@ private:
   void init_background_pipelines();
   void init_imgui();
   void init_triangle_pipeline();
+  void init_mesh_pipeline();
+  void init_default_data();
   void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
   void draw();
   void draw_background(VkCommandBuffer cmd);
