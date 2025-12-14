@@ -11,6 +11,7 @@ add_subdirectory("third-party/SDL")
 add_subdirectory("third-party/vk-bootstrap")
 add_subdirectory("third-party/vma")
 add_subdirectory("third-party/volk")
+add_subdirectory("third-party/fastgltf")
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
@@ -43,5 +44,5 @@ target_sources(imgui PRIVATE
 
 target_link_libraries(imgui PUBLIC Vulkan::Vulkan SDL3::SDL3)
 
-target_link_libraries(bulkin PRIVATE Vulkan::Vulkan SDL3::SDL3 glm vk-bootstrap::vk-bootstrap VulkanMemoryAllocator volk_headers imgui)
+target_link_libraries(bulkin PRIVATE Vulkan::Vulkan SDL3::SDL3 glm vk-bootstrap::vk-bootstrap VulkanMemoryAllocator volk_headers imgui fastgltf)
 target_compile_options(bulkin PRIVATE -Wall -Wextra -g)

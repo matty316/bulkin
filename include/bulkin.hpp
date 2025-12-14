@@ -12,6 +12,7 @@
 #include "bulkin-compute-effects.hpp"
 #include "bulkin-buffer.hpp"
 #include "bulkin-vertex.hpp"
+#include "bulkin-loader.hpp"
 
 class Bulkin {
 public:
@@ -20,6 +21,7 @@ public:
   void init();
   void run();
   void cleanup();
+  BulkinMeshBuffer upload_mesh(std::span<uint32_t> indices, std::span<BulkinVertex> vertices);
 private:
   VkInstance instance;
   VkDebugUtilsMessengerEXT debug_messenger;
@@ -71,6 +73,8 @@ private:
   VkPipeline mesh_pipeline;
   BulkinMeshBuffer rectangle;
 
+  std::vector<std::shared_ptr<BulkinMeshAsset>> test_meshes;
+
   void init_vulkan();
   void init_swapchain();
   void init_commands();
@@ -91,5 +95,4 @@ private:
   void draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view);
   BulkinBuffer create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage);
   void destroy_buffer(const BulkinBuffer &buffer);
-  BulkinMeshBuffer upload_mesh(std::span<uint32_t> indices, std::span<BulkinVertex> vertices);
 };

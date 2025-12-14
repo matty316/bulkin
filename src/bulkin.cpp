@@ -744,4 +744,6 @@ void Bulkin::init_default_data() {
     destroy_buffer(rectangle.vertex_buffer);
     destroy_buffer(rectangle.index_buffer);
   });
+
+  test_meshes = loadGltfMeshes(this, "resources/basicmesh.glb").value();
 }
