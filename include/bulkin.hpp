@@ -52,6 +52,7 @@ private:
   VmaAllocator allocator;
 
   BulkinImage draw_image;
+  BulkinImage depth_image;
   VkExtent2D draw_extent;
 
   BulkinDescriptorAllocator descriptor_allocator;

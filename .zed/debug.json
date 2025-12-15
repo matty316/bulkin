@@ -6,7 +6,7 @@
   {
     "label": "debug",
     "build": {
-      "command": "./clean.sh && ./compile.sh && ./build.sh && ./copy-shaders.sh",
+      "command": "./clean.sh && ./compile.sh && ./build.sh && ./copy-resources.sh",
       "args": []
     },
     "program": "build/bulkin",

@@ -14,23 +14,21 @@
 #include <fastgltf/tools.hpp>
 
 std::optional<std::vector<std::shared_ptr<BulkinMeshAsset>>> loadGltfMeshes(Bulkin *app, std::filesystem::path filepath) {
-  std::println("Loading GLTF: {}", std::string(filepath));
-
   auto data = fastgltf::GltfDataBuffer::FromPath(filepath);
 
   if (data.get_if() == nullptr) {
-    std::println("unable to load gltf {}", std::string(filepath));
+    std::println("unable to load gltf {}", fastgltf::getErrorName(data.error()));
     exit(EXIT_FAILURE);
   }
 
   constexpr auto gltfops = fastgltf::Options::LoadExternalBuffers;
   fastgltf::Asset gltf;
   fastgltf::Parser parser{};
-  auto load = parser.loadGltfBinary(data.get(), filepath, gltfops);
+  auto load = parser.loadGltfBinary(data.get(), filepath.parent_path(), gltfops);
   if (load) {
     gltf = std::move(load.get());
   } else {
-    std::println("unable to load gltf {}", std::string(filepath));
+    std::println("unable to load gltf binary {}", std::string(filepath));
     exit(EXIT_FAILURE);
   }
 
@@ -38,7 +36,7 @@ std::optional<std::vector<std::shared_ptr<BulkinMeshAsset>>> loadGltfMeshes(Bulk
   std::vector<uint32_t> indices;
   std::vector<BulkinVertex> vertices;
 
-  for (auto &mesh: gltf.meshes) {
+  for (fastgltf::Mesh &mesh: gltf.meshes) {
     BulkinMeshAsset new_mesh;
     new_mesh.name = mesh.name;
 
@@ -85,7 +83,7 @@ std::optional<std::vector<std::shared_ptr<BulkinMeshAsset>>> loadGltfMeshes(Bulk
 
       auto uv = p.findAttribute("TEXCOORD_0");
       if (uv != p.attributes.end()) {
-        fastgltf::iterateAccessor<glm::vec2>(gltf, gltf.accessors[(*uv).accessorIndex], [&](glm::vec2 v, size_t index){
+        fastgltf::iterateAccessorWithIndex<glm::vec2>(gltf, gltf.accessors[(*uv).accessorIndex], [&](glm::vec2 v, size_t index){
           vertices[initial_vtx + index].uv_x = v.x;
           vertices[initial_vtx + index].uv_y = v.y;
         });
@@ -93,7 +91,7 @@ std::optional<std::vector<std::shared_ptr<BulkinMeshAsset>>> loadGltfMeshes(Bulk
 
       auto color = p.findAttribute("COLOR_0");
       if (color != p.attributes.end()) {
-        fastgltf::iterateAccessor<glm::vec4>(gltf, gltf.accessors[(*color).accessorIndex], [&](glm::vec4 v, size_t index){
+        fastgltf::iterateAccessorWithIndex<glm::vec4>(gltf, gltf.accessors[(*color).accessorIndex], [&](glm::vec4 v, size_t index){
           vertices[initial_vtx + index].color = v;
         });
       }

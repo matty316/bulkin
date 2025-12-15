@@ -147,3 +147,15 @@ void BulkinPipeline::disable_depthtest() {
   depth_stencil.minDepthBounds = 0.0f;
   depth_stencil.maxDepthBounds = 1.0f;
 }
+
+void BulkinPipeline::enable_depthtest(bool depth_write_enable, VkCompareOp op) {
+  depth_stencil.depthTestEnable = VK_TRUE;
+  depth_stencil.depthWriteEnable = depth_write_enable;
+  depth_stencil.depthCompareOp = op;
+  depth_stencil.depthBoundsTestEnable = VK_FALSE;
+  depth_stencil.stencilTestEnable = VK_FALSE;
+  depth_stencil.front = {};
+  depth_stencil.back = {};
+  depth_stencil.minDepthBounds = 0.0f;
+  depth_stencil.maxDepthBounds = 1.0f;
+}

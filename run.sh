@@ -2,5 +2,5 @@
 
 ./compile.sh
 ./build.sh
-./copy-shaders.sh
+./copy-resources.sh
 build/$1

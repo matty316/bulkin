@@ -21,6 +21,9 @@
 #include <backends/imgui_impl_vulkan.h>
 #include <backends/imgui_impl_sdl3.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/transform.hpp>
+
 Bulkin *loadedEngine = nullptr;
 
 #ifdef NDEBUG
@@ -152,16 +155,29 @@ void Bulkin::init_swapchain() {
 
   VkImageCreateInfo rimg_info = vkinit::image_create_info(draw_image.image_format, draw_image_usages, draw_image_extent);
 
+  depth_image.image_format = VK_FORMAT_D32_SFLOAT;
+  depth_image.image_extent = draw_image_extent;
+  VkImageUsageFlags depth_image_usages{};
+  depth_image_usages |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+  VkImageCreateInfo dimg_info = vkinit::image_create_info(depth_image.image_format, depth_image_usages, draw_image_extent);
+
   VmaAllocationCreateInfo rimg_alloc_info{};
   rimg_alloc_info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
   rimg_alloc_info.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
   vmaCreateImage(allocator, &rimg_info, &rimg_alloc_info, &draw_image.image, &draw_image.allocation, nullptr);
   VkImageViewCreateInfo rview_info = vkinit::imageview_create_info(draw_image.image_format, draw_image.image, VK_IMAGE_ASPECT_COLOR_BIT);
+
+  vmaCreateImage(allocator, &dimg_info, &rimg_alloc_info, &depth_image.image, &depth_image.allocation, nullptr);
+  auto dview_info = vkinit::imageview_create_info(depth_image.image_format, depth_image.image, VK_IMAGE_ASPECT_DEPTH_BIT);
+
+  VK_CHECK(vkCreateImageView(device, &dview_info, nullptr, &depth_image.image_view));
   VK_CHECK(vkCreateImageView(device, &rview_info, nullptr, &draw_image.image_view));
 
   deletion_queue.push_function([=, this]() {
     vkDestroyImageView(device, draw_image.image_view, nullptr);
     vmaDestroyImage(allocator, draw_image.image, draw_image.allocation);
+    vkDestroyImageView(device, depth_image.image_view, nullptr);
+    vmaDestroyImage(allocator, depth_image.image, depth_image.allocation);
   });
 }
 
@@ -388,6 +404,7 @@ void Bulkin::draw() {
   draw_background(cmd);
 
   vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
+  vkutil::transition_image(cmd, depth_image.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
 
   draw_geometry(cmd);
 
@@ -580,7 +597,8 @@ void Bulkin::init_triangle_pipeline() {
 
 void Bulkin::draw_geometry(VkCommandBuffer cmd) {
   VkRenderingAttachmentInfo color_attachment = vkinit::attachment_info(draw_image.image_view, nullptr, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-  VkRenderingInfo render_info = vkinit::rendering_info(draw_extent, &color_attachment, nullptr);
+  VkRenderingAttachmentInfo depth_attachment = vkinit::depth_attachment_info(depth_image.image_view, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+  VkRenderingInfo render_info = vkinit::rendering_info(draw_extent, &color_attachment, &depth_attachment);
   vkCmdBeginRendering(cmd, &render_info);
   vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, triangle_pipeline);
 
@@ -607,13 +625,23 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
   vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline);
 
   BulkinDrawPushConstants pc;
-  pc.world_matrix = glm::mat4{1.0f};
+
+  glm::mat4 view = glm::translate(glm::vec3{0, 0, -5});
+  glm::mat4 projection = glm::perspective(glm::radians(70.f), (float)draw_extent.width/(float)draw_extent.height, 10000.f, 0.1f);
+  projection[1][1] *= -1;
+
+  pc.world_matrix = projection * view;
   pc.vertex_buffer = rectangle.vertex_buffer_address;
 
   vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
   vkCmdBindIndexBuffer(cmd, rectangle.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
 
   vkCmdDrawIndexed(cmd, 6, 1, 0, 0, 0);
+
+  pc.vertex_buffer = test_meshes[2]->mesh_buffers.vertex_buffer_address;
+  vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
+  vkCmdBindIndexBuffer(cmd, test_meshes[2]->mesh_buffers.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
+  vkCmdDrawIndexed(cmd, test_meshes[2]->surfaces[0].count, 1, test_meshes[2]->surfaces[0].start_index, 0, 0);
 
   vkCmdEndRendering(cmd);
 }
@@ -704,9 +732,9 @@ void Bulkin::init_mesh_pipeline() {
   pipeline_builder.set_cull_mode(VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
   pipeline_builder.set_multisampling_none();
   pipeline_builder.disable_blending();
-  pipeline_builder.disable_depthtest();
+  pipeline_builder.enable_depthtest(true, VK_COMPARE_OP_GREATER_OR_EQUAL);
   pipeline_builder.set_color_attachment_format(draw_image.image_format);
-  pipeline_builder.set_depth_format(VK_FORMAT_UNDEFINED);
+  pipeline_builder.set_depth_format(depth_image.image_format);
   mesh_pipeline = pipeline_builder.build_pipeline(device);
   vkDestroyShaderModule(device, triangle_vertex_shader, nullptr);
   vkDestroyShaderModule(device, triangle_fragment_shader, nullptr);
