@@ -40,7 +40,7 @@ void Bulkin::init() {
 
   SDL_Init(SDL_INIT_VIDEO);
 
-  SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_VULKAN);
+  SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
   window = SDL_CreateWindow("Bulkin'", window_extent.width, window_extent.height, window_flags);
 
@@ -155,17 +155,17 @@ void Bulkin::init_swapchain() {
 
   VkImageCreateInfo rimg_info = vkinit::image_create_info(draw_image.image_format, draw_image_usages, draw_image_extent);
 
-  depth_image.image_format = VK_FORMAT_D32_SFLOAT;
-  depth_image.image_extent = draw_image_extent;
-  VkImageUsageFlags depth_image_usages{};
-  depth_image_usages |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
-  VkImageCreateInfo dimg_info = vkinit::image_create_info(depth_image.image_format, depth_image_usages, draw_image_extent);
-
   VmaAllocationCreateInfo rimg_alloc_info{};
   rimg_alloc_info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
   rimg_alloc_info.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
   vmaCreateImage(allocator, &rimg_info, &rimg_alloc_info, &draw_image.image, &draw_image.allocation, nullptr);
   VkImageViewCreateInfo rview_info = vkinit::imageview_create_info(draw_image.image_format, draw_image.image, VK_IMAGE_ASPECT_COLOR_BIT);
+
+  depth_image.image_format = VK_FORMAT_D32_SFLOAT;
+  depth_image.image_extent = draw_image_extent;
+  VkImageUsageFlags depth_image_usages{};
+  depth_image_usages |= VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+  VkImageCreateInfo dimg_info = vkinit::image_create_info(depth_image.image_format, depth_image_usages, draw_image_extent);
 
   vmaCreateImage(allocator, &dimg_info, &rimg_alloc_info, &depth_image.image, &depth_image.allocation, nullptr);
   auto dview_info = vkinit::imageview_create_info(depth_image.image_format, depth_image.image, VK_IMAGE_ASPECT_DEPTH_BIT);
@@ -255,7 +255,6 @@ void Bulkin::init_descriptors() {
 
 void Bulkin::init_pipelines() {
   init_background_pipelines();
-  init_triangle_pipeline();
   init_mesh_pipeline();
 }
 
@@ -356,11 +355,15 @@ void Bulkin::run() {
       continue;
     }
 
+    if (resize_requested)
+      resize_swapchain();
+
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplSDL3_NewFrame();
     ImGui::NewFrame();
 
     if (ImGui::Begin("background")) {
+      ImGui::SliderFloat("Render Scale", &render_scale, 0.3, 1.0f);
       BulkinComputeEffect &selected = background_effects[current_background_effect];
 
       ImGui::Text("Selected effect: %s", selected.name);
@@ -388,14 +391,18 @@ void Bulkin::draw() {
   VK_CHECK(vkResetFences(device, 1, &get_current_frame().render_fence));
 
   uint32_t swapchain_image_index;
-  VK_CHECK(vkAcquireNextImageKHR(device, swapchain, timeout, get_current_frame().swapchain_semaphore, nullptr, &swapchain_image_index));
+  VkResult e = vkAcquireNextImageKHR(device, swapchain, timeout, get_current_frame().swapchain_semaphore, nullptr, &swapchain_image_index);
+  if (e == VK_ERROR_OUT_OF_DATE_KHR) {
+    resize_requested = true;
+    return;
+  }
 
   VkCommandBuffer cmd = get_current_frame().command_buffer;
   VK_CHECK(vkResetCommandBuffer(cmd, 0));
   VkCommandBufferBeginInfo cmd_begin_info = vkinit::command_buffer_begin_info(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
-  draw_extent.width = draw_image.image_extent.width;
-  draw_extent.height = draw_image.image_extent.height;
+  draw_extent.width = std::min(swapchain_extent.width, draw_image.image_extent.width) * render_scale;
+  draw_extent.height = std::min(swapchain_extent.height, draw_image.image_extent.height) * render_scale;
 
   VK_CHECK(vkBeginCommandBuffer(cmd, &cmd_begin_info));
 
@@ -404,7 +411,7 @@ void Bulkin::draw() {
   draw_background(cmd);
 
   vkutil::transition_image(cmd, draw_image.image, VK_IMAGE_LAYOUT_GENERAL, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-  vkutil::transition_image(cmd, depth_image.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+  vkutil::transition_image(cmd, depth_image.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL);
 
   draw_geometry(cmd);
 
@@ -439,11 +446,25 @@ void Bulkin::draw() {
   present_info.waitSemaphoreCount = 1;
   present_info.pImageIndices = &swapchain_image_index;
 
-  VK_CHECK(vkQueuePresentKHR(graphics_queue, &present_info));
+  VkResult present_result = vkQueuePresentKHR(graphics_queue, &present_info);
+  if (present_result == VK_ERROR_OUT_OF_DATE_KHR) {
+    resize_requested = true;
+  }
 
   frame_number++;
 
   vkQueueWaitIdle(graphics_queue);
+}
+
+void Bulkin::resize_swapchain() {
+  vkDeviceWaitIdle(device);
+  destroy_swapchain();
+   int w, h;
+   SDL_GetWindowSize(window, &w, &h);
+   window_extent.width = w;
+   window_extent.height = h;
+   create_swapchain(w, h);
+   resize_requested = false;
 }
 
 void Bulkin::draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view) {
@@ -466,6 +487,11 @@ void Bulkin::cleanup() {
       vkDestroySemaphore(device, frames[i].render_semaphore, nullptr);
 
       frames[i].deletion_queue.flush();
+    }
+
+    for (auto &mesh : test_meshes) {
+      destroy_buffer(mesh->mesh_buffers.index_buffer);
+      destroy_buffer(mesh->mesh_buffers.vertex_buffer);
     }
 
     deletion_queue.flush();
@@ -563,44 +589,12 @@ void Bulkin::init_imgui() {
   });
 }
 
-void Bulkin::init_triangle_pipeline() {
-  VkShaderModule triangle_vertex_shader, triangle_fragment_shader;
-  if (!vkutil::load_shader_module("shaders/colored-triangle.vert.spv", device, &triangle_vertex_shader) ||
-    !vkutil::load_shader_module("shaders/colored-triangle.frag.spv", device, &triangle_fragment_shader)) {
-    std::println("unable to load shaders");
-    exit(EXIT_FAILURE);
-  }
-
-  VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
-  VK_CHECK(vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &triangle_pipeline_layout));
-
-  BulkinPipeline pipeline_builder;
-  pipeline_builder.pipeline_layout = triangle_pipeline_layout;
-  pipeline_builder.set_shaders(triangle_vertex_shader, triangle_fragment_shader);
-  pipeline_builder.set_input_topology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-  pipeline_builder.set_polygon_mode(VK_POLYGON_MODE_FILL);
-  pipeline_builder.set_cull_mode(VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
-  pipeline_builder.set_multisampling_none();
-  pipeline_builder.disable_blending();
-  pipeline_builder.disable_depthtest();
-  pipeline_builder.set_color_attachment_format(draw_image.image_format);
-  pipeline_builder.set_depth_format(VK_FORMAT_UNDEFINED);
-  triangle_pipeline = pipeline_builder.build_pipeline(device);
-  vkDestroyShaderModule(device, triangle_vertex_shader, nullptr);
-  vkDestroyShaderModule(device, triangle_fragment_shader, nullptr);
-
-  deletion_queue.push_function([=, this]() {
-    vkDestroyPipelineLayout(device, triangle_pipeline_layout, nullptr);
-    vkDestroyPipeline(device, triangle_pipeline, nullptr);
-  });
-}
-
 void Bulkin::draw_geometry(VkCommandBuffer cmd) {
   VkRenderingAttachmentInfo color_attachment = vkinit::attachment_info(draw_image.image_view, nullptr, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL);
-  VkRenderingAttachmentInfo depth_attachment = vkinit::depth_attachment_info(depth_image.image_view, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+  VkRenderingAttachmentInfo depth_attachment = vkinit::depth_attachment_info(depth_image.image_view, VK_IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL);
   VkRenderingInfo render_info = vkinit::rendering_info(draw_extent, &color_attachment, &depth_attachment);
   vkCmdBeginRendering(cmd, &render_info);
-  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, triangle_pipeline);
+  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline);
 
   VkViewport viewport = {};
   viewport.x = 0;
@@ -620,24 +614,13 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
 
   vkCmdSetScissor(cmd, 0, 1, &scissor);
 
-  vkCmdDraw(cmd, 3, 1, 0, 0);
-
-  vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline);
-
   BulkinDrawPushConstants pc;
 
-  glm::mat4 view = glm::translate(glm::vec3{0, 0, -5});
-  glm::mat4 projection = glm::perspective(glm::radians(70.f), (float)draw_extent.width/(float)draw_extent.height, 10000.f, 0.1f);
+  auto view = glm::lookAt(glm::vec3{0.0f, 0.0f, -5.0f}, {0.0f, 0.0f, 0.0f}, {0.0, 1.0f, 0.0f});
+  auto projection = glm::perspective(glm::radians(70.f), (float)draw_extent.width/(float)draw_extent.height, 0.1f, 10000.f);
   projection[1][1] *= -1;
 
   pc.world_matrix = projection * view;
-  pc.vertex_buffer = rectangle.vertex_buffer_address;
-
-  vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
-  vkCmdBindIndexBuffer(cmd, rectangle.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
-
-  vkCmdDrawIndexed(cmd, 6, 1, 0, 0, 0);
-
   pc.vertex_buffer = test_meshes[2]->mesh_buffers.vertex_buffer_address;
   vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
   vkCmdBindIndexBuffer(cmd, test_meshes[2]->mesh_buffers.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
@@ -746,32 +729,5 @@ void Bulkin::init_mesh_pipeline() {
 }
 
 void Bulkin::init_default_data() {
-  std::array<BulkinVertex, 4> rect_vertices;
-
-  rect_vertices[0].position = {0.5f, -0.5f, 0.0f};
-  rect_vertices[1].position = {0.5f, 0.5f, 0.0f};
-  rect_vertices[2].position = {-0.5f, -0.5f, 0.0f};
-  rect_vertices[3].position = {-0.5f, 0.5f, 0.0f};
-
-  rect_vertices[0].color = {0.0f, 0.0f, 0.0f, 1.0f};
-  rect_vertices[1].color = {0.5f, 0.5f, 0.5f, 1.0f};
-  rect_vertices[2].color = {1.0f, 0.0f, 0.0f, 1.0f};
-  rect_vertices[3].color = {0.0f, 1.0f, 0.0f, 1.0f};
-
-  std::array<uint32_t, 6> rect_indices;
-  rect_indices[0] = 0;
-  rect_indices[1] = 1;
-  rect_indices[2] = 2;
-  rect_indices[3] = 2;
-  rect_indices[4] = 1;
-  rect_indices[5] = 3;
-
-  rectangle = upload_mesh(rect_indices, rect_vertices);
-
-  deletion_queue.push_function([&]() {
-    destroy_buffer(rectangle.vertex_buffer);
-    destroy_buffer(rectangle.index_buffer);
-  });
-
   test_meshes = loadGltfMeshes(this, "resources/basicmesh.glb").value();
 }

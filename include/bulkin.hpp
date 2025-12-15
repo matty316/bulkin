@@ -33,7 +33,7 @@ private:
   std::vector<VkImage> swapchain_images;
   std::vector<VkImageView> swapchain_imageviews;
   VkExtent2D swapchain_extent;
-  VkExtent2D window_extent{1700, 900};
+  VkExtent2D window_extent{1920, 1080};
   VkQueue graphics_queue;
   uint32_t graphics_queue_family;
 
@@ -43,6 +43,7 @@ private:
 
   bool isInitialized = false;
   bool stop_rendering = false;
+  bool resize_requested = false;
 
   BulkinFrameData frames[FRAME_OVERLAP];
   BulkinFrameData &get_current_frame() { return frames[frame_number % FRAME_OVERLAP]; }
@@ -54,6 +55,7 @@ private:
   BulkinImage draw_image;
   BulkinImage depth_image;
   VkExtent2D draw_extent;
+  float render_scale = 1.0f;
 
   BulkinDescriptorAllocator descriptor_allocator;
   VkDescriptorSet draw_image_descriptors;
@@ -68,11 +70,8 @@ private:
   std::vector<BulkinComputeEffect> background_effects;
   int current_background_effect = 0;
 
-  VkPipelineLayout triangle_pipeline_layout;
-  VkPipeline triangle_pipeline;
   VkPipelineLayout mesh_pipeline_layout;
   VkPipeline mesh_pipeline;
-  BulkinMeshBuffer rectangle;
 
   std::vector<std::shared_ptr<BulkinMeshAsset>> test_meshes;
 
@@ -86,7 +85,6 @@ private:
   void init_pipelines();
   void init_background_pipelines();
   void init_imgui();
-  void init_triangle_pipeline();
   void init_mesh_pipeline();
   void init_default_data();
   void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
@@ -96,4 +94,5 @@ private:
   void draw_imgui(VkCommandBuffer cmd, VkImageView target_image_view);
   BulkinBuffer create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage);
   void destroy_buffer(const BulkinBuffer &buffer);
+  void resize_swapchain();
 };
