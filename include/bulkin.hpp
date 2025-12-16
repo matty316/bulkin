@@ -13,6 +13,7 @@
 #include "bulkin-buffer.hpp"
 #include "bulkin-vertex.hpp"
 #include "bulkin-loader.hpp"
+#include "bulkin-scene.hpp"
 
 class Bulkin {
 public:
@@ -74,6 +75,9 @@ private:
   VkPipeline mesh_pipeline;
 
   std::vector<std::shared_ptr<BulkinMeshAsset>> test_meshes;
+
+  BulkinGPUSceneData scene_data;
+  VkDescriptorSetLayout gpu_scene_data_descriptor_layout;
 
   void init_vulkan();
   void init_swapchain();

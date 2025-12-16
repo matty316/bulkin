@@ -256,6 +256,16 @@ void Bulkin::init_descriptors() {
       frames[i].frame_descriptors.destroy_pools(device);
     });
   }
+
+  {
+    BulkinDescriptorLayout builder;
+    builder.add_binding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
+    gpu_scene_data_descriptor_layout = builder.build(device, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
+
+    deletion_queue.push_function([&]{
+      vkDestroyDescriptorSetLayout(device, gpu_scene_data_descriptor_layout, nullptr);
+    });
+  }
 }
 
 void Bulkin::init_pipelines() {
@@ -633,6 +643,20 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
   vkCmdDrawIndexed(cmd, test_meshes[2]->surfaces[0].count, 1, test_meshes[2]->surfaces[0].start_index, 0, 0);
 
   vkCmdEndRendering(cmd);
+
+  BulkinBuffer gpu_scene_data_buffer = create_buffer(sizeof(BulkinGPUSceneData), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+  get_current_frame().deletion_queue.push_function([=, this](){
+    destroy_buffer(gpu_scene_data_buffer);
+  });
+
+  BulkinGPUSceneData *scene_uniform_data = (BulkinGPUSceneData*)gpu_scene_data_buffer.allocation->GetMappedData();
+  *scene_uniform_data = scene_data;
+
+  VkDescriptorSet global_descriptor = get_current_frame().frame_descriptors.allocate(device, gpu_scene_data_descriptor_layout);
+
+  BulkinDescriptorWriter writer;
+  writer.write_buffer(0, gpu_scene_data_buffer.buffer, sizeof(BulkinGPUSceneData), 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
+  writer.update_set(device, global_descriptor);
 }
 
 BulkinBuffer Bulkin::create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage) {
