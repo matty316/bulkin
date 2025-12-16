@@ -255,6 +255,12 @@ void Bulkin::init_descriptors() {
     deletion_queue.push_function([&, i](){
       frames[i].frame_descriptors.destroy_pools(device);
     });
+
+    {
+      BulkinDescriptorLayout builder;
+      builder.add_binding(0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER);
+      single_image_descriptor_layout = builder.build(device, VK_SHADER_STAGE_FRAGMENT_BIT);
+    }
   }
 
   {
@@ -630,6 +636,15 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
 
   vkCmdSetScissor(cmd, 0, 1, &scissor);
 
+  VkDescriptorSet image_set = get_current_frame().frame_descriptors.allocate(device, single_image_descriptor_layout);
+  {
+    BulkinDescriptorWriter writer;
+    writer.write_image(0, error_checkerboard_image.image_view, default_sampler_nearest, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER);
+    writer.update_set(device, image_set);
+  }
+
+  vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline_layout, 0, 1, &image_set, 0, nullptr);
+
   BulkinDrawPushConstants pc;
 
   auto view = glm::lookAt(glm::vec3{0.0f, 0.0f, -5.0f}, {0.0f, 0.0f, 0.0f}, {0.0, 1.0f, 0.0f});
@@ -720,9 +735,9 @@ BulkinMeshBuffer Bulkin::upload_mesh(std::span<uint32_t> indices, std::span<Bulk
 }
 
 void Bulkin::init_mesh_pipeline() {
-  VkShaderModule triangle_vertex_shader, triangle_fragment_shader;
-  if (!vkutil::load_shader_module("shaders/colored-triangle-mesh.vert.spv", device, &triangle_vertex_shader) ||
-    !vkutil::load_shader_module("shaders/colored-triangle.frag.spv", device, &triangle_fragment_shader)) {
+  VkShaderModule mesh_vertex_shader, mesh_fragment_shader;
+  if (!vkutil::load_shader_module("shaders/colored-triangle-mesh.vert.spv", device, &mesh_vertex_shader) ||
+    !vkutil::load_shader_module("shaders/tex-image.frag.spv", device, &mesh_fragment_shader)) {
     std::println("unable to load shaders");
     exit(EXIT_FAILURE);
   }
@@ -735,11 +750,13 @@ void Bulkin::init_mesh_pipeline() {
   VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
   pipeline_layout_info.pPushConstantRanges = &buffer_range;
   pipeline_layout_info.pushConstantRangeCount = 1;
+  pipeline_layout_info.pSetLayouts = &single_image_descriptor_layout;
+  pipeline_layout_info.setLayoutCount = 1;
   VK_CHECK(vkCreatePipelineLayout(device, &pipeline_layout_info, nullptr, &mesh_pipeline_layout));
 
   BulkinPipeline pipeline_builder;
   pipeline_builder.pipeline_layout = mesh_pipeline_layout;
-  pipeline_builder.set_shaders(triangle_vertex_shader, triangle_fragment_shader);
+  pipeline_builder.set_shaders(mesh_vertex_shader, mesh_fragment_shader);
   pipeline_builder.set_input_topology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
   pipeline_builder.set_polygon_mode(VK_POLYGON_MODE_FILL);
   pipeline_builder.set_cull_mode(VK_CULL_MODE_NONE, VK_FRONT_FACE_CLOCKWISE);
@@ -749,8 +766,8 @@ void Bulkin::init_mesh_pipeline() {
   pipeline_builder.set_color_attachment_format(draw_image.image_format);
   pipeline_builder.set_depth_format(depth_image.image_format);
   mesh_pipeline = pipeline_builder.build_pipeline(device);
-  vkDestroyShaderModule(device, triangle_vertex_shader, nullptr);
-  vkDestroyShaderModule(device, triangle_fragment_shader, nullptr);
+  vkDestroyShaderModule(device, mesh_vertex_shader, nullptr);
+  vkDestroyShaderModule(device, mesh_fragment_shader, nullptr);
 
   deletion_queue.push_function([=, this]() {
     vkDestroyPipelineLayout(device, mesh_pipeline_layout, nullptr);
@@ -759,5 +776,107 @@ void Bulkin::init_mesh_pipeline() {
 }
 
 void Bulkin::init_default_data() {
+  uint32_t white = glm::packUnorm4x8(glm::vec4(1, 1, 1, 1));
+  white_image = create_image((void*)&white, VkExtent3D{1, 1, 1}, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_SAMPLED_BIT);
+
+  uint32_t grey = glm::packUnorm4x8(glm::vec4(0.66f, 0.66f, 0.66f, 1.0f));
+  grey_image = create_image((void*)&grey, VkExtent3D{1, 1, 1}, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_SAMPLED_BIT);
+
+  uint32_t black = glm::packUnorm4x8(glm::vec4(0, 0, 0, 0));
+  black_image = create_image((void*)&black, VkExtent3D{1, 1, 1}, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_SAMPLED_BIT);
+
+  //checkerboard image
+	uint32_t magenta = glm::packUnorm4x8(glm::vec4(1, 0, 1, 1));
+	std::array<uint32_t, 16 *16 > pixels; //for 16x16 checkerboard texture
+	for (int x = 0; x < 16; x++) {
+		for (int y = 0; y < 16; y++) {
+			pixels[y*16 + x] = ((x % 2) ^ (y % 2)) ? magenta : black;
+		}
+	}
+	error_checkerboard_image = create_image(pixels.data(), VkExtent3D{16, 16, 1}, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_USAGE_SAMPLED_BIT);
+
+	VkSamplerCreateInfo sampl = {.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO};
+
+	sampl.magFilter = VK_FILTER_NEAREST;
+	sampl.minFilter = VK_FILTER_NEAREST;
+	vkCreateSampler(device, &sampl, nullptr, &default_sampler_nearest);
+
+	sampl.magFilter = VK_FILTER_LINEAR;
+	sampl.minFilter = VK_FILTER_LINEAR;
+	vkCreateSampler(device, &sampl, nullptr, &default_sampler_linear);
+
+	deletion_queue.push_function([&](){
+  	vkDestroySampler(device, default_sampler_nearest, nullptr);
+  	vkDestroySampler(device, default_sampler_linear, nullptr);
+
+  	destroy_image(white_image);
+  	destroy_image(grey_image);
+  	destroy_image(black_image);
+  	destroy_image(error_checkerboard_image);
+	});
+
   test_meshes = loadGltfMeshes(this, "resources/basicmesh.glb").value();
+}
+
+BulkinImage Bulkin::create_image(VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped) {
+  BulkinImage new_image;
+  new_image.image_format = format;
+  new_image.image_extent = size;
+
+  VkImageCreateInfo img_info = vkinit::image_create_info(format, usage, size);
+  if (mipmapped) {
+    img_info.mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(size.width, size.height)))) + 1;
+  }
+
+  VmaAllocationCreateInfo alloc_info = {};
+  alloc_info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
+  alloc_info.requiredFlags = VkMemoryPropertyFlags(VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+
+  VK_CHECK(vmaCreateImage(allocator, &img_info, &alloc_info, &new_image.image, &new_image.allocation, nullptr));
+
+  VkImageAspectFlags aspect_flag = VK_IMAGE_ASPECT_COLOR_BIT;
+  if (format == VK_FORMAT_D32_SFLOAT) {
+    aspect_flag = VK_IMAGE_ASPECT_DEPTH_BIT;
+  }
+
+  VkImageViewCreateInfo view_info = vkinit::imageview_create_info(format, new_image.image, aspect_flag);
+  view_info.subresourceRange.layerCount = img_info.mipLevels;
+
+  VK_CHECK(vkCreateImageView(device, &view_info, nullptr, &new_image.image_view));
+
+  return new_image;
+}
+
+BulkinImage Bulkin::create_image(void *data, VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped) {
+  size_t data_size = size.depth * size.width * size.height * 4;
+  BulkinBuffer upload_buffer = create_buffer(data_size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+  memcpy(upload_buffer.info.pMappedData, data, data_size);
+
+  BulkinImage new_image = create_image(size, format, usage | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT, mipmapped);
+
+  imm_submit([&](VkCommandBuffer cmd){
+    vkutil::transition_image(cmd, new_image.image, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+
+    VkBufferImageCopy copy = {};
+    copy.bufferOffset = 0;
+    copy.bufferRowLength = 0;
+    copy.bufferImageHeight = 0;
+    copy.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    copy.imageSubresource.mipLevel = 0;
+    copy.imageSubresource.baseArrayLayer = 0;
+    copy.imageSubresource.layerCount = 1;
+    copy.imageExtent = size;
+
+    vkCmdCopyBufferToImage(cmd, upload_buffer.buffer, new_image.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &copy);
+    vkutil::transition_image(cmd, new_image.image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+  });
+
+  destroy_buffer(upload_buffer);
+
+  return new_image;
+}
+
+void Bulkin::destroy_image(const BulkinImage &img) {
+  vkDestroyImageView(device, img.image_view, nullptr);
+  vmaDestroyImage(allocator, img.image, img.allocation);
 }

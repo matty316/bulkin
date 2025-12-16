@@ -79,6 +79,16 @@ private:
   BulkinGPUSceneData scene_data;
   VkDescriptorSetLayout gpu_scene_data_descriptor_layout;
 
+  BulkinImage white_image;
+  BulkinImage black_image;
+  BulkinImage grey_image;
+  BulkinImage error_checkerboard_image;
+
+  VkSampler default_sampler_linear;
+  VkSampler default_sampler_nearest;
+
+  VkDescriptorSetLayout single_image_descriptor_layout;
+
   void init_vulkan();
   void init_swapchain();
   void init_commands();
@@ -99,4 +109,7 @@ private:
   BulkinBuffer create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage);
   void destroy_buffer(const BulkinBuffer &buffer);
   void resize_swapchain();
+  BulkinImage create_image(VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped = false);
+  BulkinImage create_image(void *data, VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped = false);
+  void destroy_image(const BulkinImage &img);
 };
