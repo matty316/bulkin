@@ -231,24 +231,29 @@ void Bulkin::init_descriptors() {
     draw_image_descriptor_layout = layout_builder.build(device, VK_SHADER_STAGE_COMPUTE_BIT);
 
     draw_image_descriptors = descriptor_allocator.allocate(device, draw_image_descriptor_layout);
-    VkDescriptorImageInfo img_info{};
-    img_info.imageLayout = VK_IMAGE_LAYOUT_GENERAL;
-    img_info.imageView = draw_image.image_view;
-
-    VkWriteDescriptorSet draw_image_write{};
-    draw_image_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-    draw_image_write.pNext = nullptr;
-    draw_image_write.dstBinding = 0;
-    draw_image_write.dstSet = draw_image_descriptors;
-    draw_image_write.descriptorCount = 1;
-    draw_image_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_IMAGE;
-    draw_image_write.pImageInfo = &img_info;
-
-    vkUpdateDescriptorSets(device, 1, &draw_image_write, 0, nullptr);
+    BulkinDescriptorWriter writer;
+    writer.write_image(0, draw_image.image_view, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_GENERAL, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE);
+    writer.update_set(device, draw_image_descriptors);
 
     deletion_queue.push_function([&]() {
       descriptor_allocator.destroy_pool(device);
       vkDestroyDescriptorSetLayout(device, draw_image_descriptor_layout, nullptr);
+    });
+  }
+
+  for (int i = 0; i < FRAME_OVERLAP; i++) {
+    std::vector<BulkinDescriptorAllocatorGrowable::PoolSizeRatio> frame_sizes = {
+      {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 3},
+      {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3},
+      {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 3},
+      {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 4}
+    };
+
+    frames[i].frame_descriptors = BulkinDescriptorAllocatorGrowable{};
+    frames[i].frame_descriptors.init(device, 1000, frame_sizes);
+
+    deletion_queue.push_function([&, i](){
+      frames[i].frame_descriptors.destroy_pools(device);
     });
   }
 }
@@ -387,6 +392,7 @@ void Bulkin::draw() {
   VK_CHECK(vkWaitForFences(device, 1, &get_current_frame().render_fence, true, timeout));
 
   get_current_frame().deletion_queue.flush();
+  get_current_frame().frame_descriptors.clear_pools(device);
 
   VK_CHECK(vkResetFences(device, 1, &get_current_frame().render_fence));
 
