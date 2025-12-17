@@ -12,6 +12,6 @@
     "program": "build/bulkin",
     "args": [],
     "request": "launch",
-    "adapter": "CodeLLDB",
+    "adapter": "GDB",
   },
 ]
