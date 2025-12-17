@@ -13,21 +13,6 @@ struct BulkinDescriptorLayout {
   VkDescriptorSetLayout build(VkDevice device, VkShaderStageFlags shader_stages, void *pNext = nullptr, VkDescriptorSetLayoutCreateFlags flags = 0);
 };
 
-struct BulkinDescriptorAllocator {
-  struct PoolSizeRatio {
-    VkDescriptorType type;
-    float ratio;
-  };
-
-  VkDescriptorPool pool;
-
-  void init_pool(VkDevice device, uint32_t max_sets, std::span<PoolSizeRatio> pool_ratios);
-  void clear_descriptors(VkDevice device);
-  void destroy_pool(VkDevice device);
-
-  VkDescriptorSet allocate(VkDevice device, VkDescriptorSetLayout layout);
-};
-
 struct BulkinDescriptorAllocatorGrowable {
 public:
   struct PoolSizeRatio {
@@ -54,7 +39,7 @@ struct BulkinDescriptorWriter {
   std::deque<VkDescriptorImageInfo> image_infos;
   std::deque<VkDescriptorBufferInfo> buffer_infos;
   std::vector<VkWriteDescriptorSet> writes;
-  
+
   void write_image(int binding, VkImageView image, VkSampler sampler, VkImageLayout layout, VkDescriptorType type);
   void write_buffer(int binding, VkBuffer buffer, size_t size, size_t offset, VkDescriptorType type);
   void clear();

@@ -219,11 +219,13 @@ void Bulkin::init_sync_structures() {
 }
 
 void Bulkin::init_descriptors() {
-  std::vector<BulkinDescriptorAllocator::PoolSizeRatio> sizes = {
-    {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 1}
+  std::vector<BulkinDescriptorAllocatorGrowable::PoolSizeRatio> sizes = {
+    {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 3},
+    {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 3},
+    {VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3}
   };
 
-  descriptor_allocator.init_pool(device, 10, sizes);
+  descriptor_allocator.init(device, 10, sizes);
 
   {
     BulkinDescriptorLayout layout_builder;
@@ -236,12 +238,12 @@ void Bulkin::init_descriptors() {
     writer.update_set(device, draw_image_descriptors);
 
     deletion_queue.push_function([&]() {
-      descriptor_allocator.destroy_pool(device);
+      descriptor_allocator.destroy_pools(device);
       vkDestroyDescriptorSetLayout(device, draw_image_descriptor_layout, nullptr);
     });
   }
 
-  for (int i = 0; i < FRAME_OVERLAP; i++) {
+  for (size_t i = 0; i < FRAME_OVERLAP; i++) {
     std::vector<BulkinDescriptorAllocatorGrowable::PoolSizeRatio> frame_sizes = {
       {VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 3},
       {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 3},
@@ -516,6 +518,8 @@ void Bulkin::cleanup() {
       destroy_buffer(mesh->mesh_buffers.index_buffer);
       destroy_buffer(mesh->mesh_buffers.vertex_buffer);
     }
+
+    metal_material.clear(device);
 
     deletion_queue.flush();
 
@@ -835,7 +839,7 @@ void Bulkin::init_default_data() {
   material_resources.data_buffer = material_constants.buffer;
   material_resources.data_buffer_offset = 0;
 
-  default_data = metal_material.write_material(device, BulkinMaterialPass::MainColor, material_resources, global_descriptor_allocator);
+  default_data = metal_material.write_material(device, BulkinMaterialPass::MainColor, material_resources, descriptor_allocator);
 }
 
 BulkinImage Bulkin::create_image(VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped) {

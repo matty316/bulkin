@@ -59,8 +59,7 @@ private:
   VkExtent2D draw_extent;
   float render_scale = 1.0f;
 
-  BulkinDescriptorAllocator descriptor_allocator;
-  BulkinDescriptorAllocatorGrowable global_descriptor_allocator;
+  BulkinDescriptorAllocatorGrowable descriptor_allocator;
   VkDescriptorSet draw_image_descriptors;
   VkDescriptorSetLayout draw_image_descriptor_layout;
 

@@ -56,7 +56,10 @@ void GLTFMetallic_Roughness::build_pipelines(Bulkin *app) {
 }
 
 void GLTFMetallic_Roughness::clear(VkDevice device) {
-
+  vkDestroyDescriptorSetLayout(device, material_layout, nullptr);
+  vkDestroyPipelineLayout(device, transparent_pipeline.layout, nullptr);
+  vkDestroyPipeline(device, transparent_pipeline.pipeline, nullptr);
+  vkDestroyPipeline(device, opaque_pipeline.pipeline, nullptr);
 }
 
 BulkinMaterial GLTFMetallic_Roughness::write_material(VkDevice device, BulkinMaterialPass pass, const MaterialResources &resources, BulkinDescriptorAllocatorGrowable &descriptor_allocator) {
