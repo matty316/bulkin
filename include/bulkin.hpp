@@ -18,6 +18,10 @@
 class Bulkin {
 public:
   static Bulkin &get();
+  VkDevice device;
+  VkDescriptorSetLayout gpu_scene_data_descriptor_layout;
+  BulkinImage draw_image;
+  BulkinImage depth_image;
 
   void init();
   void run();
@@ -27,7 +31,6 @@ private:
   VkInstance instance;
   VkDebugUtilsMessengerEXT debug_messenger;
   VkPhysicalDevice chosen_gpu;
-  VkDevice device;
   VkSurfaceKHR surface;
   VkSwapchainKHR swapchain;
   VkFormat swapchain_image_format;
@@ -53,12 +56,11 @@ private:
 
   VmaAllocator allocator;
 
-  BulkinImage draw_image;
-  BulkinImage depth_image;
   VkExtent2D draw_extent;
   float render_scale = 1.0f;
 
   BulkinDescriptorAllocator descriptor_allocator;
+  BulkinDescriptorAllocatorGrowable global_descriptor_allocator;
   VkDescriptorSet draw_image_descriptors;
   VkDescriptorSetLayout draw_image_descriptor_layout;
 
@@ -77,7 +79,6 @@ private:
   std::vector<std::shared_ptr<BulkinMeshAsset>> test_meshes;
 
   BulkinGPUSceneData scene_data;
-  VkDescriptorSetLayout gpu_scene_data_descriptor_layout;
 
   BulkinImage white_image;
   BulkinImage black_image;
@@ -88,6 +89,9 @@ private:
   VkSampler default_sampler_nearest;
 
   VkDescriptorSetLayout single_image_descriptor_layout;
+
+  BulkinMaterial default_data;
+  GLTFMetallic_Roughness metal_material;
 
   void init_vulkan();
   void init_swapchain();

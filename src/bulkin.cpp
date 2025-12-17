@@ -277,6 +277,7 @@ void Bulkin::init_descriptors() {
 void Bulkin::init_pipelines() {
   init_background_pipelines();
   init_mesh_pipeline();
+  metal_material.build_pipelines(this);
 }
 
 void Bulkin::init_background_pipelines() {
@@ -816,6 +817,25 @@ void Bulkin::init_default_data() {
 	});
 
   test_meshes = loadGltfMeshes(this, "resources/basicmesh.glb").value();
+
+  GLTFMetallic_Roughness::MaterialResources material_resources;
+  material_resources.color_image = white_image;
+  material_resources.color_sampler = default_sampler_linear;
+  material_resources.metal_rough_image = white_image;
+  material_resources.metal_rough_sampler = default_sampler_linear;
+
+  BulkinBuffer material_constants = create_buffer(sizeof(GLTFMetallic_Roughness::MaterialConstants), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+
+  GLTFMetallic_Roughness::MaterialConstants *scene_uniform_data = (GLTFMetallic_Roughness::MaterialConstants*)material_constants.allocation->GetMappedData();
+  scene_uniform_data->color_factors = glm::vec4{1, 1, 1, 1};
+  scene_uniform_data->metal_rough_factors = glm::vec4{1, 0.5, 0, 0};
+
+  deletion_queue.push_function([=, this]() { destroy_buffer(material_constants); });
+
+  material_resources.data_buffer = material_constants.buffer;
+  material_resources.data_buffer_offset = 0;
+
+  default_data = metal_material.write_material(device, BulkinMaterialPass::MainColor, material_resources, global_descriptor_allocator);
 }
 
 BulkinImage Bulkin::create_image(VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped) {

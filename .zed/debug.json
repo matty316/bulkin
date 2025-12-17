@@ -7,11 +7,11 @@
     "label": "debug",
     "build": {
       "command": "./clean.sh && ./compile.sh && ./build.sh && ./copy-resources.sh",
-      "args": []
+      "args": [],
     },
     "program": "build/bulkin",
     "args": [],
     "request": "launch",
-    "adapter": "GDB"
-  }
+    "adapter": "CodeLLDB",
+  },
 ]

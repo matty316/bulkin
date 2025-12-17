@@ -106,7 +106,7 @@ VkDescriptorPool BulkinDescriptorAllocatorGrowable::create_pool(VkDevice device,
   pool_info.pPoolSizes = pool_sizes.data();
 
   VkDescriptorPool new_pool;
-  vkCreateDescriptorPool(device, &pool_info, nullptr, &new_pool);
+  VK_CHECK(vkCreateDescriptorPool(device, &pool_info, nullptr, &new_pool));
   return new_pool;
 }
 
