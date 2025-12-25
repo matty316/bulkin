@@ -3,7 +3,7 @@
 #include "bulkin-pipelines.hpp"
 #include "vk_initializers.h"
 
-void GLTFMetallic_Roughness::build_pipelines(Bulkin *app) {
+void BulkinGLTFMetallic_Roughness::build_pipelines(Bulkin *app) {
   VkShaderModule mesh_frag_shader, mesh_vert_shader;
   if (!vkutil::load_shader_module("shaders/mesh.frag.spv", app->device, &mesh_frag_shader) || !vkutil::load_shader_module("shaders/mesh.vert.spv", app->device, &mesh_vert_shader)) {
     std::println("unable to load mesh shader modules");
@@ -55,14 +55,14 @@ void GLTFMetallic_Roughness::build_pipelines(Bulkin *app) {
   vkDestroyShaderModule(app->device, mesh_frag_shader, nullptr);
 }
 
-void GLTFMetallic_Roughness::clear(VkDevice device) {
+void BulkinGLTFMetallic_Roughness::clear(VkDevice device) {
   vkDestroyDescriptorSetLayout(device, material_layout, nullptr);
   vkDestroyPipelineLayout(device, transparent_pipeline.layout, nullptr);
   vkDestroyPipeline(device, transparent_pipeline.pipeline, nullptr);
   vkDestroyPipeline(device, opaque_pipeline.pipeline, nullptr);
 }
 
-BulkinMaterial GLTFMetallic_Roughness::write_material(VkDevice device, BulkinMaterialPass pass, const MaterialResources &resources, BulkinDescriptorAllocatorGrowable &descriptor_allocator) {
+BulkinMaterial BulkinGLTFMetallic_Roughness::write_material(VkDevice device, BulkinMaterialPass pass, const MaterialResources &resources, BulkinDescriptorAllocatorGrowable &descriptor_allocator) {
   BulkinMaterial mat_data;
   mat_data.passType = pass;
   if (pass == BulkinMaterialPass::Transparent) {

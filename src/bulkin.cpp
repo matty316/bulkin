@@ -416,6 +416,7 @@ void Bulkin::run() {
 }
 
 void Bulkin::draw() {
+  update_scene();
   int timeout = 1000000000;
   VK_CHECK(vkWaitForFences(device, 1, &get_current_frame().render_fence, true, timeout));
 
@@ -659,20 +660,6 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
 
   vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, mesh_pipeline_layout, 0, 1, &image_set, 0, nullptr);
 
-  BulkinDrawPushConstants pc;
-
-  auto view = glm::lookAt(glm::vec3{0.0f, 0.0f, -5.0f}, {0.0f, 0.0f, 0.0f}, {0.0, 1.0f, 0.0f});
-  auto projection = glm::perspective(glm::radians(70.f), (float)draw_extent.width/(float)draw_extent.height, 0.1f, 10000.f);
-  projection[1][1] *= -1;
-
-  pc.world_matrix = projection * view;
-  pc.vertex_buffer = test_meshes[2]->mesh_buffers.vertex_buffer_address;
-  vkCmdPushConstants(cmd, mesh_pipeline_layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
-  vkCmdBindIndexBuffer(cmd, test_meshes[2]->mesh_buffers.index_buffer.buffer, 0, VK_INDEX_TYPE_UINT32);
-  vkCmdDrawIndexed(cmd, test_meshes[2]->surfaces[0].count, 1, test_meshes[2]->surfaces[0].start_index, 0, 0);
-
-  vkCmdEndRendering(cmd);
-
   BulkinBuffer gpu_scene_data_buffer = create_buffer(sizeof(BulkinGPUSceneData), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
   get_current_frame().deletion_queue.push_function([=, this](){
     destroy_buffer(gpu_scene_data_buffer);
@@ -686,6 +673,21 @@ void Bulkin::draw_geometry(VkCommandBuffer cmd) {
   BulkinDescriptorWriter writer;
   writer.write_buffer(0, gpu_scene_data_buffer.buffer, sizeof(BulkinGPUSceneData), 0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER);
   writer.update_set(device, global_descriptor);
+
+  for (const BulkinRenderObject &draw : main_draw_context.opaque_surfaces) {
+    vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, draw.material->pipeline->pipeline);
+    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, draw.material->pipeline->layout, 0, 1, &global_descriptor, 0, nullptr);
+    vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, draw.material->pipeline->layout, 1, 1, &draw.material->materialSet, 0, nullptr);
+    vkCmdBindIndexBuffer(cmd, draw.index_buffer, 0, VK_INDEX_TYPE_UINT32);
+
+    BulkinDrawPushConstants pc;
+    pc.vertex_buffer = draw.vertex_buffer_address;
+    pc.world_matrix = draw.transform;
+    vkCmdPushConstants(cmd, draw.material->pipeline->layout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(BulkinDrawPushConstants), &pc);
+    vkCmdDrawIndexed(cmd, draw.index_count, 1, draw.first_index, 0, 0);
+  }
+
+  vkCmdEndRendering(cmd);
 }
 
 BulkinBuffer Bulkin::create_buffer(size_t alloc_size, VkBufferUsageFlags usage, VmaMemoryUsage memory_usage) {
@@ -831,15 +833,15 @@ void Bulkin::init_default_data() {
 
   test_meshes = loadGltfMeshes(this, "resources/basicmesh.glb").value();
 
-  GLTFMetallic_Roughness::MaterialResources material_resources;
+  BulkinGLTFMetallic_Roughness::MaterialResources material_resources;
   material_resources.color_image = white_image;
   material_resources.color_sampler = default_sampler_linear;
   material_resources.metal_rough_image = white_image;
   material_resources.metal_rough_sampler = default_sampler_linear;
 
-  BulkinBuffer material_constants = create_buffer(sizeof(GLTFMetallic_Roughness::MaterialConstants), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+  BulkinBuffer material_constants = create_buffer(sizeof(BulkinGLTFMetallic_Roughness::MaterialConstants), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
 
-  GLTFMetallic_Roughness::MaterialConstants *scene_uniform_data = (GLTFMetallic_Roughness::MaterialConstants*)material_constants.allocation->GetMappedData();
+  BulkinGLTFMetallic_Roughness::MaterialConstants *scene_uniform_data = (BulkinGLTFMetallic_Roughness::MaterialConstants*)material_constants.allocation->GetMappedData();
   scene_uniform_data->color_factors = glm::vec4{1, 1, 1, 1};
   scene_uniform_data->metal_rough_factors = glm::vec4{1, 0.5, 0, 0};
 
@@ -849,6 +851,17 @@ void Bulkin::init_default_data() {
   material_resources.data_buffer_offset = 0;
 
   default_data = metal_material.write_material(device, BulkinMaterialPass::MainColor, material_resources, descriptor_allocator);
+
+  for (auto &m : test_meshes) {
+    std::shared_ptr<BulkinMeshNode> new_node = std::make_shared<BulkinMeshNode>();
+    new_node->mesh = m;
+    new_node->local_transform = glm::mat4{ 1.0f };
+    new_node->world_transform = glm::mat4{ 1.0f };
+    for (auto & s : new_node->mesh->surfaces) {
+      s.material = std::make_shared<BulkinGLTFMaterial>(default_data);
+    }
+    loaded_nodes[m->name] = std::move(new_node);
+  }
 }
 
 BulkinImage Bulkin::create_image(VkExtent3D size, VkFormat format, VkBufferUsageFlags usage, bool mipmapped) {
@@ -912,4 +925,23 @@ BulkinImage Bulkin::create_image(void *data, VkExtent3D size, VkFormat format, V
 void Bulkin::destroy_image(const BulkinImage &img) {
   vkDestroyImageView(device, img.image_view, nullptr);
   vmaDestroyImage(allocator, img.image, img.allocation);
+}
+
+void Bulkin::update_scene() {
+  main_draw_context.opaque_surfaces.clear();
+  loaded_nodes["Suzanne"]->draw(glm::mat4{1.0f}, main_draw_context);
+  scene_data.view = glm::translate(glm::vec3{0, 0, -5});
+  scene_data.proj = glm::perspective(glm::radians(70.0f), (float)window_extent.width/(float)window_extent.height, 0.0f, 10000.0f);
+  scene_data.proj[1][1] *= -1;
+  scene_data.viewproj = scene_data.proj * scene_data.view;
+  scene_data.ambient_color = glm::vec4(0.1f);
+  scene_data.sunlight_color = glm::vec4(1.0f);
+  scene_data.sunlight_dir = glm::vec4(0.0f, 1.0f, 0.5f, 1.0f);
+
+  for (int x = -3; x < 3; x++) {
+    glm::mat4 scale = glm::scale(glm::vec3{0.2f});
+    glm::mat4 translation = glm::translate(glm::vec3{x, 1, 0});
+
+    loaded_nodes["Cube"]->draw(translation * scale, main_draw_context);
+  }
 }

@@ -19,4 +19,6 @@ struct BulkinRenderObject {
   uint32_t first_index;
   VkBuffer index_buffer;
   BulkinMaterial *material;
+  glm::mat4 transform;
+  VkDeviceAddress vertex_buffer_address;
 };

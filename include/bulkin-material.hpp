@@ -24,7 +24,11 @@ struct BulkinMaterial {
   BulkinMaterialPass passType;
 };
 
-struct GLTFMetallic_Roughness {
+struct BulkinGLTFMaterial {
+  BulkinMaterial data;
+};
+
+struct BulkinGLTFMetallic_Roughness {
   BulkinMaterialPipeline opaque_pipeline;
   BulkinMaterialPipeline transparent_pipeline;
   VkDescriptorSetLayout material_layout;

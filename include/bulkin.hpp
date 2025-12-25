@@ -14,6 +14,7 @@
 #include "bulkin-vertex.hpp"
 #include "bulkin-loader.hpp"
 #include "bulkin-scene.hpp"
+#include "bulkin-rendering.hpp"
 
 class Bulkin {
 public:
@@ -90,7 +91,10 @@ private:
   VkDescriptorSetLayout single_image_descriptor_layout;
 
   BulkinMaterial default_data;
-  GLTFMetallic_Roughness metal_material;
+  BulkinGLTFMetallic_Roughness metal_material;
+
+  BulkinDrawContext main_draw_context;
+  std::unordered_map<std::string, std::shared_ptr<BulkinNode>> loaded_nodes;
 
   void init_vulkan();
   void init_swapchain();
@@ -105,6 +109,7 @@ private:
   void init_mesh_pipeline();
   void init_default_data();
   void imm_submit(std::function<void(VkCommandBuffer cmd)>&& function);
+  void update_scene();
   void draw();
   void draw_background(VkCommandBuffer cmd);
   void draw_geometry(VkCommandBuffer cmd);

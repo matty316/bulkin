@@ -1,13 +1,14 @@
 #pragma once
 
 #include "bulkin-vertex.hpp"
-#include <unordered_map>
+#include "bulkin-material.hpp"
 #include <filesystem>
 #include <vector>
 
 struct BulkinSurface {
   uint32_t start_index;
   uint32_t count;
+  std::shared_ptr<BulkinGLTFMaterial> material;
 };
 
 struct BulkinMeshAsset {

@@ -99,7 +99,7 @@ std::optional<std::vector<std::shared_ptr<BulkinMeshAsset>>> loadGltfMeshes(Bulk
       new_mesh.surfaces.push_back(new_surface);
     }
 
-    constexpr bool override_colors = true;
+    constexpr bool override_colors = false;
     if (override_colors) {
       for (BulkinVertex &vtx : vertices) {
         vtx.color = glm::vec4(vtx.normal, 1.0f);
