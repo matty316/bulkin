@@ -61,7 +61,18 @@ void Bulkin::init_vulkan() {
 
   auto inst_ret = builder.set_app_name("Bulkin")
     .request_validation_layers(useValidationLayers)
-    .use_default_debug_messenger()
+    .set_debug_callback (
+        [] (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+	    VkDebugUtilsMessageTypeFlagsEXT messageType,
+	    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+	    void *pUserData)
+            -> VkBool32 {
+			auto severity = vkb::to_string_message_severity(messageSeverity);
+			auto type = vkb::to_string_message_type(messageType);
+			printf ("[%s: %s] %s\n", severity, type, pCallbackData->pMessage);
+			return VK_FALSE;
+		}
+    )
     .require_api_version(1, 3, 0)
     .build();
 
@@ -236,11 +247,6 @@ void Bulkin::init_descriptors() {
     BulkinDescriptorWriter writer;
     writer.write_image(0, draw_image.image_view, VK_NULL_HANDLE, VK_IMAGE_LAYOUT_GENERAL, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE);
     writer.update_set(device, draw_image_descriptors);
-
-    deletion_queue.push_function([&]() {
-      descriptor_allocator.destroy_pools(device);
-      vkDestroyDescriptorSetLayout(device, draw_image_descriptor_layout, nullptr);
-    });
   }
 
   for (size_t i = 0; i < FRAME_OVERLAP; i++) {
@@ -271,7 +277,10 @@ void Bulkin::init_descriptors() {
     gpu_scene_data_descriptor_layout = builder.build(device, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT);
 
     deletion_queue.push_function([&]{
+      descriptor_allocator.destroy_pools(device);
+      vkDestroyDescriptorSetLayout(device, draw_image_descriptor_layout, nullptr);
       vkDestroyDescriptorSetLayout(device, gpu_scene_data_descriptor_layout, nullptr);
+      vkDestroyDescriptorSetLayout(device, single_image_descriptor_layout, nullptr);
     });
   }
 }
